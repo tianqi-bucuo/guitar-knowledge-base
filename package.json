@@ -20,7 +20,12 @@
     "docs": "npx quartz build --serve -d docs",
     "check": "tsc --noEmit && npx prettier . --check",
     "format": "npx prettier . --write",
-    "test": "tsx --test",
+    "test": "tsx --test tests/config/*.test.ts tests/content/*.test.ts",
+    "test:quartz": "tsx --test quartz/**/*.test.ts",
+    "check:content": "tsx scripts/check-content.ts --mode author",
+    "check:release": "tsx scripts/check-content.ts --mode release",
+    "build:site": "npm run quartz -- build",
+    "verify": "npm test && npm run check && npm run check:content && npm run build:site",
     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1"
   },
   "engines": {

@@ -63,6 +63,9 @@ function canonicalPermalink(value: string): string | undefined {
 }
 
 function manifestFileFor(page: PageRecord): string {
+  if (page.contentPath !== undefined) {
+    return page.contentPath
+  }
   return page.file.startsWith("content/") ? page.file.slice("content/".length) : page.file
 }
 

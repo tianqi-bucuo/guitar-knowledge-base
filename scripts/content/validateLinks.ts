@@ -54,7 +54,12 @@ function decodeTarget(value: string): string | undefined {
   }
 }
 
-function contentRelativeFile(pageFile: string, contentRoot: string): string {
+function contentRelativeFile(page: PageRecord, contentRoot: string): string {
+  if (page.contentPath !== undefined) {
+    return posix.normalize(page.contentPath)
+  }
+
+  const pageFile = page.file
   const root = resolve(contentRoot)
   const absolutePage = isAbsolute(pageFile) ? resolve(pageFile) : resolve(pageFile)
   const result = relative(root, absolutePage).split(sep).join("/")
@@ -122,7 +127,7 @@ function buildIndexes(pages: PageRecord[], contentRoot: string): PageIndexes {
   }
 
   for (const page of pages) {
-    const file = contentRelativeFile(page.file, contentRoot)
+    const file = contentRelativeFile(page, contentRoot)
     const key = canonicalKey(file)
     const indexed: IndexedPage = { page, file, key, headings: headingSlugs(page.headings) }
     addIndex(indexes.files, key, indexed)
@@ -378,7 +383,7 @@ function analyzeLinks(pages: PageRecord[], contentRoot: string): Analysis {
   const diagnostics: Diagnostic[] = []
 
   for (const page of pages) {
-    const sourceFile = contentRelativeFile(page.file, contentRoot)
+    const sourceFile = contentRelativeFile(page, contentRoot)
     const source = indexes.files.get(canonicalKey(sourceFile))?.[0]
     if (!source) {
       continue

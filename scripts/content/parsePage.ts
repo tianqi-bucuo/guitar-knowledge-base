@@ -9,6 +9,7 @@ import { visit } from "unist-util-visit"
 
 export interface PageRecord {
   file: string
+  contentPath?: string
   body: string
   headings: string[]
   links: string[]
