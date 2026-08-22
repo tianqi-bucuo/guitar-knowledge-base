@@ -1,6 +1,11 @@
 import { readFileSync } from "node:fs"
 import matter from "gray-matter"
+import { toString } from "mdast-util-to-string"
+import remarkGfm from "remark-gfm"
+import remarkParse from "remark-parse"
 import toml from "toml"
+import { unified } from "unified"
+import { visit } from "unist-util-visit"
 
 export interface PageRecord {
   file: string
@@ -56,63 +61,41 @@ function normalizeFrontmatter(data: Record<string, unknown>): Record<string, unk
   return frontmatter
 }
 
-function withoutFencedCode(body: string): string {
-  const lines = body.split(/\r?\n/)
-  const visible: string[] = []
-  let fence: { marker: "`" | "~"; length: number } | undefined
-
-  for (const line of lines) {
-    const match = /^\s{0,3}(`{3,}|~{3,})/.exec(line)
-    if (fence) {
-      if (match && match[1][0] === fence.marker && match[1].length >= fence.length) {
-        fence = undefined
-      }
-      continue
-    }
-
-    if (match) {
-      fence = { marker: match[1][0] as "`" | "~", length: match[1].length }
-      continue
-    }
-
-    visible.push(line)
-  }
-
-  return visible.join("\n")
-}
-
-function withoutInlineCode(text: string): string {
-  return text.replace(/`+[^`]*`+/g, "")
+function hasFrontmatterDelimiter(source: string): boolean {
+  const withoutBom = source.startsWith("\uFEFF") ? source.slice(1) : source
+  return withoutBom.startsWith("---") && withoutBom.charAt(3) !== "-"
 }
 
 export function parsePage(path: string): PageRecord {
   const source = readFileSync(path, "utf8")
   const parsed = matter(source, { engines: { toml: toml.parse } })
   const body = parsed.content
-  const visibleBody = withoutInlineCode(withoutFencedCode(body))
-  const headings = visibleBody
-    .split(/\r?\n/)
-    .map((line) => /^\s{0,3}#{1,6}\s+(.+?)(?:\s+#+)?\s*$/.exec(line)?.[1]?.trim())
-    .filter((heading): heading is string => heading !== undefined && heading.length > 0)
   const links: string[] = []
   const embeds: string[] = []
+  const headings: string[] = []
+  const tree = unified().use(remarkParse).use(remarkGfm).parse(body)
 
-  for (const match of visibleBody.matchAll(/!\[\[([^\]\r\n]+)\]\]/g)) {
-    embeds.push(match[1].trim())
-  }
-  for (const match of visibleBody.matchAll(/(?<!!)\[\[([^\]\r\n]+)\]\]/g)) {
-    links.push(match[1].trim())
-  }
-  for (const match of visibleBody.matchAll(
-    /(!)?\[[^\]\r\n]*\]\(\s*(?:<([^>\r\n]*)>|([^\s)\r\n]+))[^)]*\)/g,
-  )) {
-    const target = (match[2] ?? match[3]).trim()
-    if (match[1] === "!") {
-      embeds.push(target)
-    } else {
-      links.push(target)
+  visit(tree, (node) => {
+    if (node.type === "heading") {
+      const heading = toString(node).trim()
+      if (heading) {
+        headings.push(heading)
+      }
+    } else if (node.type === "link") {
+      links.push(node.url.trim())
+    } else if (node.type === "image") {
+      embeds.push(node.url.trim())
+    } else if (node.type === "text") {
+      for (const match of node.value.matchAll(/(!)?\[\[([^\]\r\n]+)\]\]/g)) {
+        const target = match[2].trim()
+        if (match[1] === "!") {
+          embeds.push(target)
+        } else {
+          links.push(target)
+        }
+      }
     }
-  }
+  })
 
   return {
     file: path,
@@ -121,6 +104,6 @@ export function parsePage(path: string): PageRecord {
     links,
     embeds,
     frontmatter: normalizeFrontmatter(parsed.data),
-    hasFrontmatter: /^\uFEFF?\s*---(?:toml)?(?:\r?\n|$)/.test(source),
+    hasFrontmatter: hasFrontmatterDelimiter(source),
   }
 }

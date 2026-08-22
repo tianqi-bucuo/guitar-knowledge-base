@@ -1,4 +1,7 @@
 import assert from "node:assert/strict"
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import test from "node:test"
 import { loadManifest } from "../../scripts/content/loadManifest"
 import { parsePage, type PageRecord } from "../../scripts/content/parsePage"
@@ -56,6 +59,29 @@ test("parsePage recognizes TOML frontmatter as present and normalizes it", () =>
   assert.equal(page.hasFrontmatter, true)
   assert.equal(page.frontmatter.title, "TOML 页面")
   assert.deepEqual(page.frontmatter.tags, ["和弦", "左手"])
+})
+
+test("parsePage only recognizes a frontmatter delimiter at the parser boundary", () => {
+  const directory = mkdtempSync(join(tmpdir(), "parse-page-"))
+  const file = join(directory, "leading-whitespace.md")
+  writeFileSync(file, "\n ---\ntitle: 不应被解析的 frontmatter\n---\n# 保留为正文\n", "utf8")
+
+  try {
+    const page = parsePage(file)
+
+    assert.equal(page.hasFrontmatter, false)
+    assert.deepEqual(page.frontmatter, {})
+    assert.ok(codes([page]).includes("MISSING_FRONTMATTER"))
+  } finally {
+    rmSync(directory, { recursive: true, force: true })
+  }
+})
+
+test("parsePage collects Markdown targets from AST nodes but never from code", () => {
+  const page = parsePage("tests/content/fixtures/content-valid/ast-syntax.md")
+
+  assert.deepEqual(page.links, ["real-wiki", "notes/real.md"])
+  assert.deepEqual(page.embeds, ["assets/real.svg", "assets/real.png"])
 })
 
 test("duplicate permalinks return a stable diagnostic", () => {
