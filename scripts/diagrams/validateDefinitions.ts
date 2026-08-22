@@ -138,7 +138,8 @@ export function validateChord(value: unknown): ChordDefinition {
   const normalizedId = requireId(record, "CHORD")
   const title = requireHumanText(record.title, "CHORD_TITLE", normalizedId)
 
-  if (!isIntegerInRange(record.baseFret, 1)) {
+  const baseFret = record.baseFret
+  if (!isIntegerInRange(baseFret, 1)) {
     fail("CHORD_BASE_FRET", normalizedId, "baseFret must be a positive integer")
   }
 
@@ -151,13 +152,22 @@ export function validateChord(value: unknown): ChordDefinition {
   const barres = requireArray(record.barres, "CHORD_BARRE_SHAPE", normalizedId).map((barre) =>
     validateBarre(barre, normalizedId),
   )
-  const barreKeys = new Set<string>()
+  const previousBarres: Barre[] = []
   for (const barre of barres) {
-    const key = `${barre.fret}:${barre.fromString}:${barre.toString}:${barre.finger}`
-    if (barreKeys.has(key)) {
-      fail("CHORD_BARRE_DUPLICATE", normalizedId, "duplicate barre")
+    if (barre.fret < baseFret || barre.fret > baseFret + 4) {
+      fail("CHORD_BARRE_DISPLAY", normalizedId, "barre fret must be within the five-fret display")
     }
-    barreKeys.add(key)
+    const overlapsMatchingBarre = previousBarres.some(
+      (previous) =>
+        previous.fret === barre.fret &&
+        previous.finger === barre.finger &&
+        previous.fromString <= barre.toString &&
+        barre.fromString <= previous.toString,
+    )
+    if (overlapsMatchingBarre) {
+      fail("CHORD_BARRE_DUPLICATE", normalizedId, "duplicate or overlapping barre")
+    }
+    previousBarres.push(barre)
   }
 
   const frets = rawFrets.map((fret) => {
@@ -203,9 +213,27 @@ export function validateChord(value: unknown): ChordDefinition {
         fail("CHORD_BARRE_AGREEMENT", normalizedId, "barre endpoints must be fretted by its finger")
       }
     }
+    for (let string = barre.fromString; string <= barre.toString; string += 1) {
+      const index = stringIndex(string as GuitarString)
+      const fret = frets[index]
+      const finger = fingers[index]
+      if (fret === "x" || fret === 0 || fret < barre.fret) {
+        fail("CHORD_BARRE_AGREEMENT", normalizedId, "barre-covered strings cannot be open or muted")
+      }
+      if (fret === barre.fret && finger !== barre.finger) {
+        fail("CHORD_BARRE_AGREEMENT", normalizedId, "barre fret must use the barre finger")
+      }
+      if (fret > barre.fret && finger === barre.finger) {
+        fail(
+          "CHORD_BARRE_AGREEMENT",
+          normalizedId,
+          "higher barre-covered frets require an independent finger",
+        )
+      }
+    }
   }
 
-  return { id: normalizedId, title, baseFret: record.baseFret, frets, fingers, barres }
+  return { id: normalizedId, title, baseFret, frets, fingers, barres }
 }
 
 function validatePosition(

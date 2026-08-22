@@ -116,6 +116,78 @@ test("requires own barre fields instead of accepting inherited property names", 
   )
 })
 
+test("rejects barres below or above the five-fret chord display", () => {
+  const fMajor = {
+    ...cMajor,
+    id: "f-major-barre",
+    title: "F 大横按和弦",
+    frets: [1, 3, 3, 2, 1, 1],
+    fingers: [1, 3, 4, 2, 1, 1],
+    barres: [{ fret: 1, fromString: 1, toString: 6, finger: 1 }],
+  }
+
+  assert.throws(
+    () => validateChord({ ...fMajor, baseFret: 2 }),
+    /CHORD_BARRE_DISPLAY.*f-major-barre/,
+  )
+  assert.throws(
+    () =>
+      validateChord({
+        ...fMajor,
+        frets: [9, 11, 11, 10, 9, 9],
+        barres: [{ fret: 9, fromString: 1, toString: 6, finger: 1 }],
+      }),
+    /CHORD_BARRE_DISPLAY.*f-major-barre/,
+  )
+})
+
+test("requires every barre-covered string to be fretted consistently", () => {
+  const fMajor = {
+    ...cMajor,
+    id: "f-major-barre",
+    title: "F 大横按和弦",
+    frets: [1, 3, 3, 2, 1, 1],
+    fingers: [1, 3, 4, 2, 1, 1],
+    barres: [{ fret: 1, fromString: 1, toString: 6, finger: 1 }],
+  }
+
+  assert.doesNotThrow(() => validateChord(fMajor))
+  assert.throws(
+    () => validateChord({ ...fMajor, frets: [1, 3, 0, 2, 1, 1], fingers: [1, 3, null, 2, 1, 1] }),
+    /CHORD_BARRE_AGREEMENT.*f-major-barre/,
+  )
+  assert.throws(
+    () => validateChord({ ...fMajor, frets: [1, 3, "x", 2, 1, 1], fingers: [1, 3, null, 2, 1, 1] }),
+    /CHORD_BARRE_AGREEMENT.*f-major-barre/,
+  )
+  assert.throws(
+    () => validateChord({ ...fMajor, frets: [1, 3, 1, 2, 1, 1], fingers: [1, 3, 2, 2, 1, 1] }),
+    /CHORD_BARRE_AGREEMENT.*f-major-barre/,
+  )
+  assert.throws(
+    () => validateChord({ ...fMajor, fingers: [1, 3, 1, 2, 1, 1] }),
+    /CHORD_BARRE_AGREEMENT.*f-major-barre/,
+  )
+})
+
+test("rejects overlapping barres that repeat the same fret and finger", () => {
+  assert.throws(
+    () =>
+      validateChord({
+        ...cMajor,
+        id: "overlapping-barres",
+        title: "重叠横按",
+        frets: [1, 1, 1, 1, 1, 1],
+        fingers: [1, 1, 1, 1, 1, 1],
+        barres: [
+          { fret: 1, fromString: 1, toString: 4, finger: 1 },
+          { fret: 1, fromString: 3, toString: 6, finger: 1 },
+        ],
+      }),
+    /CHORD_BARRE_DUPLICATE.*overlapping-barres/,
+  )
+})
+
 test("accepts open-position fretboards and trims all human labels", () => {
   const definition = validateFretboard(openCMajor)
 
