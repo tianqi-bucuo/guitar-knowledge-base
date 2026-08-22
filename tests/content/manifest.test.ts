@@ -3,6 +3,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
+import matter from "gray-matter"
 import yaml from "js-yaml"
 import { loadManifest } from "../../scripts/content/loadManifest"
 import { TAGS } from "../../scripts/content/types"
@@ -96,6 +97,19 @@ test("rejects release page bounds that cannot describe a release", () => {
   })
 })
 
+test("rejects release bounds outside the fixed 60-to-80 contract", () => {
+  const mutations: Array<(release: Record<string, unknown>) => void> = [
+    (release) => (release.minPages = 59),
+    (release) => (release.maxPages = 81),
+  ]
+
+  for (const mutate of mutations) {
+    expectManifestError("MANIFEST_INVALID_RELEASE_BOUNDS", (manifest) => {
+      mutate(manifest.release as Record<string, unknown>)
+    })
+  }
+})
+
 test("rejects a missing approved module", () => {
   expectManifestError("MANIFEST_MISSING_MODULE", (manifest) => {
     ;(manifest.modules as unknown[]).pop()
@@ -155,4 +169,24 @@ test("publishes controlled tags without empty, padded, or canonical duplicates",
   assert.ok(TAGS.length > 0)
   assert.ok(TAGS.every((tag) => tag.length > 0 && tag === tag.trim()))
   assert.equal(new Set(canonicalTags).size, TAGS.length)
+})
+
+test("keeps normalized tags of every published seed page in the controlled vocabulary", () => {
+  const normalizeTag = (tag: string) => tag.trim().toLocaleLowerCase("en-US")
+  const controlledTagKeys = new Set(TAGS.map(normalizeTag))
+  const seedPages = [
+    "content/index.md",
+    "content/00-从这里开始/如何使用知识库.md",
+    "content/00-从这里开始/学习路线总览.md",
+  ]
+
+  for (const pagePath of seedPages) {
+    const { data } = matter(readFileSync(pagePath, "utf8"))
+    assert.ok(Array.isArray(data.tags), `${pagePath} must declare tag array`)
+
+    for (const tag of data.tags) {
+      assert.equal(typeof tag, "string", `${pagePath} tags must be strings`)
+      assert.ok(controlledTagKeys.has(normalizeTag(tag)), `${pagePath} has unknown tag ${tag}`)
+    }
+  }
 })

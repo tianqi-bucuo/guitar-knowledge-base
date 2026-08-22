@@ -14,6 +14,8 @@ export const MODULE_IDS = [
 ] as const
 export const TAGS = [
   "导航",
+  "使用说明",
+  "学习路线",
   "入门",
   "基础动作",
   "调音",

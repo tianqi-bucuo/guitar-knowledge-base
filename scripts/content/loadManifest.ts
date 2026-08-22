@@ -188,11 +188,13 @@ export function loadManifest(path: string): Manifest {
     typeof maxPages !== "number" ||
     !Number.isInteger(maxPages) ||
     maxPages <= 0 ||
-    minPages > maxPages
+    minPages > maxPages ||
+    minPages !== 60 ||
+    maxPages !== 80
   ) {
     fail(
       "MANIFEST_INVALID_RELEASE_BOUNDS",
-      "release minPages and maxPages must be positive integers with minPages <= maxPages",
+      "release minPages and maxPages must be fixed at 60 and 80",
     )
   }
 
