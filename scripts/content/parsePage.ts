@@ -66,6 +66,14 @@ function hasFrontmatterDelimiter(source: string): boolean {
   return withoutBom.startsWith("---") && withoutBom.charAt(3) !== "-"
 }
 
+function hasEscapedOpener(source: string, index: number): boolean {
+  let backslashes = 0
+  for (let cursor = index - 1; cursor >= 0 && source[cursor] === "\\"; cursor -= 1) {
+    backslashes += 1
+  }
+  return backslashes % 2 === 1
+}
+
 export function parsePage(path: string): PageRecord {
   const source = readFileSync(path, "utf8")
   const parsed = matter(source, { engines: { toml: toml.parse } })
@@ -86,7 +94,17 @@ export function parsePage(path: string): PageRecord {
     } else if (node.type === "image") {
       embeds.push(node.url.trim())
     } else if (node.type === "text") {
-      for (const match of node.value.matchAll(/(!)?\[\[([^\]\r\n]+)\]\]/g)) {
+      const start = node.position?.start.offset
+      const end = node.position?.end.offset
+      const hasSourceSlice = start !== undefined && end !== undefined
+      const text = hasSourceSlice ? body.slice(start, end) : node.value
+
+      for (const match of text.matchAll(/(!)?\[\[([^\]\r\n]+)\]\]/g)) {
+        const opener = match.index
+        if (hasEscapedOpener(hasSourceSlice ? body : text, (hasSourceSlice ? start : 0) + opener)) {
+          continue
+        }
+
         const target = match[2].trim()
         if (match[1] === "!") {
           embeds.push(target)

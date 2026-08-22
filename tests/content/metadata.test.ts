@@ -77,7 +77,7 @@ test("parsePage only recognizes a frontmatter delimiter at the parser boundary",
   }
 })
 
-test("parsePage collects Markdown targets from AST nodes but never from code", () => {
+test("parsePage collects only unescaped Markdown targets from AST nodes", () => {
   const page = parsePage("tests/content/fixtures/content-valid/ast-syntax.md")
 
   assert.deepEqual(page.links, ["real-wiki", "notes/real.md"])

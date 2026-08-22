@@ -16,4 +16,6 @@
 
 `[[fake-long-inline]] [fake [long] label](notes/fake-long-inline.md) ![[assets/fake-long-inline.svg]]`
 
+转义字面量：\[[escaped-wiki]] 与 \![[escaped-embed]]。
+
 真实目标：[[real-wiki]]、![[assets/real.svg]]、[real [nested] label](notes/real.md) 和 ![image [nested] label](assets/real.png)。
