@@ -1,4 +1,5 @@
 import { toString } from "mdast-util-to-string"
+import type { Heading, Root, RootContent } from "mdast"
 import remarkGfm from "remark-gfm"
 import remarkParse from "remark-parse"
 import { unified } from "unified"
@@ -26,39 +27,65 @@ function isPageType(value: unknown): value is PageType {
   return typeof value === "string" && (PAGE_TYPES as readonly string[]).includes(value)
 }
 
-function hasNonEmptyOrderedLinks(body: string): boolean {
-  const tree = unified().use(remarkParse).use(remarkGfm).parse(body)
+interface RequiredSection {
+  heading: Heading
+  content: RootContent[]
+}
+
+function findRequiredSection(tree: Root, name: string): RequiredSection | undefined {
   const children = tree.children
 
   for (let index = 0; index < children.length; index += 1) {
     const node = children[index]
-    if (node.type !== "heading" || toString(node).trim() !== "有序链接") {
+    if (node.type !== "heading" || toString(node).trim() !== name) {
       continue
     }
 
+    const content: RootContent[] = []
     for (let cursor = index + 1; cursor < children.length; cursor += 1) {
       const candidate = children[cursor]
       if (candidate.type === "heading" && candidate.depth <= node.depth) {
         break
       }
-      if (
-        candidate.type === "list" &&
-        candidate.ordered === true &&
-        candidate.children.some((item) => toString(item).trim().length > 0)
-      ) {
-        return true
-      }
+      content.push(candidate)
     }
 
-    return false
+    return { heading: node, content }
   }
 
-  return false
+  return undefined
 }
 
-function validatePlaceholders(page: PageRecord, diagnostics: Diagnostic[]): void {
-  const tree = unified().use(remarkParse).use(remarkGfm).parse(page.body)
+function hasMeaningfulContent(nodes: RootContent[]): boolean {
+  return nodes.some((node) => {
+    if (node.type === "paragraph" || node.type === "table") {
+      return toString(node).trim().length > 0
+    }
+    if (node.type === "code") {
+      return node.value.trim().length > 0
+    }
+    if (node.type === "list") {
+      return node.children.some((item) => toString(item).trim().length > 0)
+    }
+    if (node.type === "blockquote") {
+      return hasMeaningfulContent(node.children)
+    }
+    return false
+  })
+}
 
+function hasNonEmptyOrderedLinks(section: RequiredSection | undefined): boolean {
+  return (
+    section?.content.some(
+      (node) =>
+        node.type === "list" &&
+        node.ordered === true &&
+        node.children.some((item) => toString(item).trim().length > 0),
+    ) ?? false
+  )
+}
+
+function validatePlaceholders(page: PageRecord, diagnostics: Diagnostic[], tree: Root): void {
   visit(tree, (node) => {
     if (node.type === "blockquote") {
       return SKIP
@@ -77,21 +104,32 @@ export function validateStructure(pages: PageRecord[]): Diagnostic[] {
   const diagnostics: Diagnostic[] = []
 
   for (const page of pages) {
+    const tree = unified().use(remarkParse).use(remarkGfm).parse(page.body)
     const pageType = page.frontmatter.type
     if (isPageType(pageType)) {
-      const headings = new Set(page.headings.map((heading) => heading.trim()))
       for (const required of REQUIRED_SECTIONS[pageType]) {
-        if (!headings.has(required)) {
+        const section = findRequiredSection(tree, required)
+        if (section === undefined) {
           addDiagnostic(
             diagnostics,
             page,
             "MISSING_REQUIRED_SECTION",
             `type: ${pageType} 缺少必需章节“${required}”`,
           )
+        } else if (!hasMeaningfulContent(section.content)) {
+          addDiagnostic(
+            diagnostics,
+            page,
+            "EMPTY_REQUIRED_SECTION",
+            `type: ${pageType} 必需章节“${required}”没有有效内容`,
+          )
         }
       }
 
-      if ((pageType === "path" || pageType === "index") && !hasNonEmptyOrderedLinks(page.body)) {
+      if (
+        (pageType === "path" || pageType === "index") &&
+        !hasNonEmptyOrderedLinks(findRequiredSection(tree, "有序链接"))
+      ) {
         addDiagnostic(
           diagnostics,
           page,
@@ -101,7 +139,7 @@ export function validateStructure(pages: PageRecord[]): Diagnostic[] {
       }
     }
 
-    validatePlaceholders(page, diagnostics)
+    validatePlaceholders(page, diagnostics, tree)
   }
 
   return deduplicateDiagnostics(diagnostics).sort((left, right) =>

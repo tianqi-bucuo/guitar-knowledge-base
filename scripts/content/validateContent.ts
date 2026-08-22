@@ -238,6 +238,31 @@ function stableDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   return [...unique.values()].sort(compareDiagnostics)
 }
 
+function validateModuleCoverage(
+  manifest: Manifest,
+  pages: PageRecord[],
+  mode: ValidationMode,
+): Diagnostic[] {
+  const moduleByFile = new Map(manifest.pages.map((entry) => [entry.file, entry.module]))
+  const coveredModules = new Set(
+    pages
+      .filter((page) => page.frontmatter.draft !== true)
+      .map((page) => (page.contentPath ? moduleByFile.get(page.contentPath) : undefined))
+      .filter((module): module is NonNullable<typeof module> => module !== undefined),
+  )
+
+  return manifest.modules
+    .filter(({ id }) => !coveredModules.has(id))
+    .map(({ id }) =>
+      diagnostic(
+        mode === "release" ? "error" : "warning",
+        "MODULE_COVERAGE_MISSING",
+        "",
+        `批准模块“${id}”没有可发布的正式页面`,
+      ),
+    )
+}
+
 export async function validateContent(options: ValidationOptions): Promise<Diagnostic[]> {
   let manifest: Manifest
   try {
@@ -252,6 +277,7 @@ export async function validateContent(options: ValidationOptions): Promise<Diagn
     ...validateMetadata(collection.pages, manifest),
     ...validateStructure(collection.pages),
     ...validateLinks(collection.pages, options.contentRoot),
+    ...validateModuleCoverage(manifest, collection.pages, options.mode),
   ]
 
   if (options.mode === "release") {

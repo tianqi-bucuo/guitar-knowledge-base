@@ -20,6 +20,41 @@ const files = await listFiles(publicDir)
 const relativeFiles = files.map((file) => path.relative(publicDir, file))
 const homePage = await readFile(path.join(publicDir, "index.html"), "utf8")
 const stylesheet = await readFile(path.join(publicDir, "index.css"), "utf8")
+const html = (
+  await Promise.all(
+    files
+      .filter((file) => path.extname(file).toLowerCase() === ".html")
+      .map((file) => readFile(file, "utf8")),
+  )
+).join("\n")
+
+function metaAttributes(tag: string): Map<string, string> {
+  const attributes = new Map<string, string>()
+  for (const match of tag.matchAll(/([^\s=]+)\s*=\s*(["'])(.*?)\2/gu)) {
+    attributes.set(match[1].toLowerCase(), match[3])
+  }
+  return attributes
+}
+
+function isPlaceholderHost(hostname: string): boolean {
+  const normalized = hostname.toLowerCase().replace(/\.$/u, "")
+  return (
+    normalized === "undefined" ||
+    normalized === "null" ||
+    /(?:^|\.)example\.(?:com|org|net)$/u.test(normalized)
+  )
+}
+
+function isValidSocialUrl(value: string): boolean {
+  try {
+    const url = new URL(value)
+    return (
+      (url.protocol === "http:" || url.protocol === "https:") && !isPlaceholderHost(url.hostname)
+    )
+  } catch {
+    return false
+  }
+}
 
 assert.ok(relativeFiles.includes("index.html"), "the production homepage must exist")
 assert.ok(
@@ -34,6 +69,25 @@ assert.ok(
   !relativeFiles.some((file) => /-og-image\.webp$/i.test(file)),
   "offline builds must not generate font-fetching OG images",
 )
+assert.doesNotMatch(
+  html,
+  /https?:\/\/(?:undefined|null|(?:[^/"'\s]+\.)?example\.(?:com|org|net))(?=[/:"'\s]|$)/iu,
+  "generated HTML must not contain undefined or placeholder hosts",
+)
+for (const tag of html.match(/<meta\b[^>]*>/giu) ?? []) {
+  const attributes = metaAttributes(tag)
+  const name = (attributes.get("property") ?? attributes.get("name"))?.toLowerCase()
+  if (["og:image", "og:image:url", "twitter:image", "og:url", "twitter:url"].includes(name ?? "")) {
+    const content = attributes.get("content") ?? ""
+    assert.ok(isValidSocialUrl(content), `invalid social URL metadata: ${name}=${content}`)
+  } else if (name === "twitter:domain") {
+    const content = attributes.get("content") ?? ""
+    assert.ok(
+      content.length > 0 && !isPlaceholderHost(content),
+      `invalid host metadata: ${content}`,
+    )
+  }
+}
 assert.doesNotMatch(
   `${homePage}\n${stylesheet}`,
   /https:\/\/fonts\.(googleapis|gstatic)\.com/i,

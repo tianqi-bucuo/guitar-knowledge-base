@@ -83,6 +83,10 @@ function hasEscapedOpener(source: string, index: number): boolean {
   return backslashes % 2 === 1
 }
 
+function normalizeReferenceIdentifier(identifier: string): string {
+  return identifier.trim().replace(/\s+/gu, " ").toLocaleLowerCase("en-US")
+}
+
 export function parsePage(path: string): PageRecord {
   const source = readFileSync(path, "utf8")
   const parsed = matter(source, { engines: { toml: toml.parse } })
@@ -92,6 +96,14 @@ export function parsePage(path: string): PageRecord {
   const linkTargets: LinkTarget[] = []
   const headings: string[] = []
   const tree = unified().use(remarkParse).use(remarkGfm).parse(body)
+  const definitions = new Map<string, string>()
+
+  visit(tree, "definition", (node) => {
+    const identifier = normalizeReferenceIdentifier(node.identifier)
+    if (!definitions.has(identifier)) {
+      definitions.set(identifier, node.url.trim())
+    }
+  })
 
   visit(tree, (node) => {
     if (node.type === "heading") {
@@ -107,6 +119,18 @@ export function parsePage(path: string): PageRecord {
       const target = node.url.trim()
       embeds.push(target)
       linkTargets.push({ raw: target, kind: "markdown-image" })
+    } else if (node.type === "linkReference" || node.type === "imageReference") {
+      const target = definitions.get(normalizeReferenceIdentifier(node.identifier))
+      if (target === undefined) {
+        return
+      }
+      if (node.type === "linkReference") {
+        links.push(target)
+        linkTargets.push({ raw: target, kind: "markdown-link" })
+      } else {
+        embeds.push(target)
+        linkTargets.push({ raw: target, kind: "markdown-image" })
+      }
     } else if (node.type === "text") {
       const start = node.position?.start.offset
       const end = node.position?.end.offset

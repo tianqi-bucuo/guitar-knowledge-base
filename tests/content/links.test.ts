@@ -1,4 +1,7 @@
 import assert from "node:assert/strict"
+import { chmodSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import test from "node:test"
 import { parsePage, type PageRecord } from "../../scripts/content/parsePage"
 import {
@@ -56,6 +59,46 @@ test("resolves relative Markdown, URL-encoded, permalink, and page embed targets
   assert.equal(
     resolved.filter((link) => link.raw === "notes/目标页面").at(0)?.target,
     "notes/目标页面.md",
+  )
+})
+
+test("resolves full, collapsed, and shortcut reference links and images in source order", () => {
+  const source = parsePage(`${contentRoot}/nested/reference-source.md`)
+  const pages = [source, parsePage(`${contentRoot}/notes/目标页面.md`)]
+  const resolved = resolveInternalLinks(pages, contentRoot)
+
+  assert.deepEqual(source.linkTargets, [
+    { raw: "../notes/目标页面.md#目标-标题", kind: "markdown-link" },
+    { raw: "../assets/valid.svg", kind: "markdown-image" },
+    { raw: "../notes/目标页面.md", kind: "markdown-link" },
+    { raw: "../assets/valid.svg", kind: "markdown-image" },
+    { raw: "../notes/目标页面.md", kind: "markdown-link" },
+    { raw: "../assets/valid.svg", kind: "markdown-image" },
+  ])
+  assert.deepEqual(
+    resolved.map(({ target }) => target),
+    [
+      "notes/目标页面.md#目标-标题",
+      "assets/valid.svg",
+      "notes/目标页面.md",
+      "assets/valid.svg",
+      "notes/目标页面.md",
+      "assets/valid.svg",
+    ],
+  )
+  assert.deepEqual(validateLinks(pages, contentRoot), [])
+})
+
+test("validates broken reference targets without fabricating undefined definitions", () => {
+  const source = parsePage(`${contentRoot}/nested/broken-reference-source.md`)
+
+  assert.deepEqual(source.linkTargets, [
+    { raw: "../notes/不存在.md", kind: "markdown-link" },
+    { raw: "../assets/不存在.png", kind: "markdown-image" },
+  ])
+  assert.deepEqual(
+    validateLinks([source], contentRoot).map(({ code }) => code),
+    ["BROKEN_INTERNAL_LINK", "MISSING_LOCAL_ASSET"],
   )
 })
 
@@ -211,6 +254,67 @@ test("accepts titled SVG and rejects untitled, DOCTYPE, malformed, and non-SVG a
   assert.ok(diagnostics.some((item) => item.code === "SVG_MISSING_TITLE"))
   assert.equal(diagnostics.filter((item) => item.code === "INVALID_SVG_ASSET").length, 3)
   assert.ok(!diagnostics.some((item) => item.message.includes("valid.svg")))
+})
+
+test("rejects SVG and non-SVG asset symlinks whose real paths escape the content root", () => {
+  const root = mkdtempSync(join(tmpdir(), "guitar-assets-"))
+  const temporaryContentRoot = join(root, "content")
+  const assets = join(temporaryContentRoot, "assets")
+  try {
+    mkdirSync(assets, { recursive: true })
+    writeFileSync(join(root, "outside.svg"), "<svg><title>外部图示</title></svg>", "utf8")
+    writeFileSync(join(root, "outside.png"), "not really a png", "utf8")
+    symlinkSync(join(root, "outside.svg"), join(assets, "escape.svg"))
+    symlinkSync(join(root, "outside.png"), join(assets, "escape.png"))
+    const page: PageRecord = {
+      ...pageWithTargets(["assets/escape.svg", "assets/escape.png"]),
+      file: join(temporaryContentRoot, "source.md"),
+    }
+
+    assert.deepEqual(
+      validateLinks([page], temporaryContentRoot).map(({ code }) => code),
+      ["PATH_TRAVERSAL_TARGET", "PATH_TRAVERSAL_TARGET"],
+    )
+    assert.deepEqual(resolveInternalLinks([page], temporaryContentRoot), [])
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
+test("stabilizes broken, cyclic, and non-file assets while accepting an in-root symlink", () => {
+  const root = mkdtempSync(join(tmpdir(), "guitar-assets-"))
+  const temporaryContentRoot = join(root, "content")
+  const assets = join(temporaryContentRoot, "assets")
+  try {
+    mkdirSync(join(assets, "directory.bin"), { recursive: true })
+    writeFileSync(join(assets, "valid.svg"), "<svg><title>站内图示</title></svg>", "utf8")
+    writeFileSync(join(assets, "unreadable.png"), "private", "utf8")
+    chmodSync(join(assets, "unreadable.png"), 0o000)
+    symlinkSync("valid.svg", join(assets, "in-root.svg"))
+    symlinkSync("missing.svg", join(assets, "broken.svg"))
+    symlinkSync("cycle-b.svg", join(assets, "cycle-a.svg"))
+    symlinkSync("cycle-a.svg", join(assets, "cycle-b.svg"))
+    const page: PageRecord = {
+      ...pageWithTargets([
+        "assets/in-root.svg",
+        "assets/broken.svg",
+        "assets/cycle-a.svg",
+        "assets/directory.bin",
+        "assets/unreadable.png",
+      ]),
+      file: join(temporaryContentRoot, "source.md"),
+    }
+
+    const diagnostics = validateLinks([page], temporaryContentRoot)
+    assert.equal(diagnostics.filter(({ code }) => code === "MISSING_LOCAL_ASSET").length, 2)
+    assert.equal(diagnostics.filter(({ code }) => code === "INVALID_LOCAL_ASSET").length, 2)
+    assert.equal(
+      targetFor(resolveInternalLinks([page], temporaryContentRoot), "assets/in-root.svg"),
+      "assets/in-root.svg",
+    )
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
 })
 
 test("the three published seed pages have no link diagnostics", () => {

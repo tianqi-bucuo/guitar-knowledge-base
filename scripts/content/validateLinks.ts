@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, statSync } from "node:fs"
+import { accessSync, constants, lstatSync, readFileSync, realpathSync, statSync } from "node:fs"
 import { isAbsolute, relative, resolve, sep } from "node:path"
 import { posix } from "node:path"
 import { DOMParser } from "@xmldom/xmldom"
@@ -55,6 +55,30 @@ function decodeTarget(value: string): string | undefined {
       .join("/")
   } catch {
     return undefined
+  }
+}
+
+function isInside(root: string, candidate: string): boolean {
+  const path = relative(root, candidate)
+  return path === "" || (!path.startsWith(`..${sep}`) && path !== ".." && !isAbsolute(path))
+}
+
+function fileSystemError(path: string, error: unknown): Resolution {
+  const code =
+    typeof error === "object" && error !== null && "code" in error
+      ? String((error as { code?: unknown }).code)
+      : undefined
+  if (code === "ENOENT" || code === "ELOOP") {
+    return {
+      kind: "error",
+      code: "MISSING_LOCAL_ASSET",
+      message: `找不到本地附件: ${path}`,
+    }
+  }
+  return {
+    kind: "error",
+    code: "INVALID_LOCAL_ASSET",
+    message: `无法检查本地附件: ${path}`,
   }
 }
 
@@ -345,7 +369,13 @@ function resolveAssetTarget(rawPath: string, source: IndexedPage, contentRoot: s
   }
 
   const absolute = resolve(contentRoot, ...normalized.path.split("/"))
-  if (!existsSync(absolute) || !statSync(absolute).isFile()) {
+  let entryStats
+  try {
+    entryStats = lstatSync(absolute, { throwIfNoEntry: false })
+  } catch (error) {
+    return fileSystemError(normalized.path, error)
+  }
+  if (entryStats === undefined) {
     return {
       kind: "error",
       code: "MISSING_LOCAL_ASSET",
@@ -353,8 +383,42 @@ function resolveAssetTarget(rawPath: string, source: IndexedPage, contentRoot: s
     }
   }
 
+  let realRoot: string
+  let realAsset: string
+  try {
+    realRoot = realpathSync(resolve(contentRoot))
+    realAsset = realpathSync(absolute)
+  } catch (error) {
+    return fileSystemError(normalized.path, error)
+  }
+  if (!isInside(realRoot, realAsset)) {
+    return {
+      kind: "error",
+      code: "PATH_TRAVERSAL_TARGET",
+      message: `本地附件 realpath 越出 content root: ${normalized.path}`,
+    }
+  }
+
+  try {
+    if (!statSync(realAsset).isFile()) {
+      return {
+        kind: "error",
+        code: "INVALID_LOCAL_ASSET",
+        message: `本地附件不是普通文件: ${normalized.path}`,
+      }
+    }
+    accessSync(realAsset, constants.R_OK)
+  } catch (error) {
+    return fileSystemError(normalized.path, error)
+  }
+
   if (posix.extname(normalized.path).toLocaleLowerCase("en-US") === ".svg") {
-    const svgError = validateSvg(absolute, normalized.path)
+    let svgError: Resolution | undefined
+    try {
+      svgError = validateSvg(realAsset, normalized.path)
+    } catch (error) {
+      return fileSystemError(normalized.path, error)
+    }
     if (svgError) {
       return svgError
     }

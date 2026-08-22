@@ -3,7 +3,10 @@ import { readFile } from "node:fs/promises"
 import test from "node:test"
 import { build } from "esbuild"
 import { fileURLToPath, pathToFileURL } from "node:url"
+import { h } from "preact"
+import { render } from "preact-render-to-string"
 import type { QuartzConfig } from "../../quartz/cfg"
+import HeadConstructor from "../../quartz/components/Head"
 
 const configPath = fileURLToPath(new URL("../../quartz.config.ts", import.meta.url))
 const bundledConfigPath = fileURLToPath(
@@ -37,6 +40,35 @@ async function loadConfig(): Promise<QuartzConfig> {
   return (await import(`${pathToFileURL(bundledConfigPath).href}?test`)).default as QuartzConfig
 }
 
+async function renderHead(baseUrl?: string, customImage?: string): Promise<string> {
+  const config = await loadConfig()
+  const cfg = { ...config.configuration, baseUrl }
+  const emitters = customImage
+    ? [...config.plugins.emitters, { name: "CustomOgImages" }]
+    : config.plugins.emitters
+  const Head = HeadConstructor()
+  return render(
+    h(Head, {
+      cfg,
+      ctx: { cfg: { ...config, configuration: cfg, plugins: { ...config.plugins, emitters } } },
+      fileData: {
+        slug: "guide",
+        frontmatter: { title: "测试页面", description: "测试说明", socialImage: customImage },
+      },
+      externalResources: {
+        css: [],
+        js: [],
+        additionalHead: customImage
+          ? [() => h("meta", { property: "og:image", content: customImage })]
+          : [],
+      },
+      children: [],
+      tree: { type: "root", children: [] },
+      allFiles: [],
+    } as never),
+  )
+}
+
 test("configures the approved offline Chinese knowledge-base contract", async () => {
   // This fails if a production change restores hosted fonts, analytics, host-dependent outputs,
   // the approved palette, or a required Quartz processing component.
@@ -65,4 +97,21 @@ test("configures the approved offline Chinese knowledge-base contract", async ()
   assert.ok(config.plugins.emitters.some((plugin) => plugin.name === "ContentIndex"))
   assert.ok(config.plugins.emitters.some((plugin) => plugin.name === "Assets"))
   assert.ok(!config.plugins.emitters.some((plugin) => plugin.name === "CustomOgImages"))
+})
+
+test("omits absolute social image metadata when baseUrl is absent", async () => {
+  const head = await renderHead()
+
+  assert.doesNotMatch(head, /https:\/\/(?:undefined|example\.com)/i)
+  assert.doesNotMatch(head, /(?:property="og:image(?:|:url|:type)"|name="twitter:image")/i)
+})
+
+test("preserves default and custom social images with a valid baseUrl", async () => {
+  const configured = await renderHead("kb.example.test")
+  const customImage = "https://cdn.example.test/custom.png"
+  const custom = await renderHead("kb.example.test", customImage)
+
+  assert.match(configured, /https:\/\/kb\.example\.test\/static\/og-image\.png/)
+  assert.match(custom, new RegExp(customImage.replaceAll(".", "\\.")))
+  assert.doesNotMatch(custom, /kb\.example\.test\/static\/og-image\.png/)
 })

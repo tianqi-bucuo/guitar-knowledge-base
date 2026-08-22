@@ -26,14 +26,16 @@ interface Fixture {
   manifestPath: string
 }
 
-function indexPage(options: { draft?: boolean; body?: string } = {}): string {
+function indexPage(
+  options: { draft?: boolean; body?: string; title?: string; permalink?: string } = {},
+): string {
   const body =
     options.body ??
     "## 适用对象\n\n初学者。\n\n## 导航方法\n\n依序学习。\n\n## 有序链接\n\n1. [使用说明](https://example.test)\n\n## 完成标准\n\n完成阅读。\n\n## 更新策略\n\n定期复核。\n"
   return `---
-title: 测试知识库
+title: ${options.title ?? "测试知识库"}
 description: 用于验证内容编排的页面
-permalink: /
+permalink: ${options.permalink ?? "/"}
 type: index
 tags:
   - 导航
@@ -100,6 +102,36 @@ function replaceManifestPages(fixture: Fixture, pages: Array<Record<string, unkn
   writeFileSync(fixture.manifestPath, yaml.dump(manifest), "utf8")
 }
 
+function replaceWithGeneratedPages(
+  fixture: Fixture,
+  moduleForIndex: (index: number) => string,
+  draftForIndex: (index: number) => boolean = () => false,
+): void {
+  rmSync(fixture.contentRoot, { recursive: true, force: true })
+  mkdirSync(fixture.contentRoot, { recursive: true })
+  const pages = Array.from({ length: 60 }, (_, index) => {
+    const number = index + 1
+    const file = `page-${number}.md`
+    const title = `测试页面 ${number}`
+    const permalink = `/tests/page-${number}`
+    writeFileSync(
+      join(fixture.contentRoot, file),
+      indexPage({ title, permalink, draft: draftForIndex(index) }),
+      "utf8",
+    )
+    return {
+      id: `page-${number}`,
+      title,
+      module: moduleForIndex(index),
+      type: "index",
+      file,
+      permalink,
+      required: true,
+    }
+  })
+  replaceManifestPages(fixture, pages)
+}
+
 function runCli(...args: string[]) {
   return spawnSync(process.execPath, ["--import", "tsx", "scripts/check-content.ts", ...args], {
     cwd: process.cwd(),
@@ -124,10 +156,86 @@ test("author mode treats missing planned pages and page count as warnings", asyn
       diagnostics.map(({ code, severity }) => [code, severity]),
       [
         ["CONTENT_COUNT_OUT_OF_RANGE", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
+        ["MODULE_COVERAGE_MISSING", "warning"],
         ["PLANNED_PAGE_MISSING", "warning"],
         ["PLANNED_PAGE_MISSING", "warning"],
       ],
     )
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true })
+  }
+})
+
+test("release mode rejects sixty formal pages concentrated in one approved module", async () => {
+  const fixture = createFixture()
+  try {
+    replaceWithGeneratedPages(fixture, () => "start")
+
+    const diagnostics = await validateContent({
+      contentRoot: fixture.contentRoot,
+      manifestPath: fixture.manifestPath,
+      mode: "release",
+    })
+    const missingCoverage = diagnostics.filter(({ code }) => code === "MODULE_COVERAGE_MISSING")
+
+    assert.equal(missingCoverage.length, 9)
+    assert.ok(missingCoverage.every(({ severity }) => severity === "error"))
+    assert.ok(!codes(diagnostics).includes("CONTENT_COUNT_OUT_OF_RANGE"))
+    assert.deepEqual(
+      missingCoverage.map(({ message }) => message).sort(),
+      modules
+        .filter(({ id }) => id !== "start")
+        .map(({ id }) => `批准模块“${id}”没有可发布的正式页面`)
+        .sort(),
+    )
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true })
+  }
+})
+
+test("release mode accepts sixty publishable formal pages covering all ten modules", async () => {
+  const fixture = createFixture()
+  try {
+    replaceWithGeneratedPages(fixture, (index) => String(modules[index % modules.length].id))
+
+    const diagnostics = await validateContent({
+      contentRoot: fixture.contentRoot,
+      manifestPath: fixture.manifestPath,
+      mode: "release",
+    })
+
+    assert.deepEqual(diagnostics, [])
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true })
+  }
+})
+
+test("draft-filtered pages do not satisfy module coverage", async () => {
+  const fixture = createFixture()
+  try {
+    replaceWithGeneratedPages(
+      fixture,
+      (index) => String(modules[index % modules.length].id),
+      (index) => index % modules.length === 1,
+    )
+
+    const diagnostics = await validateContent({
+      contentRoot: fixture.contentRoot,
+      manifestPath: fixture.manifestPath,
+      mode: "release",
+    })
+    const coverage = diagnostics.filter(({ code }) => code === "MODULE_COVERAGE_MISSING")
+
+    assert.equal(coverage.length, 1)
+    assert.match(coverage[0].message, /“basics”/)
   } finally {
     rmSync(fixture.root, { recursive: true, force: true })
   }
@@ -344,7 +452,8 @@ test("CLI exits 0 for warnings, 1 for validation errors, and repeats stdout byte
     assert.equal(second.status, 0, second.stderr)
     assert.equal(first.stdout, second.stdout)
     assert.match(first.stdout, /WARNING CONTENT_COUNT_OUT_OF_RANGE content\/:/)
-    assert.match(first.stdout, /Summary: 0 error\(s\), 3 warning\(s\)/)
+    assert.match(first.stdout, /WARNING MODULE_COVERAGE_MISSING content\/:/)
+    assert.match(first.stdout, /Summary: 0 error\(s\), 12 warning\(s\)/)
     assert.equal(release.status, 1, release.stderr)
     assert.match(release.stdout, /ERROR DRAFT_PAGE_IN_RELEASE content\/index\.md:/)
   } finally {

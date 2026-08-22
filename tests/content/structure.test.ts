@@ -15,10 +15,19 @@ const lessonSections = [
 ]
 const navigationSections = ["适用对象", "导航方法", "有序链接", "完成标准", "更新策略"]
 
+function sectionBody(
+  headings: readonly string[],
+  contentFor: (heading: string, index: number) => string = () => "说明。",
+): string {
+  return headings
+    .map((heading, index) => `## ${heading}\n\n${contentFor(heading, index)}\n`)
+    .join("\n")
+}
+
 function record(
   type: "lesson" | "path" | "index" | "glossary",
   headings: string[],
-  body = "",
+  body = sectionBody(headings),
 ): PageRecord {
   return {
     file: `content/${type}.md`,
@@ -40,7 +49,11 @@ test("reports a missing lesson section and a standalone placeholder", () => {
 })
 
 test("ignores placeholders inside fenced and inline code and inside larger words", () => {
-  const page = record("lesson", lessonSections, "`TODO` and METHODTBDVALUE\n\n```text\nXXX\n```\n")
+  const page = record(
+    "lesson",
+    lessonSections,
+    `${sectionBody(lessonSections)}\n\n\`TODO\` and METHODTBDVALUE\n\n\`\`\`text\nXXX\n\`\`\`\n`,
+  )
 
   assert.deepEqual(validateStructure([page]), [])
 })
@@ -49,26 +62,80 @@ test("ignores placeholder words inside blockquotes", () => {
   const page = record(
     "lesson",
     lessonSections,
-    "> TODO 是本引用讨论的术语，不是页面占位符。\n\n正文已完成。\n",
+    `${sectionBody(lessonSections)}\n\n> TODO 是本引用讨论的术语，不是页面占位符。\n\n正文已完成。\n`,
   )
 
   assert.deepEqual(validateStructure([page]), [])
 })
 
 test("detects HTML fill markers and empty headings from the Markdown AST", () => {
-  const page = record("lesson", lessonSections, "<!-- fill -->\n\n##   \n")
+  const page = record(
+    "lesson",
+    lessonSections,
+    `${sectionBody(lessonSections)}\n\n<!-- fill -->\n\n##   \n`,
+  )
   const placeholders = validateStructure([page]).filter((item) => item.code === "PLACEHOLDER_TEXT")
 
   assert.equal(placeholders.length, 2)
 })
 
 test("deduplicates exact diagnostics from repeated placeholders", () => {
-  const page = record("lesson", lessonSections, "TODO\n\nTODO\n")
+  const page = record("lesson", lessonSections, `${sectionBody(lessonSections)}\n\nTODO\n\nTODO\n`)
 
   assert.deepEqual(
     validateStructure([page]).map((item) => item.code),
     ["PLACEHOLDER_TEXT"],
   )
+})
+
+test("rejects empty, comment-only, and thematic-break-only required sections for every page type", () => {
+  const cases = [
+    ["lesson", lessonSections],
+    ["path", navigationSections],
+    ["index", navigationSections],
+    ["glossary", ["术语条目", "参考来源与延伸阅读"]],
+  ] as const
+
+  for (const [type, headings] of cases) {
+    const body = sectionBody(headings, (_heading, index) => ["", "<!-- note -->", "---"][index % 3])
+    const diagnostics = validateStructure([record(type, [...headings], body)])
+
+    assert.equal(
+      diagnostics.filter(({ code }) => code === "EMPTY_REQUIRED_SECTION").length,
+      headings.length,
+      type,
+    )
+  }
+})
+
+test("reports empty exercise, self-check, and reference lesson sections individually", () => {
+  for (const emptyHeading of ["分级练习", "自我检查标准", "参考来源与延伸阅读"]) {
+    const body = sectionBody(lessonSections, (heading) =>
+      heading === emptyHeading ? "<!-- still empty -->" : "已完成内容。",
+    )
+    const diagnostics = validateStructure([record("lesson", lessonSections, body)]).filter(
+      ({ code }) => code === "EMPTY_REQUIRED_SECTION",
+    )
+
+    assert.equal(diagnostics.length, 1, emptyHeading)
+    assert.match(diagnostics[0].message, new RegExp(emptyHeading))
+  }
+})
+
+test("accepts meaningful paragraphs, lists, links, code, image alt, and blockquotes", () => {
+  const meaningful = [
+    "学习目标。",
+    "- 核心条目",
+    "[操作说明](https://example.test)",
+    "```text\n修正示例\n```",
+    "![练习节拍图](https://example.test/exercise.png)",
+    "> 连续四次清晰发声。",
+    "1. 下一步词条",
+    "参考来源。",
+  ]
+  const body = sectionBody(lessonSections, (_heading, index) => meaningful[index])
+
+  assert.deepEqual(validateStructure([record("lesson", lessonSections, body)]), [])
 })
 
 test("requires exact type-specific sections for path, index, and glossary pages", () => {
