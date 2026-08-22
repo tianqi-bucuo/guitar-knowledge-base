@@ -55,6 +55,22 @@ export const TAGS = [
   "来源",
 ] as const
 
+export const REQUIRED_SECTIONS = {
+  lesson: [
+    "学习目标与先修知识",
+    "核心概念",
+    "图示与操作步骤",
+    "常见错误及修正",
+    "分级练习",
+    "自我检查标准",
+    "下一步与相关词条",
+    "参考来源与延伸阅读",
+  ],
+  path: ["适用对象", "导航方法", "有序链接", "完成标准", "更新策略"],
+  index: ["适用对象", "导航方法", "有序链接", "完成标准", "更新策略"],
+  glossary: ["术语条目", "参考来源与延伸阅读"],
+} as const satisfies Record<(typeof PAGE_TYPES)[number], readonly string[]>
+
 export type PageType = (typeof PAGE_TYPES)[number]
 export type Level = (typeof LEVELS)[number]
 export type ModuleId = (typeof MODULE_IDS)[number]

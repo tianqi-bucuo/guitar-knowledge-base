@@ -1,0 +1,107 @@
+import assert from "node:assert/strict"
+import test from "node:test"
+import { parsePage, type PageRecord } from "../../scripts/content/parsePage"
+import { validateStructure } from "../../scripts/content/validateStructure"
+
+const lessonSections = [
+  "学习目标与先修知识",
+  "核心概念",
+  "图示与操作步骤",
+  "常见错误及修正",
+  "分级练习",
+  "自我检查标准",
+  "下一步与相关词条",
+  "参考来源与延伸阅读",
+]
+const navigationSections = ["适用对象", "导航方法", "有序链接", "完成标准", "更新策略"]
+
+function record(
+  type: "lesson" | "path" | "index" | "glossary",
+  headings: string[],
+  body = "",
+): PageRecord {
+  return {
+    file: `content/${type}.md`,
+    body,
+    headings,
+    links: [],
+    embeds: [],
+    frontmatter: { type },
+    hasFrontmatter: true,
+  }
+}
+
+test("reports a missing lesson section and a standalone placeholder", () => {
+  const page = parsePage("tests/content/fixtures/link-site/missing-section.md")
+  const codes = validateStructure([page]).map((item) => item.code)
+
+  assert.ok(codes.includes("MISSING_REQUIRED_SECTION"))
+  assert.ok(codes.includes("PLACEHOLDER_TEXT"))
+})
+
+test("ignores placeholders inside fenced and inline code and inside larger words", () => {
+  const page = record("lesson", lessonSections, "`TODO` and METHODTBDVALUE\n\n```text\nXXX\n```\n")
+
+  assert.deepEqual(validateStructure([page]), [])
+})
+
+test("detects HTML fill markers and empty headings from the Markdown AST", () => {
+  const page = record("lesson", lessonSections, "<!-- fill -->\n\n##   \n")
+  const placeholders = validateStructure([page]).filter((item) => item.code === "PLACEHOLDER_TEXT")
+
+  assert.equal(placeholders.length, 2)
+})
+
+test("requires exact type-specific sections for path, index, and glossary pages", () => {
+  const path = record("path", navigationSections.slice(1))
+  const index = record("index", navigationSections.slice(0, -1))
+  const glossary = record("glossary", ["术语条目"])
+
+  for (const page of [path, index, glossary]) {
+    assert.ok(validateStructure([page]).some((item) => item.code === "MISSING_REQUIRED_SECTION"))
+  }
+})
+
+test("requires a non-empty ordered list in the ordered-links section", () => {
+  const emptyListPage = record(
+    "path",
+    navigationSections,
+    navigationSections.map((heading) => `## ${heading}\n`).join("\n"),
+  )
+  const unorderedListPage = record(
+    "index",
+    navigationSections,
+    "## 适用对象\n\n说明\n\n## 导航方法\n\n说明\n\n## 有序链接\n\n- [[page]]\n\n## 完成标准\n\n说明\n\n## 更新策略\n\n说明\n",
+  )
+
+  assert.ok(
+    validateStructure([emptyListPage]).some((item) => item.code === "MISSING_REQUIRED_SECTION"),
+  )
+  assert.ok(
+    validateStructure([unorderedListPage]).some((item) => item.code === "MISSING_REQUIRED_SECTION"),
+  )
+})
+
+test("accepts complete path, index, and glossary structures", () => {
+  const navigationBody =
+    "## 适用对象\n\n说明\n\n## 导航方法\n\n说明\n\n## 有序链接\n\n1. [[page]]\n\n## 完成标准\n\n说明\n\n## 更新策略\n\n说明\n"
+  const glossary = record(
+    "glossary",
+    ["术语条目", "参考来源与延伸阅读"],
+    "## 术语条目\n\n和弦：三个或以上的音。\n\n## 参考来源与延伸阅读\n\n参考。\n",
+  )
+
+  assert.deepEqual(validateStructure([record("path", navigationSections, navigationBody)]), [])
+  assert.deepEqual(validateStructure([record("index", navigationSections, navigationBody)]), [])
+  assert.deepEqual(validateStructure([glossary]), [])
+})
+
+test("the three published seed pages have no structure diagnostics", () => {
+  const pages = [
+    parsePage("content/index.md"),
+    parsePage("content/00-从这里开始/如何使用知识库.md"),
+    parsePage("content/00-从这里开始/学习路线总览.md"),
+  ]
+
+  assert.deepEqual(validateStructure(pages), [])
+})
