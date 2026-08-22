@@ -1,3 +1,30 @@
 @use "./base.scss";
 
 // put your custom CSS here!
+:root {
+  --bodyFont: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --headerFont: "Noto Serif CJK SC", "Songti SC", serif;
+}
+
+.page .center > article {
+  max-inline-size: min(100%, 72ch);
+}
+
+.page article img[src$=".svg"] {
+  max-width: min(100%, 42rem);
+}
+
+:focus-visible {
+  outline: 3px solid var(--tertiary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
