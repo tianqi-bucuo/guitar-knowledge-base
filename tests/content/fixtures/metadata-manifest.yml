@@ -1,0 +1,43 @@
+version: 1
+release:
+  minPages: 60
+  maxPages: 80
+modules:
+  - id: start
+    directory: 00-从这里开始
+    target: 5
+  - id: basics
+    directory: 01-持琴与基础动作
+    target: 8
+  - id: chords
+    directory: 02-和弦系统
+    target: 12
+  - id: rhythm
+    directory: 03-节奏系统
+    target: 10
+  - id: technique
+    directory: 04-演奏技巧
+    target: 8
+  - id: accompaniment
+    directory: 05-弹唱与伴奏
+    target: 8
+  - id: theory
+    directory: 06-基础乐理与指板
+    target: 8
+  - id: practice
+    directory: 07-练习与复盘
+    target: 6
+  - id: care
+    directory: 08-保养安全与排错
+    target: 5
+  - id: reference
+    directory: 09-术语与参考资料
+    target: 5
+pages:
+  - id: open-chords
+    title: 开放和弦入门
+    module: chords
+    type: lesson
+    file: tests/content/fixtures/content-valid/开放和弦.md
+    permalink: /chords/open-chords
+    required: true
