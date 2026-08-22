@@ -79,6 +79,36 @@ test("keeps Markdown relative paths distinct from wikilink shortest paths", () =
   )
 })
 
+test("keeps Markdown images in the asset branch while wiki embeds transclude pages", () => {
+  const source = parsePage(`${contentRoot}/image-source.md`)
+  const rootTarget = parsePage(`${contentRoot}/root-only.md`)
+  const permalinkTarget = parsePage(`${contentRoot}/permalink-page.md`)
+  const pages = [source, rootTarget, permalinkTarget]
+  const resolved = resolveInternalLinks(pages, contentRoot)
+  const diagnostics = validateLinks(pages, contentRoot)
+
+  assert.deepEqual(source.linkTargets, [
+    { raw: "root-only", kind: "markdown-image" },
+    { raw: "/virtual-page.md", kind: "markdown-image" },
+    { raw: "root-only|普通页面链接", kind: "wikilink" },
+    { raw: "root-only|页面嵌入", kind: "wiki-embed" },
+  ])
+  assert.deepEqual(
+    resolved.map(({ raw, target }) => ({ raw, target })),
+    [
+      { raw: "root-only|普通页面链接", target: "root-only.md" },
+      { raw: "root-only|页面嵌入", target: "root-only.md" },
+    ],
+  )
+  assert.deepEqual(
+    diagnostics.map(({ code, message }) => ({ code, message })),
+    [
+      { code: "MISSING_LOCAL_ASSET", message: "找不到本地附件: root-only" },
+      { code: "MISSING_LOCAL_ASSET", message: "找不到本地附件: virtual-page.md" },
+    ],
+  )
+})
+
 test("reports missing pages, missing assets, and duplicate basename ambiguity separately", () => {
   const codes = validateLinks(fixturePages(), contentRoot).map((item) => item.code)
 

@@ -391,6 +391,10 @@ function resolveOne(
       message: `内部目标不允许 query、反斜线或 NUL: ${rawPath}`,
     }
   }
+  if (targetKind === "markdown-image") {
+    return resolveAssetTarget(decodedPath, source, contentRoot)
+  }
+
   const extension = posix.extname(decodedPath).toLocaleLowerCase("en-US")
   const isPage = extension.length === 0 || extension === ".md"
 
