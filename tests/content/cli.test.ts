@@ -1,5 +1,5 @@
 import assert from "node:assert/strict"
-import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs"
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, symlinkSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { spawnSync } from "node:child_process"
@@ -94,6 +94,12 @@ function createFixture(options: { draft?: boolean; body?: string } = {}): Fixtur
   return { root, contentRoot, manifestPath }
 }
 
+function replaceManifestPages(fixture: Fixture, pages: Array<Record<string, unknown>>): void {
+  const manifest = yaml.load(readFileSync(fixture.manifestPath, "utf8")) as Record<string, unknown>
+  manifest.pages = pages
+  writeFileSync(fixture.manifestPath, yaml.dump(manifest), "utf8")
+}
+
 function runCli(...args: string[]) {
   return spawnSync(process.execPath, ["--import", "tsx", "scripts/check-content.ts", ...args], {
     cwd: process.cwd(),
@@ -174,6 +180,42 @@ test("excluded directories are ignored while unlisted pages cannot satisfy links
   }
 })
 
+test("manifest entries cannot promote excluded directories into formal pages", async () => {
+  for (const reservedDirectory of ["templates", ".obsidian"]) {
+    const fixture = createFixture()
+    try {
+      rmSync(join(fixture.contentRoot, "index.md"))
+      mkdirSync(join(fixture.contentRoot, reservedDirectory), { recursive: true })
+      writeFileSync(
+        join(fixture.contentRoot, reservedDirectory, "hidden.md"),
+        indexPage({ body: "TODO" }),
+        "utf8",
+      )
+      replaceManifestPages(fixture, [
+        {
+          ...manifestPages()[0],
+          file: `${reservedDirectory}/hidden.md`,
+        },
+      ])
+
+      const diagnostics = await validateContent({
+        contentRoot: fixture.contentRoot,
+        manifestPath: fixture.manifestPath,
+        mode: "author",
+      })
+
+      assert.ok(codes(diagnostics).includes("MANIFEST_EXCLUDED_FILE"))
+      assert.match(
+        diagnostics.find(({ code }) => code === "CONTENT_COUNT_OUT_OF_RANGE")?.message ?? "",
+        /正式页面数量 0\b/,
+      )
+      assert.ok(!codes(diagnostics).includes("PLACEHOLDER_TEXT"))
+    } finally {
+      rmSync(fixture.root, { recursive: true, force: true })
+    }
+  }
+})
+
 test("parse failures and manifest failures become stable diagnostics", async () => {
   const fixture = createFixture()
   try {
@@ -212,6 +254,32 @@ test("symlinked manifest pages cannot escape the content root", async () => {
       mode: "author",
     })
     assert.ok(codes(diagnostics).includes("CONTENT_PARSE_ERROR"))
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true })
+  }
+})
+
+test("broken manifest-page symlinks are errors rather than planned missing warnings", async () => {
+  const fixture = createFixture()
+  try {
+    rmSync(join(fixture.contentRoot, "index.md"))
+    symlinkSync(join(fixture.root, "missing.md"), join(fixture.contentRoot, "index.md"))
+
+    const diagnostics = await validateContent({
+      contentRoot: fixture.contentRoot,
+      manifestPath: fixture.manifestPath,
+      mode: "author",
+    })
+
+    assert.ok(
+      diagnostics.some(
+        ({ code, file, severity }) =>
+          code === "CONTENT_PARSE_ERROR" && file === "index.md" && severity === "error",
+      ),
+    )
+    assert.ok(
+      !diagnostics.some(({ code, file }) => code === "PLANNED_PAGE_MISSING" && file === "index.md"),
+    )
   } finally {
     rmSync(fixture.root, { recursive: true, force: true })
   }
@@ -285,6 +353,32 @@ test("CLI exits 0 for warnings, 1 for validation errors, and repeats stdout byte
   }
 })
 
+test("CLI keeps malformed custom manifests in one manifest-namespaced diagnostic line", () => {
+  const fixture = createFixture()
+  try {
+    const customManifest = join(fixture.root, "custom.yml")
+    writeFileSync(customManifest, "version: [", "utf8")
+    const result = runCli(
+      "--mode",
+      "author",
+      "--content-root",
+      fixture.contentRoot,
+      "--manifest",
+      customManifest,
+    )
+    const lines = result.stdout.trimEnd().split(/\r?\n/)
+
+    assert.equal(result.status, 1, result.stderr)
+    assert.equal(lines.length, 2)
+    assert.match(lines[0], /^ERROR MANIFEST_READ_ERROR /)
+    assert.ok(lines[0].includes(`${customManifest}:`))
+    assert.ok(!lines[0].includes(`content/${customManifest}`))
+    assert.match(lines[1], /^Summary: 1 error\(s\), 0 warning\(s\)$/)
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true })
+  }
+})
+
 test("CLI rejects invalid, unknown, or incomplete arguments with exit 2", () => {
   const fixture = createFixture()
   try {
@@ -295,6 +389,36 @@ test("CLI rejects invalid, unknown, or incomplete arguments with exit 2", () => 
     assert.equal(invalidMode.status, 2)
     assert.equal(unknown.status, 2)
     assert.equal(missingValue.status, 2)
+  } finally {
+    rmSync(fixture.root, { recursive: true, force: true })
+  }
+})
+
+test("CLI rejects empty or whitespace-only option values with exit 2", () => {
+  for (const [flag, value] of [
+    ["--manifest", ""],
+    ["--manifest", "   "],
+    ["--content-root", ""],
+    ["--content-root", "\t"],
+    ["--mode", ""],
+    ["--mode", "   "],
+  ]) {
+    assert.equal(runCli(flag, value).status, 2, `${flag} ${JSON.stringify(value)}`)
+  }
+})
+
+test("CLI rejects every repeated option flag with exit 2", () => {
+  const fixture = createFixture()
+  try {
+    const cases = [
+      ["--mode", "author", "--mode", "release"],
+      ["--content-root", fixture.contentRoot, "--content-root", fixture.contentRoot],
+      ["--manifest", fixture.manifestPath, "--manifest", fixture.manifestPath],
+    ]
+
+    for (const args of cases) {
+      assert.equal(runCli(...args).status, 2, args.join(" "))
+    }
   } finally {
     rmSync(fixture.root, { recursive: true, force: true })
   }

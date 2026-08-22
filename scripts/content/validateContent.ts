@@ -1,4 +1,4 @@
-import { existsSync, lstatSync, readdirSync, realpathSync } from "node:fs"
+import { lstatSync, readdirSync, realpathSync, type Stats } from "node:fs"
 import { isAbsolute, relative, resolve, sep } from "node:path"
 import { posix } from "node:path"
 import { loadManifest } from "./loadManifest"
@@ -28,12 +28,14 @@ function diagnostic(
 function manifestFailure(error: unknown, manifestPath: string): Diagnostic {
   const message = error instanceof Error ? error.message : String(error)
   const match = /^([A-Z][A-Z0-9_]+):\s*(.*)$/s.exec(message)
-  return diagnostic(
-    "error",
-    match?.[1] ?? "MANIFEST_READ_ERROR",
-    manifestPath.split(sep).join("/"),
-    match?.[2] ?? message,
-  )
+  const absolutePath = resolve(manifestPath)
+  const file = isInside(process.cwd(), absolutePath)
+    ? relative(process.cwd(), absolutePath).split(sep).join("/")
+    : absolutePath.split(sep).join("/")
+  return {
+    ...diagnostic("error", match?.[1] ?? "MANIFEST_READ_ERROR", file, match?.[2] ?? message),
+    namespace: "manifest",
+  }
 }
 
 function isInside(root: string, candidate: string): boolean {
@@ -58,6 +60,11 @@ function normalizeManifestFile(file: string): string | undefined {
   return normalized
 }
 
+function isExcludedContentPath(file: string): boolean {
+  const firstSegment = file.split("/", 1)[0]
+  return (EXCLUDED_CONTENT_DIRS as readonly string[]).includes(firstSegment)
+}
+
 function scanMarkdown(root: string): string[] {
   const files: string[] = []
 
@@ -67,8 +74,7 @@ function scanMarkdown(root: string): string[] {
     )
     for (const entry of entries) {
       const relativePath = prefix ? `${prefix}/${entry.name}` : entry.name
-      const firstSegment = relativePath.split("/", 1)[0]
-      if ((EXCLUDED_CONTENT_DIRS as readonly string[]).includes(firstSegment)) {
+      if (isExcludedContentPath(relativePath)) {
         continue
       }
       const absolutePath = resolve(directory, entry.name)
@@ -117,6 +123,12 @@ function collectPages(manifest: Manifest, options: ValidationOptions): Collectio
       )
       continue
     }
+    if (isExcludedContentPath(file)) {
+      diagnostics.push(
+        diagnostic("error", "MANIFEST_EXCLUDED_FILE", file, "manifest 页面不能位于保留的内容目录"),
+      )
+      continue
+    }
     manifestFiles.add(file)
     const absolutePath = resolve(root, ...file.split("/"))
     if (!isInside(root, absolutePath)) {
@@ -126,7 +138,18 @@ function collectPages(manifest: Manifest, options: ValidationOptions): Collectio
       continue
     }
 
-    if (!existsSync(absolutePath)) {
+    let stats: Stats | undefined
+    try {
+      stats = lstatSync(absolutePath, { throwIfNoEntry: false })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      diagnostics.push(
+        diagnostic("error", "CONTENT_PARSE_ERROR", file, `无法检查正式页面: ${message}`),
+      )
+      continue
+    }
+
+    if (stats === undefined) {
       const isRequiredRelease = options.mode === "release" && entry.required
       diagnostics.push(
         diagnostic(
@@ -140,7 +163,6 @@ function collectPages(manifest: Manifest, options: ValidationOptions): Collectio
     }
 
     try {
-      const stats = lstatSync(absolutePath)
       const realFile = realpathSync(absolutePath)
       if (!isInside(realRoot, realFile) || (!stats.isFile() && !stats.isSymbolicLink())) {
         diagnostics.push(
@@ -210,7 +232,7 @@ function compareDiagnostics(left: Diagnostic, right: Diagnostic): number {
 function stableDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   const unique = new Map<string, Diagnostic>()
   for (const item of diagnostics) {
-    const key = `${item.file}\0${item.severity}\0${item.code}\0${item.message}`
+    const key = `${item.namespace ?? "content"}\0${item.file}\0${item.severity}\0${item.code}\0${item.message}`
     if (!unique.has(key)) unique.set(key, item)
   }
   return [...unique.values()].sort(compareDiagnostics)

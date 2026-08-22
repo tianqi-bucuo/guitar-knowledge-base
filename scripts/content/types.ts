@@ -100,4 +100,5 @@ export interface Diagnostic {
   code: string
   file: string
   message: string
+  namespace?: "content" | "manifest"
 }

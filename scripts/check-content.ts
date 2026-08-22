@@ -1,6 +1,6 @@
 import { resolve } from "node:path"
 import { validateContent, type ValidationOptions } from "./content/validateContent"
-import type { ValidationMode } from "./content/types"
+import type { Diagnostic, ValidationMode } from "./content/types"
 
 interface CliOptions extends ValidationOptions {}
 
@@ -13,14 +13,20 @@ function parseArguments(args: string[]): CliOptions {
   let mode: ValidationMode = "author"
   let contentRoot = "content"
   let manifestPath = "data/content-manifest.yml"
+  const seen = new Set<string>()
 
   for (let index = 0; index < args.length; index += 1) {
     const argument = args[index]
     if (!["--mode", "--content-root", "--manifest"].includes(argument)) {
       usageError(`未知参数: ${argument}`)
     }
-    const value = args[index + 1]
-    if (value === undefined || value.startsWith("--")) {
+    if (seen.has(argument)) {
+      usageError(`参数不能重复: ${argument}`)
+    }
+    seen.add(argument)
+    const rawValue = args[index + 1]
+    const value = rawValue?.trim()
+    if (value === undefined || value.length === 0 || value.startsWith("--")) {
       usageError(`参数缺少值: ${argument}`)
     }
     index += 1
@@ -39,11 +45,15 @@ function parseArguments(args: string[]): CliOptions {
   return { mode, contentRoot: resolve(contentRoot), manifestPath: resolve(manifestPath) }
 }
 
-function displayFile(file: string): string {
+function displayFile(item: Diagnostic): string {
+  const file = item.file.replace(/[\r\n]+/g, " ")
+  if (item.namespace === "manifest") return file
   if (file === "") return "content/"
-  if (file.startsWith("data/")) return file
-  if (file.includes("/data/") || file.endsWith("content-manifest.yml")) return file
   return file.startsWith("content/") ? file : `content/${file}`
+}
+
+function singleLine(message: string): string {
+  return message.replace(/[\r\n]+/g, " ")
 }
 
 async function main(): Promise<void> {
@@ -58,7 +68,7 @@ async function main(): Promise<void> {
 
   for (const item of diagnostics) {
     process.stdout.write(
-      `${item.severity.toUpperCase()} ${item.code} ${displayFile(item.file)}: ${item.message}\n`,
+      `${item.severity.toUpperCase()} ${item.code} ${displayFile(item)}: ${singleLine(item.message)}\n`,
     )
   }
   const errors = diagnostics.filter((item) => item.severity === "error").length
