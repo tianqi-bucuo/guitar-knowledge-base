@@ -51,6 +51,12 @@ test("parsePage normalizes frontmatter and ignores code syntax", () => {
   assert.ok(!page.headings.includes("不应成为标题"))
   assert.deepEqual(page.links, ["相关页面", "notes/target.md"])
   assert.deepEqual(page.embeds, ["assets/chord.svg", "assets/chord.png"])
+  assert.deepEqual(page.linkTargets, [
+    { raw: "相关页面", kind: "wikilink" },
+    { raw: "assets/chord.svg", kind: "wiki-embed" },
+    { raw: "notes/target.md", kind: "markdown-link" },
+    { raw: "assets/chord.png", kind: "markdown-image" },
+  ])
 })
 
 test("parsePage recognizes TOML frontmatter as present and normalizes it", () => {

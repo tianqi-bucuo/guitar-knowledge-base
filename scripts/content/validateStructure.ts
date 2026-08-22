@@ -2,12 +2,16 @@ import { toString } from "mdast-util-to-string"
 import remarkGfm from "remark-gfm"
 import remarkParse from "remark-parse"
 import { unified } from "unified"
-import { visit } from "unist-util-visit"
+import { SKIP, visit } from "unist-util-visit"
 import type { PageRecord } from "./parsePage"
 import { PAGE_TYPES, REQUIRED_SECTIONS, type Diagnostic, type PageType } from "./types"
 
 const PLACEHOLDER_PATTERN = /(?:^|[^\p{L}\p{N}_])(?:TODO|TBD|XXX)(?=$|[^\p{L}\p{N}_])/iu
 const FILL_MARKER_PATTERN = /<!--\s*fill\s*-->/iu
+
+function deduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
+  return [...new Map(diagnostics.map((item) => [JSON.stringify(item), item])).values()]
+}
 
 function addDiagnostic(
   diagnostics: Diagnostic[],
@@ -40,7 +44,7 @@ function hasNonEmptyOrderedLinks(body: string): boolean {
       if (
         candidate.type === "list" &&
         candidate.ordered === true &&
-        candidate.children.length > 0
+        candidate.children.some((item) => toString(item).trim().length > 0)
       ) {
         return true
       }
@@ -56,6 +60,9 @@ function validatePlaceholders(page: PageRecord, diagnostics: Diagnostic[]): void
   const tree = unified().use(remarkParse).use(remarkGfm).parse(page.body)
 
   visit(tree, (node) => {
+    if (node.type === "blockquote") {
+      return SKIP
+    }
     if (node.type === "heading" && toString(node).trim().length === 0) {
       addDiagnostic(diagnostics, page, "PLACEHOLDER_TEXT", "存在空标题")
     } else if (node.type === "html" && FILL_MARKER_PATTERN.test(node.value)) {
@@ -97,7 +104,7 @@ export function validateStructure(pages: PageRecord[]): Diagnostic[] {
     validatePlaceholders(page, diagnostics)
   }
 
-  return diagnostics.sort((left, right) =>
+  return deduplicateDiagnostics(diagnostics).sort((left, right) =>
     left.file === right.file
       ? left.code === right.code
         ? left.message.localeCompare(right.message, "zh-CN")

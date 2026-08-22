@@ -3,7 +3,7 @@ import { isAbsolute, relative, resolve, sep } from "node:path"
 import { posix } from "node:path"
 import { DOMParser } from "@xmldom/xmldom"
 import Slugger from "github-slugger"
-import type { PageRecord } from "./parsePage"
+import type { LinkTarget, LinkTargetKind, PageRecord } from "./parsePage"
 import type { Diagnostic } from "./types"
 
 export interface ResolvedLink {
@@ -35,6 +35,10 @@ type Resolution =
   | { kind: "external" }
   | { kind: "resolved"; target: string }
   | { kind: "error"; code: string; message: string }
+
+function deduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
+  return [...new Map(diagnostics.map((item) => [JSON.stringify(item), item])).values()]
+}
 
 function canonicalKey(value: string): string {
   return value
@@ -157,20 +161,15 @@ function isExternalTarget(target: string): boolean {
 }
 
 function normalizedPathTarget(
-  target: string,
+  decoded: string,
   sourceFile: string,
 ): { path: string; key: string } | Resolution {
-  if (target.includes("?") || target.includes("\\") || target.includes("\0")) {
+  if (decoded.includes("?") || decoded.includes("\\") || decoded.includes("\0")) {
     return {
       kind: "error",
       code: "INVALID_INTERNAL_TARGET",
-      message: `内部目标不允许 query、反斜线或 NUL: ${target}`,
+      message: `内部目标不允许 query、反斜线或 NUL: ${decoded}`,
     }
-  }
-
-  const decoded = decodeTarget(target)
-  if (decoded === undefined) {
-    return { kind: "error", code: "INVALID_INTERNAL_TARGET", message: `URI 编码无效: ${target}` }
   }
 
   const fromRoot = decoded.startsWith("/")
@@ -181,28 +180,35 @@ function normalizedPathTarget(
     return {
       kind: "error",
       code: "PATH_TRAVERSAL_TARGET",
-      message: `内部目标越出 content root: ${target}`,
+      message: `内部目标越出 content root: ${decoded}`,
     }
   }
 
   return { path, key: canonicalKey(path) }
 }
 
-function selectIndexed(
-  candidates: IndexedPage[] | undefined,
+function selectAcrossIndexes(
+  lookups: Array<IndexedPage[] | undefined>,
   raw: string,
 ): IndexedPage | Resolution | undefined {
-  if (!candidates || candidates.length === 0) {
+  const candidates = new Map<string, IndexedPage>()
+  for (const entries of lookups) {
+    for (const entry of entries ?? []) {
+      candidates.set(entry.file, entry)
+    }
+  }
+
+  if (candidates.size === 0) {
     return undefined
   }
-  if (candidates.length > 1) {
+  if (candidates.size > 1) {
     return {
       kind: "error",
       code: "AMBIGUOUS_INTERNAL_LINK",
       message: `内部目标对应多个页面: ${raw}`,
     }
   }
-  return candidates[0]
+  return candidates.values().next().value
 }
 
 function resolvePageTarget(
@@ -210,6 +216,7 @@ function resolvePageTarget(
   fragment: string | undefined,
   source: IndexedPage,
   indexes: PageIndexes,
+  kind: LinkTargetKind,
 ): Resolution {
   if (rawPath.length === 0) {
     return resolvePageFragment(source, fragment)
@@ -220,26 +227,31 @@ function resolvePageTarget(
     return normalized
   }
 
-  const decodedRootKey = canonicalKey(decodeTarget(rawPath) ?? rawPath)
+  const decodedRootKey = canonicalKey(rawPath)
   const basenameKey = canonicalKey(posix.basename(normalized.path))
-  const lookups: Array<IndexedPage[] | undefined> = [
-    indexes.files.get(normalized.key),
-    indexes.files.get(decodedRootKey),
-    indexes.permalinks.get(decodedRootKey),
-    indexes.aliases.get(decodedRootKey),
-  ]
-  if (!rawPath.includes("/")) {
-    lookups.push(indexes.basenames.get(basenameKey))
+  const isMarkdown = kind === "markdown-link" || kind === "markdown-image"
+  const lookups: Array<IndexedPage[] | undefined> = [indexes.files.get(normalized.key)]
+  if (isMarkdown) {
+    if (rawPath.startsWith("/")) {
+      lookups.push(indexes.permalinks.get(decodedRootKey))
+    }
+  } else {
+    lookups.push(
+      indexes.files.get(decodedRootKey),
+      indexes.permalinks.get(decodedRootKey),
+      indexes.aliases.get(decodedRootKey),
+    )
+    if (!rawPath.includes("/")) {
+      lookups.push(indexes.basenames.get(basenameKey))
+    }
   }
 
-  for (const candidates of lookups) {
-    const selected = selectIndexed(candidates, rawPath)
-    if (selected && "kind" in selected) {
-      return selected
-    }
-    if (selected) {
-      return resolvePageFragment(selected, fragment)
-    }
+  const selected = selectAcrossIndexes(lookups, rawPath)
+  if (selected && "kind" in selected) {
+    return selected
+  }
+  if (selected) {
+    return resolvePageFragment(selected, fragment)
   }
 
   return {
@@ -353,6 +365,7 @@ function resolveAssetTarget(rawPath: string, source: IndexedPage, contentRoot: s
 
 function resolveOne(
   raw: string,
+  targetKind: LinkTargetKind,
   source: IndexedPage,
   indexes: PageIndexes,
   contentRoot: string,
@@ -367,14 +380,25 @@ function resolveOne(
   const rawPath =
     fragmentIndex === -1 ? targetWithFragment : targetWithFragment.slice(0, fragmentIndex)
   const fragment = fragmentIndex === -1 ? undefined : targetWithFragment.slice(fragmentIndex + 1)
-  const extension = posix.extname(rawPath).toLocaleLowerCase("en-US")
+  const decodedPath = decodeTarget(rawPath)
+  if (decodedPath === undefined) {
+    return { kind: "error", code: "INVALID_INTERNAL_TARGET", message: `URI 编码无效: ${rawPath}` }
+  }
+  if (decodedPath.includes("?") || decodedPath.includes("\\") || decodedPath.includes("\0")) {
+    return {
+      kind: "error",
+      code: "INVALID_INTERNAL_TARGET",
+      message: `内部目标不允许 query、反斜线或 NUL: ${rawPath}`,
+    }
+  }
+  const extension = posix.extname(decodedPath).toLocaleLowerCase("en-US")
   const isPage = extension.length === 0 || extension === ".md"
 
   if (isPage) {
-    return resolvePageTarget(rawPath, fragment, source, indexes)
+    return resolvePageTarget(decodedPath, fragment, source, indexes, targetKind)
   }
 
-  return resolveAssetTarget(rawPath, source, contentRoot)
+  return resolveAssetTarget(decodedPath, source, contentRoot)
 }
 
 function analyzeLinks(pages: PageRecord[], contentRoot: string): Analysis {
@@ -389,8 +413,12 @@ function analyzeLinks(pages: PageRecord[], contentRoot: string): Analysis {
       continue
     }
 
-    for (const raw of [...page.links, ...page.embeds]) {
-      const result = resolveOne(raw, source, indexes, contentRoot)
+    const linkTargets: LinkTarget[] = page.linkTargets ?? [
+      ...page.links.map((raw) => ({ raw, kind: "wikilink" as const })),
+      ...page.embeds.map((raw) => ({ raw, kind: "wiki-embed" as const })),
+    ]
+    for (const { raw, kind } of linkTargets) {
+      const result = resolveOne(raw, kind, source, indexes, contentRoot)
       if (result.kind === "resolved") {
         resolved.push({ source: sourceFile, target: result.target, raw })
       } else if (result.kind === "error") {
@@ -404,14 +432,15 @@ function analyzeLinks(pages: PageRecord[], contentRoot: string): Analysis {
     }
   }
 
-  diagnostics.sort((left, right) =>
+  const uniqueDiagnostics = deduplicateDiagnostics(diagnostics)
+  uniqueDiagnostics.sort((left, right) =>
     left.file === right.file
       ? left.code === right.code
         ? left.message.localeCompare(right.message, "zh-CN")
         : left.code.localeCompare(right.code, "en-US")
       : left.file.localeCompare(right.file, "zh-CN"),
   )
-  return { resolved, diagnostics }
+  return { resolved, diagnostics: uniqueDiagnostics }
 }
 
 export function resolveInternalLinks(pages: PageRecord[], contentRoot: string): ResolvedLink[] {

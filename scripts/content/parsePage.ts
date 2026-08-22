@@ -7,6 +7,13 @@ import toml from "toml"
 import { unified } from "unified"
 import { visit } from "unist-util-visit"
 
+export type LinkTargetKind = "markdown-link" | "wikilink" | "markdown-image" | "wiki-embed"
+
+export interface LinkTarget {
+  raw: string
+  kind: LinkTargetKind
+}
+
 export interface PageRecord {
   file: string
   contentPath?: string
@@ -14,6 +21,7 @@ export interface PageRecord {
   headings: string[]
   links: string[]
   embeds: string[]
+  linkTargets?: LinkTarget[]
   frontmatter: Record<string, unknown>
   hasFrontmatter?: boolean
 }
@@ -81,6 +89,7 @@ export function parsePage(path: string): PageRecord {
   const body = parsed.content
   const links: string[] = []
   const embeds: string[] = []
+  const linkTargets: LinkTarget[] = []
   const headings: string[] = []
   const tree = unified().use(remarkParse).use(remarkGfm).parse(body)
 
@@ -91,9 +100,13 @@ export function parsePage(path: string): PageRecord {
         headings.push(heading)
       }
     } else if (node.type === "link") {
-      links.push(node.url.trim())
+      const target = node.url.trim()
+      links.push(target)
+      linkTargets.push({ raw: target, kind: "markdown-link" })
     } else if (node.type === "image") {
-      embeds.push(node.url.trim())
+      const target = node.url.trim()
+      embeds.push(target)
+      linkTargets.push({ raw: target, kind: "markdown-image" })
     } else if (node.type === "text") {
       const start = node.position?.start.offset
       const end = node.position?.end.offset
@@ -109,8 +122,10 @@ export function parsePage(path: string): PageRecord {
         const target = match[2].trim()
         if (match[1] === "!") {
           embeds.push(target)
+          linkTargets.push({ raw: target, kind: "wiki-embed" })
         } else {
           links.push(target)
+          linkTargets.push({ raw: target, kind: "wikilink" })
         }
       }
     }
@@ -122,6 +137,7 @@ export function parsePage(path: string): PageRecord {
     headings,
     links,
     embeds,
+    linkTargets,
     frontmatter: normalizeFrontmatter(parsed.data),
     hasFrontmatter: hasFrontmatterDelimiter(source),
   }

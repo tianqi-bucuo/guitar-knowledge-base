@@ -45,11 +45,30 @@ test("ignores placeholders inside fenced and inline code and inside larger words
   assert.deepEqual(validateStructure([page]), [])
 })
 
+test("ignores placeholder words inside blockquotes", () => {
+  const page = record(
+    "lesson",
+    lessonSections,
+    "> TODO 是本引用讨论的术语，不是页面占位符。\n\n正文已完成。\n",
+  )
+
+  assert.deepEqual(validateStructure([page]), [])
+})
+
 test("detects HTML fill markers and empty headings from the Markdown AST", () => {
   const page = record("lesson", lessonSections, "<!-- fill -->\n\n##   \n")
   const placeholders = validateStructure([page]).filter((item) => item.code === "PLACEHOLDER_TEXT")
 
   assert.equal(placeholders.length, 2)
+})
+
+test("deduplicates exact diagnostics from repeated placeholders", () => {
+  const page = record("lesson", lessonSections, "TODO\n\nTODO\n")
+
+  assert.deepEqual(
+    validateStructure([page]).map((item) => item.code),
+    ["PLACEHOLDER_TEXT"],
+  )
 })
 
 test("requires exact type-specific sections for path, index, and glossary pages", () => {
@@ -80,6 +99,16 @@ test("requires a non-empty ordered list in the ordered-links section", () => {
   assert.ok(
     validateStructure([unorderedListPage]).some((item) => item.code === "MISSING_REQUIRED_SECTION"),
   )
+})
+
+test("rejects ordered lists whose items have no content", () => {
+  const page = record(
+    "path",
+    navigationSections,
+    "## 适用对象\n\n说明\n\n## 导航方法\n\n说明\n\n## 有序链接\n\n1.\n\n## 完成标准\n\n说明\n\n## 更新策略\n\n说明\n",
+  )
+
+  assert.ok(validateStructure([page]).some((item) => item.code === "MISSING_REQUIRED_SECTION"))
 })
 
 test("accepts complete path, index, and glossary structures", () => {

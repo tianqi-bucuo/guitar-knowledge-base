@@ -59,12 +59,65 @@ test("resolves relative Markdown, URL-encoded, permalink, and page embed targets
   )
 })
 
+test("keeps Markdown relative paths distinct from wikilink shortest paths", () => {
+  const source = parsePage(`${contentRoot}/nested/source.md`)
+  const rootTarget = parsePage(`${contentRoot}/root-only.md`)
+  const pages = [source, rootTarget]
+  const resolved = resolveInternalLinks(pages, contentRoot)
+  const diagnostics = validateLinks(pages, contentRoot)
+
+  assert.deepEqual(
+    source.linkTargets?.map((target) => target.kind),
+    ["markdown-link", "wikilink"],
+  )
+  assert.equal(targetFor(resolved, "root-only.md"), undefined)
+  assert.equal(targetFor(resolved, "root-only"), "root-only.md")
+  assert.ok(
+    diagnostics.some(
+      (item) => item.code === "BROKEN_INTERNAL_LINK" && item.message.includes("root-only.md"),
+    ),
+  )
+})
+
 test("reports missing pages, missing assets, and duplicate basename ambiguity separately", () => {
   const codes = validateLinks(fixturePages(), contentRoot).map((item) => item.code)
 
   assert.ok(codes.includes("BROKEN_INTERNAL_LINK"))
   assert.ok(codes.includes("MISSING_LOCAL_ASSET"))
   assert.ok(codes.includes("AMBIGUOUS_INTERNAL_LINK"))
+})
+
+test("deduplicates exact diagnostics from repeated targets", () => {
+  const page = pageWithTargets(
+    ["不存在页面", "不存在页面"],
+    ["assets/missing.svg", "assets/missing.svg"],
+  )
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map((item) => item.code),
+    ["BROKEN_INTERNAL_LINK", "MISSING_LOCAL_ASSET"],
+  )
+})
+
+test("reports ambiguity across file, permalink, and alias namespaces", () => {
+  const source = pageWithTargets(["collision"])
+  const page = (file: string, permalink: string, aliases: string[] = []): PageRecord => ({
+    ...pageWithTargets([]),
+    file: `${contentRoot}/${file}`,
+    frontmatter: { permalink, aliases },
+  })
+  const pages = [
+    source,
+    page("collision.md", "/tests/file-owner"),
+    page("permalink-owner.md", "/collision"),
+    page("alias-owner.md", "/tests/alias-owner", ["collision"]),
+  ]
+
+  assert.equal(targetFor(resolveInternalLinks(pages, contentRoot), "collision"), undefined)
+  assert.deepEqual(
+    validateLinks(pages, contentRoot).map((item) => item.code),
+    ["AMBIGUOUS_INTERNAL_LINK"],
+  )
 })
 
 test("rejects invalid encoding, internal queries, traversal, missing fragments, and blocks", () => {
@@ -74,6 +127,27 @@ test("rejects invalid encoding, internal queries, traversal, missing fragments, 
   assert.ok(codes.includes("PATH_TRAVERSAL_TARGET"))
   assert.ok(codes.includes("BROKEN_FRAGMENT"))
   assert.ok(codes.includes("UNSUPPORTED_FRAGMENT"))
+})
+
+test("decodes paths before rejecting reserved characters and classifying extensions", () => {
+  const page = pageWithTargets([
+    "assets/valid%2Esvg",
+    "notes/目标页面%3Fview=1.md",
+    "notes/目标页面%5Cother.md",
+    "assets/valid%00.svg",
+    "%2E%2E/outside.md",
+  ])
+  const pages = [page, parsePage(`${contentRoot}/notes/目标页面.md`)]
+  const resolved = resolveInternalLinks(pages, contentRoot)
+  const codes = validateLinks(pages, contentRoot).map((item) => item.code)
+
+  assert.equal(targetFor(resolved, "assets/valid%2Esvg"), "assets/valid.svg")
+  assert.deepEqual(codes, [
+    "INVALID_INTERNAL_TARGET",
+    "INVALID_INTERNAL_TARGET",
+    "INVALID_INTERNAL_TARGET",
+    "PATH_TRAVERSAL_TARGET",
+  ])
 })
 
 test("ignores every external protocol without fetching it", () => {
