@@ -328,6 +328,14 @@ const task3LinkContextFiles = [
   "content/05-弹唱与伴奏/前奏间奏与尾奏.md",
   "content/05-弹唱与伴奏/弹唱协调训练.md",
   "content/05-弹唱与伴奏/完整歌曲编配流程.md",
+  "content/06-基础乐理与指板/音高音名与唱名.md",
+  "content/06-基础乐理与指板/指板上的音名.md",
+  "content/06-基础乐理与指板/全音与半音.md",
+  "content/06-基础乐理与指板/音程入门.md",
+  "content/06-基础乐理与指板/大调音阶.md",
+  "content/06-基础乐理与指板/调与调号.md",
+  "content/06-基础乐理与指板/三和弦构成.md",
+  "content/06-基础乐理与指板/顺阶和弦与级数.md",
 ]
 const task3LinkContext = task3LinkContextFiles.filter(existsSync).map((file) => parsePage(file))
 
@@ -488,7 +496,8 @@ test(
     assert.match(routeItems[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
     assert.match(routeItems[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
     assert.match(routeItems[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
-    for (const item of routeItems.slice(6)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(routeItems[6], /\[\[06-基础乐理与指板\/音高音名与唱名\|音高音名与唱名\]\]/u)
+    for (const item of routeItems.slice(7)) assert.doesNotMatch(item, /\[\[/u)
 
     for (const expected of expectedPages) {
       const page = pageByFile.get(expected.file)
