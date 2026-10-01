@@ -658,11 +658,21 @@ test("stabilizes broken, cyclic, and non-file assets while accepting an in-root 
   }
 })
 
-test("the three published seed pages have no link diagnostics", () => {
+test("the thirteen published Task 2 pages have no link diagnostics", () => {
   const pages = [
     parsePage("content/index.md"),
     parsePage("content/00-从这里开始/如何使用知识库.md"),
     parsePage("content/00-从这里开始/学习路线总览.md"),
+    parsePage("content/00-从这里开始/开始前自测.md"),
+    parsePage("content/00-从这里开始/吉他调音与标准音.md"),
+    parsePage("content/01-持琴与基础动作/认识民谣吉他.md"),
+    parsePage("content/01-持琴与基础动作/坐姿与站姿.md"),
+    parsePage("content/01-持琴与基础动作/左手拇指与手腕.md"),
+    parsePage("content/01-持琴与基础动作/右手位置与发力.md"),
+    parsePage("content/01-持琴与基础动作/正确按弦.md"),
+    parsePage("content/01-持琴与基础动作/拨片握法与上下拨.md"),
+    parsePage("content/01-持琴与基础动作/空弦与单音练习.md"),
+    parsePage("content/01-持琴与基础动作/相邻弦与跨弦.md"),
   ]
 
   assert.deepEqual(validateLinks(pages, "content"), [])
