@@ -354,7 +354,7 @@ test("accepts generated-style SVG with a local fragment reference", () => {
     ),
     file: "content/diagram-validator-probe.md",
   }
-  assert.equal(diagrams.length, 14)
+  assert.equal(diagrams.length, 17)
   assert.deepEqual(validateLinks([productionPage], "content"), [])
 })
 
@@ -658,7 +658,7 @@ test("stabilizes broken, cyclic, and non-file assets while accepting an in-root 
   }
 })
 
-test("the thirteen published Task 2 pages have no link diagnostics", () => {
+test("the twenty-five currently published pages have no link diagnostics", () => {
   const pages = [
     parsePage("content/index.md"),
     parsePage("content/00-从这里开始/如何使用知识库.md"),
@@ -673,6 +673,18 @@ test("the thirteen published Task 2 pages have no link diagnostics", () => {
     parsePage("content/01-持琴与基础动作/拨片握法与上下拨.md"),
     parsePage("content/01-持琴与基础动作/空弦与单音练习.md"),
     parsePage("content/01-持琴与基础动作/相邻弦与跨弦.md"),
+    parsePage("content/02-和弦系统/和弦图读法.md"),
+    parsePage("content/02-和弦系统/Em与E和弦.md"),
+    parsePage("content/02-和弦系统/Am与A和弦.md"),
+    parsePage("content/02-和弦系统/C和弦.md"),
+    parsePage("content/02-和弦系统/G和弦.md"),
+    parsePage("content/02-和弦系统/D与Dm和弦.md"),
+    parsePage("content/02-和弦系统/常用七和弦.md"),
+    parsePage("content/02-和弦系统/和弦转换方法.md"),
+    parsePage("content/02-和弦系统/C-G-Am-Em和弦进行.md"),
+    parsePage("content/02-和弦系统/C-Am-F-G和弦进行.md"),
+    parsePage("content/02-和弦系统/F简化指法与横按准备.md"),
+    parsePage("content/02-和弦系统/F大横按与移动和弦.md"),
   ]
 
   assert.deepEqual(validateLinks(pages, "content"), [])

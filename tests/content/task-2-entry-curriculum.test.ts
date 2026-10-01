@@ -289,6 +289,21 @@ const shortSafetyBlock =
 const missingFiles = expectedPages.map(({ file }) => file).filter((file) => !existsSync(file))
 const pages = missingFiles.length === 0 ? expectedPages.map(({ file }) => parsePage(file)) : []
 const pageByFile = new Map(pages.map((page) => [page.file, page]))
+const task3LinkContextFiles = [
+  "content/02-和弦系统/和弦图读法.md",
+  "content/02-和弦系统/Em与E和弦.md",
+  "content/02-和弦系统/Am与A和弦.md",
+  "content/02-和弦系统/C和弦.md",
+  "content/02-和弦系统/G和弦.md",
+  "content/02-和弦系统/D与Dm和弦.md",
+  "content/02-和弦系统/常用七和弦.md",
+  "content/02-和弦系统/和弦转换方法.md",
+  "content/02-和弦系统/C-G-Am-Em和弦进行.md",
+  "content/02-和弦系统/C-Am-F-G和弦进行.md",
+  "content/02-和弦系统/F简化指法与横按准备.md",
+  "content/02-和弦系统/F大横按与移动和弦.md",
+]
+const task3LinkContext = task3LinkContextFiles.filter(existsSync).map((file) => parsePage(file))
 
 function sorted(values: Iterable<string>): string[] {
   return [...values].sort((left, right) => left.localeCompare(right, "en-US"))
@@ -406,7 +421,7 @@ test(
 )
 
 test(
-  "the existing validators accept all Task 2 pages and their current links",
+  "the existing validators accept Task 2 pages with current link-resolution context",
   {
     skip: missingFiles.length > 0,
   },
@@ -414,7 +429,7 @@ test(
     const manifest = loadManifest("data/content-manifest.yml")
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
-    assert.deepEqual(validateLinks(pages, contentRoot), [])
+    assert.deepEqual(validateLinks([...pages, ...task3LinkContext], contentRoot), [])
   },
 )
 

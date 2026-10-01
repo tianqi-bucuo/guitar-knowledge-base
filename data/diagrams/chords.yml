@@ -54,8 +54,29 @@
   fingers: [null, 2, 3, null, null, null]
   barres: []
 
+- id: e7-open
+  title: E7 属七和弦（开放把位）
+  baseFret: 1
+  frets: [0, 2, 0, 1, 0, 0]
+  fingers: [null, 2, null, 1, null, null]
+  barres: []
+
+- id: a7-open
+  title: A7 属七和弦（开放把位）
+  baseFret: 1
+  frets: [x, 0, 2, 0, 2, 0]
+  fingers: [null, null, 2, null, 3, null]
+  barres: []
+
+- id: d7-open
+  title: D7 属七和弦（开放把位）
+  baseFret: 1
+  frets: [x, x, 0, 2, 1, 2]
+  fingers: [null, null, null, 2, 1, 3]
+  barres: []
+
 - id: f-major-simplified
-  title: F 大三和弦简化按法（F/C）
+  title: F 大三和弦简化按法
   baseFret: 1
   frets: [x, x, 3, 2, 1, 1]
   fingers: [null, null, 3, 2, 1, 1]

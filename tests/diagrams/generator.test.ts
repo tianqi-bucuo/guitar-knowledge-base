@@ -341,7 +341,7 @@ test("CLI returns 0 for write/check, 1 for generation errors, and 2 for usage er
   }
 })
 
-test("approved YAML records all ten chord fingerings and barres exactly", async () => {
+test("approved YAML records all thirteen chord fingerings and barres exactly", async () => {
   const source = await readFile("data/diagrams/chords.yml", "utf8")
   const chords = load(source) as ChordDefinition[]
 
@@ -411,6 +411,27 @@ test("approved YAML records all ten chord fingerings and barres exactly", async 
         barres: [],
       },
       {
+        id: "e7-open",
+        baseFret: 1,
+        frets: [0, 2, 0, 1, 0, 0],
+        fingers: [null, 2, null, 1, null, null],
+        barres: [],
+      },
+      {
+        id: "a7-open",
+        baseFret: 1,
+        frets: ["x", 0, 2, 0, 2, 0],
+        fingers: [null, null, 2, null, 3, null],
+        barres: [],
+      },
+      {
+        id: "d7-open",
+        baseFret: 1,
+        frets: ["x", "x", 0, 2, 1, 2],
+        fingers: [null, null, null, 2, 1, 3],
+        barres: [],
+      },
+      {
         id: "f-major-simplified",
         baseFret: 1,
         frets: ["x", "x", 3, 2, 1, 1],
@@ -427,7 +448,7 @@ test("approved YAML records all ten chord fingerings and barres exactly", async 
     ],
   )
   assert.ok(chords.every(({ title }) => /\p{Script=Han}/u.test(title)))
-  assert.equal(chords[8].title, "F 大三和弦简化按法（F/C）")
+  assert.equal(chords[11].title, "F 大三和弦简化按法")
 })
 
 test("approved fretboard records all 24 C-major positions and only three roots", async () => {
