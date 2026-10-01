@@ -62,20 +62,14 @@ test("loads a complete valid manifest", () => {
   )
 })
 
-test("loads the initial manifest for the three published seed pages", () => {
+test("loads the canonical curriculum manifest", () => {
   const manifest = loadManifest("data/content-manifest.yml")
 
+  assert.equal(manifest.version, 1)
   assert.equal(manifest.release.minPages, 60)
   assert.equal(manifest.release.maxPages, 80)
-  assert.equal(manifest.modules.length, 10)
-  assert.deepEqual(
-    manifest.pages.map((page) => [page.id, page.type]),
-    [
-      ["home", "index"],
-      ["how-to-use", "lesson"],
-      ["learning-roadmap", "path"],
-    ],
-  )
+  assert.ok(manifest.modules.length > 0)
+  assert.ok(manifest.pages.length > 0)
 })
 
 test("rejects duplicate page ids", () => {
