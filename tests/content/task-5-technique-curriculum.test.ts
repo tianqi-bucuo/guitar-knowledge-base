@@ -460,6 +460,7 @@ const arabicFixedQuotaPattern =
   /(?:\d+\s*(?:BPM|秒钟?|分钟|小时|次|遍|回|组|轮|天|日|周|星期)|BPM\s*\d+)/giu
 const chineseQuotaNumber = "[零〇一二两三四五六七八九十百千万]+"
 const chineseFixedQuotaPatterns = [
+  new RegExp(`${chineseQuotaNumber}\\s*BPM`, "giu"),
   new RegExp(
     `(?:每天|每日|每周|每星期)\\s*(?:练习|练|做|重复)?\\s*${chineseQuotaNumber}\\s*(?:BPM|秒钟?|分钟|小时|次|遍|回|组|轮)`,
     "gu",
@@ -496,6 +497,9 @@ test("fixed practice quota detection covers Chinese numerals without rejecting m
     "重复两组",
     "坚持二十秒",
     "练六十 BPM",
+    "速度设为六十 BPM",
+    "六十 BPM",
+    "节拍器设为六十 BPM",
     "每天练 10 分钟",
   ]
   for (const sample of forbidden)
