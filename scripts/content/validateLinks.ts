@@ -212,7 +212,8 @@ function decodeUtf8Svg(bytes: Uint8Array): string | undefined {
     return undefined
   }
   try {
-    return new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(content)
+    const source = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(content)
+    return source.includes("\uFEFF") ? undefined : source
   } catch {
     return undefined
   }

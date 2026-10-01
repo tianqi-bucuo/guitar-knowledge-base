@@ -425,6 +425,15 @@ test("rejects a second leading UTF-8 BOM without an XML declaration", () => {
   )
 })
 
+test("rejects a trailing UTF-8 BOM after the SVG root", () => {
+  const page = pageWithTargets(["assets/unsafe-trailing-utf8-bom.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET"],
+  )
+})
+
 test("enforces BOM and document-level text boundaries around the SVG root", () => {
   const root = mkdtempSync(join(tmpdir(), "guitar-svg-wrapper-"))
   const assets = join(root, "assets")
@@ -446,7 +455,26 @@ test("enforces BOM and document-level text boundaries around the SVG root", () =
       true,
     ],
     ["double-bom-declaration", Buffer.concat([bom, bom, declaration, svg]), false],
-    ["outside-feff", Buffer.concat([Buffer.from("<!--before-->", "utf8"), bom, svg]), false],
+    ["feff-before-root", Buffer.concat([Buffer.from("<!--before-->", "utf8"), bom, svg]), false],
+    ["feff-between-declaration-and-root", Buffer.concat([declaration, bom, svg]), false],
+    [
+      "feff-inside-root",
+      Buffer.concat([
+        Buffer.from(
+          '<svg xmlns="http://www.w3.org/2000/svg"><title>unsafe wrapper</title>',
+          "utf8",
+        ),
+        bom,
+        Buffer.from("</svg>", "utf8"),
+      ]),
+      false,
+    ],
+    ["feff-after-root", Buffer.concat([svg, bom]), false],
+    [
+      "feff-after-root-with-newline",
+      Buffer.concat([svg, Buffer.from("\n", "utf8"), bom, Buffer.from("\n", "utf8")]),
+      false,
+    ],
     ["outside-text-before", Buffer.concat([Buffer.from("x", "utf8"), svg]), false],
     ["outside-text-after", Buffer.concat([svg, Buffer.from("x", "utf8")]), false],
   ] as const
@@ -469,7 +497,7 @@ test("enforces BOM and document-level text boundaries around the SVG root", () =
     assert.deepEqual(validateLinks([probe(true)], root), [])
     assert.deepEqual(
       validateLinks([probe(false)], root).map(({ code }) => code),
-      Array.from({ length: 4 }, () => "INVALID_SVG_ASSET"),
+      Array.from({ length: 8 }, () => "INVALID_SVG_ASSET"),
     )
   } finally {
     rmSync(root, { recursive: true, force: true })
