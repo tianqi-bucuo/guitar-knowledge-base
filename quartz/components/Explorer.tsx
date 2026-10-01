@@ -1,4 +1,5 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
+import { useId } from "preact/hooks"
 import style from "./styles/explorer.scss"
 
 // @ts-ignore
@@ -55,13 +56,12 @@ export type FolderState = {
   collapsed: boolean
 }
 
-let numExplorers = 0
 export default ((userOpts?: Partial<Options>) => {
   const opts: Options = { ...defaultOptions, ...userOpts }
   const { OverflowList, overflowListAfterDOMLoaded } = OverflowListFactory()
 
   const Explorer: QuartzComponent = ({ cfg, displayClass }: QuartzComponentProps) => {
-    const id = `explorer-${numExplorers++}`
+    const id = `explorer-${useId()}`
 
     return (
       <div
