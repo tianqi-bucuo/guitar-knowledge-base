@@ -19,7 +19,7 @@ interface ExpectedLesson {
   frontmatter: Record<string, unknown>
   sources: string[]
   claimAnchors: Record<string, string>
-  links: string[]
+  links: Record<string, string>
   tables: string[][][]
   orderedSteps: string[]
 }
@@ -78,12 +78,12 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": "人的声音在音高、音量和音色上会有差异",
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "04-演奏技巧/自然泛音与打板",
-      "02-和弦系统/C-Am-F-G和弦进行",
-      "03-节奏系统/六八拍伴奏",
-      "05-弹唱与伴奏/变调夹原理与用法",
-    ],
+    links: {
+      "04-演奏技巧/自然泛音与打板": "自然泛音与打板",
+      "02-和弦系统/C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
+      "03-节奏系统/六八拍伴奏": "六八拍伴奏",
+      "05-弹唱与伴奏/变调夹原理与用法": "变调夹原理与用法",
+    },
     tables: [[["候选版本", "最低处", "最高处", "整段后声音", "吉他可执行性", "结论"]]],
     orderedSteps: [
       "先用学习者原创、公版或合法取得的短材料单独试唱。",
@@ -112,12 +112,12 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": "变调夹不会替你判断人声",
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "05-弹唱与伴奏/根据人声选择调",
-      "00-从这里开始/吉他调音与标准音",
-      "02-和弦系统/F大横按与移动和弦",
-      "05-弹唱与伴奏/和弦级数与移调",
-    ],
+    links: {
+      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
+      "00-从这里开始/吉他调音与标准音": "吉他调音与标准音",
+      "02-和弦系统/F大横按与移动和弦": "F大横按与移动和弦",
+      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
+    },
     tables: [
       [
         ["按法名称", "C", "G", "Am", "F"],
@@ -152,13 +152,13 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": "旋律整体移动后仍要重新试唱",
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "05-弹唱与伴奏/根据人声选择调",
-      "05-弹唱与伴奏/变调夹原理与用法",
-      "02-和弦系统/C-Am-F-G和弦进行",
-      "02-和弦系统/C-G-Am-Em和弦进行",
-      "05-弹唱与伴奏/听辨歌曲结构",
-    ],
+    links: {
+      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
+      "05-弹唱与伴奏/变调夹原理与用法": "变调夹原理与用法",
+      "02-和弦系统/C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
+      "02-和弦系统/C-G-Am-Em和弦进行": "C-G-Am-Em和弦进行",
+      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
+    },
     tables: [
       [
         ["小节", "1", "2", "3", "4", "5", "6", "7", "8"],
@@ -192,12 +192,12 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": safetyBlock,
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "03-节奏系统/重音与强弱层次",
-      "03-节奏系统/切分节奏入门",
-      "00-从这里开始/学习路线总览",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比",
-    ],
+    links: {
+      "03-节奏系统/重音与强弱层次": "重音与强弱层次",
+      "03-节奏系统/切分节奏入门": "切分节奏入门",
+      "00-从这里开始/学习路线总览": "学习路线总览",
+      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+    },
     tables: [[["段落序号", "开始线索", "结束线索", "重复或对比", "暂记标签", "再出现位置"]]],
     orderedSteps: [],
   },
@@ -221,13 +221,13 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": safetyBlock,
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "05-弹唱与伴奏/听辨歌曲结构",
-      "03-节奏系统/重音与强弱层次",
-      "03-节奏系统/基础八分音符扫弦",
-      "04-演奏技巧/常用分解和弦型",
-      "05-弹唱与伴奏/前奏间奏与尾奏",
-    ],
+    links: {
+      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
+      "03-节奏系统/重音与强弱层次": "重音与强弱层次",
+      "03-节奏系统/基础八分音符扫弦": "基础八分音符扫弦",
+      "04-演奏技巧/常用分解和弦型": "常用分解和弦型",
+      "05-弹唱与伴奏/前奏间奏与尾奏": "前奏间奏与尾奏",
+    },
     tables: [
       [
         ["口数", "1", "&", "2", "&", "3", "&", "4", "&"],
@@ -259,12 +259,12 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": safetyBlock,
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "05-弹唱与伴奏/听辨歌曲结构",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比",
-      "03-节奏系统/四拍全下扫",
-      "05-弹唱与伴奏/弹唱协调训练",
-    ],
+    links: {
+      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
+      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+      "03-节奏系统/四拍全下扫": "四拍全下扫",
+      "05-弹唱与伴奏/弹唱协调训练": "弹唱协调训练",
+    },
     tables: [
       [
         ["位置", "候选级数", "试听目的"],
@@ -293,13 +293,13 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": safetyBlock,
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "05-弹唱与伴奏/根据人声选择调",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比",
-      "03-节奏系统/第一次使用节拍器",
-      "03-节奏系统/基础八分音符扫弦",
-      "05-弹唱与伴奏/完整歌曲编配流程",
-    ],
+    links: {
+      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
+      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+      "03-节奏系统/第一次使用节拍器": "第一次使用节拍器",
+      "03-节奏系统/基础八分音符扫弦": "基础八分音符扫弦",
+      "05-弹唱与伴奏/完整歌曲编配流程": "完整歌曲编配流程",
+    },
     tables: [
       [
         ["口数", "1", "&", "2", "&", "3", "&", "4", "&"],
@@ -334,18 +334,18 @@ const expectedLessons: ExpectedLesson[] = [
       "voice-nidcd": safetyBlock,
       "safety-bapam": safetyBlock,
     },
-    links: [
-      "05-弹唱与伴奏/根据人声选择调",
-      "05-弹唱与伴奏/变调夹原理与用法",
-      "05-弹唱与伴奏/和弦级数与移调",
-      "05-弹唱与伴奏/听辨歌曲结构",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比",
-      "05-弹唱与伴奏/前奏间奏与尾奏",
-      "05-弹唱与伴奏/弹唱协调训练",
-      "03-节奏系统/重音与强弱层次",
-      "03-节奏系统/基础八分音符扫弦",
-      "03-节奏系统/第一次使用节拍器",
-    ],
+    links: {
+      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
+      "05-弹唱与伴奏/变调夹原理与用法": "变调夹原理与用法",
+      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
+      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
+      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+      "05-弹唱与伴奏/前奏间奏与尾奏": "前奏间奏与尾奏",
+      "05-弹唱与伴奏/弹唱协调训练": "弹唱协调训练",
+      "03-节奏系统/重音与强弱层次": "重音与强弱层次",
+      "03-节奏系统/基础八分音符扫弦": "基础八分音符扫弦",
+      "03-节奏系统/第一次使用节拍器": "第一次使用节拍器",
+    },
     tables: [[["步骤", "当前选择", "可观察证据", "下一次只改一项"]]],
     orderedSteps: [
       "确认目标与合法材料",
@@ -495,6 +495,22 @@ function fixedPracticeQuotaMatches(body: string): string[] {
   ].map((match) => match[0])
 }
 
+const copyrightBoundaryPatterns = [
+  /\bTAB\b/giu,
+  /Bohemian Rhapsody|Pride \(In the Name of Love\)|In My Lonely Room/giu,
+  /\b\d{1,2}:\d{2}\b/gu,
+  /《[^》\r\n]+》/gu,
+  /(?:来源|外部)?(?:歌曲(?:名|标题|例|示例)?|歌名|曲名)\s*[：:]\s*\S[^\r\n]*/giu,
+  /(?:可照|照着|仿照|采用|使用)\s*[“"'‘][^”"'’\r\n]+[”"'’]\s*(?:编配|伴奏|改编)/giu,
+  /(?:^|[。！？；\n])\s*(?:(?:主歌|副歌)\s*)?歌词(?:摘录|行|片段)?\s*[：:]\s*\S[^\r\n]*/gimu,
+]
+
+function copyrightBoundaryMatches(body: string): string[] {
+  return copyrightBoundaryPatterns.flatMap((pattern) =>
+    [...body.matchAll(pattern)].map((match) => match[0]),
+  )
+}
+
 function sha256(file: string): string {
   return createHash("sha256").update(readFileSync(file)).digest("hex")
 }
@@ -532,6 +548,37 @@ test("fixed practice quota detection rejects Arabic and Chinese dosages without 
   ]
   for (const sample of musicalCoordinates)
     assert.deepEqual(fixedPracticeQuotaMatches(sample), [], `must allow: ${sample}`)
+})
+
+test("copyright boundary detection rejects external-song, lyric, TAB, and timestamp fixtures", () => {
+  const forbidden = [
+    "歌词：Let it be, let it be。",
+    "副歌歌词行: Hello from the other side.",
+    "例如可照《Let It Be》编配。",
+    "例如可照“Let It Be”编配。",
+    "歌曲示例：“Imagine”。",
+    "来源歌曲例：In My Lonely Room。",
+    "来源歌曲例：Pride (In the Name of Love)。",
+    "外部歌名：Bohemian Rhapsody。",
+    "附 TAB 片段。",
+    "来源分析时间点 01:23。",
+  ]
+  for (const sample of forbidden)
+    assert.notDeepEqual(copyrightBoundaryMatches(sample), [], `must reject: ${sample}`)
+})
+
+test("copyright boundary detection allows abstract curriculum and legal-boundary prose", () => {
+  const allowed = [
+    "课程页标题：根据人声选择调。",
+    "可回看“听辨歌曲结构”与“前奏间奏与尾奏”。",
+    "结构示例：“前奏 → 主歌 → 副歌 → 间奏 → 主歌 → 副歌 → 尾奏”。",
+    "页面不抄歌词、旋律或完整和弦谱。",
+    "记录歌词或诗行结束这一结构线索。",
+    "本站原创八小节练习，不对应任何歌曲。",
+    "歌曲结构可以由重复和对比听辨。",
+  ]
+  for (const sample of allowed)
+    assert.deepEqual(copyrightBoundaryMatches(sample), [], `must allow: ${sample}`)
 })
 
 test("all protected diagram definitions and assets remain byte-for-byte unchanged", () => {
@@ -825,12 +872,7 @@ test(
       const body = page.body
       assert.deepEqual(page.embeds, [], `${expected.file} embeds`)
       assert.match(body, /原创练习|本站原创/u, `${expected.file} originality`)
-      assert.doesNotMatch(
-        body,
-        /\bTAB\b|Bohemian Rhapsody|Pride \(In the Name of Love\)/iu,
-        expected.file,
-      )
-      assert.doesNotMatch(body, /\b\d{1,2}:\d{2}\b/u, `${expected.file} source timestamp`)
+      assert.deepEqual(copyrightBoundaryMatches(body), [], `${expected.file} copyright boundary`)
       assert.match(body, /原创、公版或合法取得/u, `${expected.file} legal material boundary`)
       const practice = section(body, "分级练习")
       assert.match(practice, /一级/u, `${expected.file} level one`)
@@ -850,8 +892,13 @@ test(
       const page = pageByFile.get(expected.file)!
       assert.deepEqual(
         normalizedInternalTargets(page),
-        sorted(expected.links),
-        `${expected.file} links`,
+        sorted(Object.keys(expected.links)),
+        `${expected.file} link targets`,
+      )
+      assert.deepEqual(
+        sorted(new Set(internalCurriculumLinks(page))),
+        sorted(Object.entries(expected.links).map(([target, alias]) => `${target}|${alias}`)),
+        `${expected.file} exact link target and alias pairs`,
       )
       for (const raw of internalCurriculumLinks(page)) {
         assert.match(raw, /^[^|/]+\/.+\|.+$/u, `${expected.file}: ${raw}`)
