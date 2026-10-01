@@ -80,6 +80,8 @@ const ALLOWED_SVG_ATTRIBUTES = new Set([
   "lengthAdjust",
   "href",
 ])
+const XML_DECLARATION_DATA =
+  /^version[\t\n\r ]*=[\t\n\r ]*(?:"1\.[01]"|'1\.[01]')(?:[\t\n\r ]+encoding[\t\n\r ]*=[\t\n\r ]*(?:"[A-Za-z][A-Za-z0-9._-]*"|'[A-Za-z][A-Za-z0-9._-]*'))?(?:[\t\n\r ]+standalone[\t\n\r ]*=[\t\n\r ]*(?:"(?:yes|no)"|'(?:yes|no)'))?$/u
 
 function deduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   return [...new Map(diagnostics.map((item) => [JSON.stringify(item), item])).values()]
@@ -202,6 +204,15 @@ function isAllowedSvgAttribute(attribute: {
   return ALLOWED_SVG_ATTRIBUTES.has(attribute.name) && attribute.namespaceURI == null
 }
 
+function isValidXmlDeclaration(node: Node, document: Document): boolean {
+  return (
+    node.parentNode?.nodeType === 9 &&
+    document.childNodes.item(0) === node &&
+    node.nodeName === "xml" &&
+    XML_DECLARATION_DATA.test(node.nodeValue ?? "")
+  )
+}
+
 function hasForbiddenProcessingInstruction(document: Document): boolean {
   const nodes = [
     ...Array.from(document.childNodes ?? []),
@@ -209,10 +220,11 @@ function hasForbiddenProcessingInstruction(document: Document): boolean {
       Array.from(element.childNodes ?? []),
     ),
   ]
-  return nodes.some(
-    (node) =>
-      node.nodeType === 7 &&
-      !(node.parentNode?.nodeType === 9 && node.nodeName.toLocaleLowerCase("en-US") === "xml"),
+  const processingInstructions = nodes.filter((node) => node.nodeType === 7)
+  return (
+    processingInstructions.length > 0 &&
+    (processingInstructions.length !== 1 ||
+      !isValidXmlDeclaration(processingInstructions[0], document))
   )
 }
 

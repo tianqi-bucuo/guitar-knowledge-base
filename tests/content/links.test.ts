@@ -383,6 +383,71 @@ test("rejects elements and processing instructions outside the generated SVG voc
   )
 })
 
+test("rejects a malformed lowercase XML declaration processing instruction", () => {
+  const page = pageWithTargets(["assets/unsafe-malformed-xml-declaration.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET"],
+  )
+})
+
+test("rejects a case-invalid XML declaration processing instruction", () => {
+  const page = pageWithTargets(["assets/unsafe-uppercase-xml-declaration.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET"],
+  )
+})
+
+test("accepts only one first-node XML declaration with complete ordered grammar", () => {
+  const root = mkdtempSync(join(tmpdir(), "guitar-svg-declaration-"))
+  const assets = join(root, "assets")
+  const svg = (prefix: string, nested = "") =>
+    `${prefix}<svg xmlns="http://www.w3.org/2000/svg"><title>XML declaration probe</title>${nested}</svg>`
+  const valid = [
+    ["minimal", svg('<?xml version="1.0"?>')],
+    ["complete", svg("<?xml version = '1.1' encoding = 'UTF-8' standalone = 'no'?>")],
+  ] as const
+  const invalid = [
+    ["missing-version", svg('<?xml encoding="UTF-8"?>')],
+    ["unsupported-version", svg('<?xml version="1.2"?>')],
+    ["unquoted-version", svg("<?xml version=1.0?>")],
+    ["reordered-version", svg('<?xml encoding="UTF-8" version="1.0"?>')],
+    ["invalid-encoding", svg('<?xml version="1.0" encoding="8BIT"?>')],
+    ["invalid-standalone", svg('<?xml version="1.0" standalone="maybe"?>')],
+    ["reordered-standalone", svg('<?xml version="1.0" standalone="yes" encoding="UTF-8"?>')],
+    ["extra-pseudo-attribute", svg('<?xml version="1.0" extra="x"?>')],
+    ["extra-text", svg('<?xml version="1.0" trailing?>')],
+    ["not-first-node", svg('<!--before--><?xml version="1.0"?>')],
+    ["multiple", svg('<?xml version="1.0"?><?xml version="1.0"?>')],
+    ["nested", svg("", '<?xml version="1.0"?>')],
+  ] as const
+
+  try {
+    mkdirSync(assets, { recursive: true })
+    for (const [name, source] of [...valid, ...invalid]) {
+      writeFileSync(join(assets, `${name}.svg`), source, "utf8")
+    }
+    const probe = (names: readonly (readonly [string, string])[]) => ({
+      ...pageWithTargets(
+        [],
+        names.map(([name]) => `assets/${name}.svg`),
+      ),
+      file: join(root, "source.md"),
+    })
+
+    assert.deepEqual(validateLinks([probe(valid)], root), [])
+    assert.deepEqual(
+      validateLinks([probe(invalid)], root).map(({ code }) => code),
+      Array.from({ length: 12 }, () => "INVALID_SVG_ASSET"),
+    )
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
 test("rejects style attributes and unsafe CSS URL values after XML decoding", () => {
   const page = pageWithTargets([
     "assets/unsafe-style-attribute.svg",
