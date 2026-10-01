@@ -658,7 +658,7 @@ test("stabilizes broken, cyclic, and non-file assets while accepting an in-root 
   }
 })
 
-test("the thirty-five currently published pages have no link diagnostics", () => {
+test("the forty-three currently published pages have no link diagnostics", () => {
   const pages = [
     parsePage("content/index.md"),
     parsePage("content/00-从这里开始/如何使用知识库.md"),
@@ -695,6 +695,14 @@ test("the thirty-five currently published pages have no link diagnostics", () =>
     parsePage("content/03-节奏系统/切分节奏入门.md"),
     parsePage("content/03-节奏系统/三拍子伴奏.md"),
     parsePage("content/03-节奏系统/六八拍伴奏.md"),
+    parsePage("content/04-演奏技巧/分解和弦基础.md"),
+    parsePage("content/04-演奏技巧/常用分解和弦型.md"),
+    parsePage("content/04-演奏技巧/交替低音.md"),
+    parsePage("content/04-演奏技巧/左手制音.md"),
+    parsePage("content/04-演奏技巧/右手制音.md"),
+    parsePage("content/04-演奏技巧/击弦与勾弦.md"),
+    parsePage("content/04-演奏技巧/滑音.md"),
+    parsePage("content/04-演奏技巧/自然泛音与打板.md"),
   ]
 
   assert.deepEqual(validateLinks(pages, "content"), [])

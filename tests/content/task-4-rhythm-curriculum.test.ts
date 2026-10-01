@@ -321,7 +321,12 @@ const expectedLessons: ExpectedLesson[] = [
       draft: false,
     },
     sources: ["omt-compound", "omt-simple", "safety-bapam"],
-    links: ["03-节奏系统/三拍子伴奏", "03-节奏系统/节拍拍号与小节", "00-从这里开始/学习路线总览"],
+    links: [
+      "03-节奏系统/三拍子伴奏",
+      "03-节奏系统/节拍拍号与小节",
+      "00-从这里开始/学习路线总览",
+      "04-演奏技巧/分解和弦基础",
+    ],
     diagrams: [sixEightDiagram],
     visiblePatterns: [sixEightPattern],
   },
@@ -636,27 +641,27 @@ test(
     const items = [...ordered.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
     assert.equal(items.length, 10)
     assert.match(items[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
-    for (const item of items.slice(4)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
+    for (const item of items.slice(5)) assert.doesNotMatch(item, /\[\[/u)
 
     const fullF = parsePage("content/02-和弦系统/F大横按与移动和弦.md")
     const nextSection = fullF.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""
     assert.match(nextSection, /下一步.*\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
 
     const finalPage = pageByFile.get("content/03-节奏系统/六八拍伴奏.md")!
-    assert.match(finalPage.body, /下一步.*分解和弦基础/u)
-    assert.doesNotMatch(finalPage.body, /\[\[[^\]]*分解和弦基础/u)
+    assert.match(finalPage.body, /下一步.*\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
   },
 )
 
 test(
-  "the existing validators accept all thirty-five current pages",
+  "the existing validators accept all forty-three current pages",
   { skip: missingLessonFiles.length > 0 },
   () => {
     const manifest = loadManifest("data/content-manifest.yml")
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 35)
+    assert.equal(pages.length, 43)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])
