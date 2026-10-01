@@ -319,34 +319,61 @@ function resolvePageFragment(page: IndexedPage, fragment: string | undefined): R
 }
 
 function validateSvg(path: string, displayPath: string): Resolution | undefined {
-  const source = readFileSync(path, "utf8")
+  const invalid = (message: string): Resolution => ({
+    kind: "error",
+    code: "INVALID_SVG_ASSET",
+    message: `${message}: ${displayPath}`,
+  })
+  let source: string
+  try {
+    source = readFileSync(path, "utf8")
+  } catch {
+    return invalid("SVG 无法读取")
+  }
   if (/<!DOCTYPE\b/iu.test(source)) {
-    return {
-      kind: "error",
-      code: "INVALID_SVG_ASSET",
-      message: `SVG 不得包含 DOCTYPE: ${displayPath}`,
-    }
+    return invalid("SVG 不得包含 DOCTYPE")
   }
 
   let parseError = false
-  const document = new DOMParser({
-    errorHandler: {
-      warning: () => {
-        parseError = true
+  let document
+  try {
+    document = new DOMParser({
+      errorHandler: {
+        warning: () => {
+          parseError = true
+        },
+        error: () => {
+          parseError = true
+        },
+        fatalError: () => {
+          parseError = true
+        },
       },
-      error: () => {
-        parseError = true
-      },
-      fatalError: () => {
-        parseError = true
-      },
-    },
-  }).parseFromString(source, "image/svg+xml")
+    }).parseFromString(source, "image/svg+xml")
+  } catch {
+    return invalid("SVG 无法解析")
+  }
   if (parseError || document.documentElement?.tagName !== "svg") {
-    return {
-      kind: "error",
-      code: "INVALID_SVG_ASSET",
-      message: `SVG 无法解析或根元素不是 <svg>: ${displayPath}`,
+    return invalid("SVG 无法解析或根元素不是 <svg>")
+  }
+
+  for (const element of Array.from(document.getElementsByTagName("*"))) {
+    const elementName = (element.localName || element.tagName).toLocaleLowerCase("en-US")
+    if (elementName === "script" || elementName === "foreignobject") {
+      return invalid(`SVG 不得包含 <${elementName}>`)
+    }
+    for (const attribute of Array.from(element.attributes)) {
+      const attributeName = (attribute.localName || attribute.name).toLocaleLowerCase("en-US")
+      const qualifiedName = attribute.name.toLocaleLowerCase("en-US")
+      if (attributeName.startsWith("on") || qualifiedName.startsWith("on")) {
+        return invalid(`SVG 不得包含事件属性 ${attribute.name}`)
+      }
+      if (
+        (attributeName === "href" || qualifiedName === "xlink:href") &&
+        /^(?:https?:|\/\/|data:)/iu.test(attribute.value.trim())
+      ) {
+        return invalid(`SVG 不得包含外部引用 ${attribute.name}`)
+      }
     }
   }
 

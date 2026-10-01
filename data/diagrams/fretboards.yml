@@ -1,0 +1,29 @@
+- id: c-major-scale
+  title: C 大调 0–5 品指板音位图
+  startFret: 0
+  endFret: 5
+  positions:
+    - { string: 6, fret: 0, label: E, role: tone }
+    - { string: 6, fret: 1, label: F, role: tone }
+    - { string: 6, fret: 3, label: G, role: tone }
+    - { string: 6, fret: 5, label: A, role: tone }
+    - { string: 5, fret: 0, label: A, role: tone }
+    - { string: 5, fret: 2, label: B, role: tone }
+    - { string: 5, fret: 3, label: C, role: root }
+    - { string: 5, fret: 5, label: D, role: tone }
+    - { string: 4, fret: 0, label: D, role: tone }
+    - { string: 4, fret: 2, label: E, role: tone }
+    - { string: 4, fret: 3, label: F, role: tone }
+    - { string: 4, fret: 5, label: G, role: tone }
+    - { string: 3, fret: 0, label: G, role: tone }
+    - { string: 3, fret: 2, label: A, role: tone }
+    - { string: 3, fret: 4, label: B, role: tone }
+    - { string: 3, fret: 5, label: C, role: root }
+    - { string: 2, fret: 0, label: B, role: tone }
+    - { string: 2, fret: 1, label: C, role: root }
+    - { string: 2, fret: 3, label: D, role: tone }
+    - { string: 2, fret: 5, label: E, role: tone }
+    - { string: 1, fret: 0, label: E, role: tone }
+    - { string: 1, fret: 1, label: F, role: tone }
+    - { string: 1, fret: 3, label: G, role: tone }
+    - { string: 1, fret: 5, label: A, role: tone }

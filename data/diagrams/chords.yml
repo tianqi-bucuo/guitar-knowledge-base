@@ -1,0 +1,77 @@
+- id: c-major
+  title: C 大三和弦
+  baseFret: 1
+  frets: [x, 3, 2, 0, 1, 0]
+  fingers: [null, 3, 2, null, 1, null]
+  barres: []
+
+- id: g-major
+  title: G 大三和弦
+  baseFret: 1
+  frets: [3, 2, 0, 0, 3, 3]
+  fingers: [2, 1, null, null, 3, 4]
+  barres: []
+
+- id: d-major
+  title: D 大三和弦
+  baseFret: 1
+  frets: [x, x, 0, 2, 3, 2]
+  fingers: [null, null, null, 1, 3, 2]
+  barres: []
+
+- id: d-minor
+  title: D 小三和弦
+  baseFret: 1
+  frets: [x, x, 0, 2, 3, 1]
+  fingers: [null, null, null, 2, 3, 1]
+  barres: []
+
+- id: a-major
+  title: A 大三和弦
+  baseFret: 1
+  frets: [x, 0, 2, 2, 2, 0]
+  fingers: [null, null, 1, 2, 3, null]
+  barres: []
+
+- id: a-minor
+  title: A 小三和弦
+  baseFret: 1
+  frets: [x, 0, 2, 2, 1, 0]
+  fingers: [null, null, 2, 3, 1, null]
+  barres: []
+
+- id: e-major
+  title: E 大三和弦
+  baseFret: 1
+  frets: [0, 2, 2, 1, 0, 0]
+  fingers: [null, 2, 3, 1, null, null]
+  barres: []
+
+- id: e-minor
+  title: E 小三和弦
+  baseFret: 1
+  frets: [0, 2, 2, 0, 0, 0]
+  fingers: [null, 2, 3, null, null, null]
+  barres: []
+
+- id: f-major-simplified
+  title: F 大三和弦简化按法（F/C）
+  baseFret: 1
+  frets: [x, x, 3, 2, 1, 1]
+  fingers: [null, null, 3, 2, 1, 1]
+  barres:
+    - fret: 1
+      fromString: 1
+      toString: 2
+      finger: 1
+
+- id: f-major-barre
+  title: F 大三和弦大横按
+  baseFret: 1
+  frets: [1, 3, 3, 2, 1, 1]
+  fingers: [1, 3, 4, 2, 1, 1]
+  barres:
+    - fret: 1
+      fromString: 1
+      toString: 6
+      finger: 1

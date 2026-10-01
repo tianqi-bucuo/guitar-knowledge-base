@@ -256,6 +256,44 @@ test("accepts titled SVG and rejects untitled, DOCTYPE, malformed, and non-SVG a
   assert.ok(!diagnostics.some((item) => item.message.includes("valid.svg")))
 })
 
+test("rejects script and foreignObject elements case-insensitively", () => {
+  const page = pageWithTargets(["assets/unsafe-script.svg", "assets/unsafe-foreign-object.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET", "INVALID_SVG_ASSET"],
+  )
+})
+
+test("rejects event-handler attributes case-insensitively", () => {
+  const page = pageWithTargets(["assets/unsafe-event.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET"],
+  )
+})
+
+test("rejects network, protocol-relative, and data SVG references", () => {
+  const page = pageWithTargets([
+    "assets/unsafe-http-href.svg",
+    "assets/unsafe-https-href.svg",
+    "assets/unsafe-protocol-relative-href.svg",
+    "assets/unsafe-data-href.svg",
+  ])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET", "INVALID_SVG_ASSET", "INVALID_SVG_ASSET", "INVALID_SVG_ASSET"],
+  )
+})
+
+test("accepts generated-style SVG with a local fragment reference", () => {
+  const page = pageWithTargets(["assets/safe-generated.svg"])
+
+  assert.deepEqual(validateLinks([page], contentRoot), [])
+})
+
 test("rejects SVG and non-SVG asset symlinks whose real paths escape the content root", () => {
   const root = mkdtempSync(join(tmpdir(), "guitar-assets-"))
   const temporaryContentRoot = join(root, "content")

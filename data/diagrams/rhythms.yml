@@ -1,0 +1,35 @@
+- id: basic-eighth-strum
+  title: 4/4 基础八分音符交替扫弦
+  meter: 4/4
+  subdivision: 8
+  cells:
+    - { label: "1", stroke: down, accent: true }
+    - { label: "&", stroke: up, accent: false }
+    - { label: "2", stroke: down, accent: false }
+    - { label: "&", stroke: up, accent: false }
+    - { label: "3", stroke: down, accent: true }
+    - { label: "&", stroke: up, accent: false }
+    - { label: "4", stroke: down, accent: false }
+    - { label: "&", stroke: up, accent: false }
+
+- id: four-downstrokes
+  title: 4/4 四拍下扫练习
+  meter: 4/4
+  subdivision: 4
+  cells:
+    - { label: "1", stroke: down, accent: true }
+    - { label: "2", stroke: down, accent: false }
+    - { label: "3", stroke: down, accent: false }
+    - { label: "4", stroke: down, accent: false }
+
+- id: six-eight-arpeggio-pulse
+  title: 6/8 分解和弦律动练习
+  meter: 6/8
+  subdivision: 8
+  cells:
+    - { label: 1·低音, stroke: down, accent: true }
+    - { label: 2·3弦, stroke: down, accent: false }
+    - { label: 3·2弦, stroke: down, accent: false }
+    - { label: 4·低音, stroke: down, accent: true }
+    - { label: 5·3弦, stroke: down, accent: false }
+    - { label: 6·2弦, stroke: down, accent: false }

@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg"><title>危险事件</title><rect width="10" height="10" onClick="alert('x')"/></svg>
