@@ -91,6 +91,7 @@ test("renders the reviewed teaching/test strum with fixed geometry, ordered cell
   assert.match(first, />↑<\/text>/)
   assert.match(first, />—<\/text>/)
   assert.match(first, />×<\/text>/)
+  assert.match(first, /× 闷音/)
   assert.deepEqual(
     groups.map((group) => `${group[1]}:${group[2]}:${group[3]}:${group[4]}`),
     basicStrum.cells.map((cell, index) => `${index}:${cell.label}:${cell.stroke}:${cell.accent}`),
@@ -131,7 +132,7 @@ test("escapes rhythm labels and does not invent a mute symbol", () => {
   })
 
   assert.match(svg, /data-label="A &amp; B &lt; C &gt; D &quot; &apos;"/)
-  assert.doesNotMatch(svg, />×<\/text>/)
+  assert.doesNotMatch(svg, /×|闷音/)
   assert.doesNotMatch(svg, /&amp;amp;|<script|foreignObject|\son\w+=|\shref=|url\(/)
   parseXml(svg)
 })

@@ -104,7 +104,7 @@ test("renders C-major positions with fixed open-fret geometry and redundant root
   )
   assert.match(first, /<g data-role="legend"><circle cx="48" cy="210" r="8"/)
   assert.match(first, />根音<\/text>/)
-  assert.match(first, />根音（C）<\/text>/)
+  assert.doesNotMatch(first, /根音（C）/)
   assert.equal(positionGroups.length, 24)
   assert.equal((first.match(/data-role="root"/g) ?? []).length, 3)
   assert.equal((first.match(/data-role="tone"/g) ?? []).length, 21)
@@ -136,7 +136,40 @@ test("uses actual fret labels below a positive position and never draws a false 
     svg,
     /<circle cx="174" cy="52" r="12" fill="#fffdf9" stroke="#8A4B2A" stroke-width="4"\/>/,
   )
+  assert.match(
+    svg,
+    /<g data-role="legend"><circle cx="48" cy="210" r="8"[^>]*\/><text x="62" y="214"[^>]*>根音<\/text>/,
+  )
+  assert.doesNotMatch(svg, /根音（C）/)
   assert.doesNotMatch(svg, /data-role="nut"/)
+  parseXml(svg)
+})
+
+test("centers every fretted marker in its open-position cell outside the reviewed zero-to-five range", () => {
+  const svg = renderFretboard({
+    id: "open-short-range",
+    title: "短开放把位",
+    startFret: 0,
+    endFret: 1,
+    positions: [
+      { string: 1, fret: 0, label: "E", role: "tone" },
+      { string: 1, fret: 1, label: "F", role: "tone" },
+    ],
+  })
+
+  assert.match(
+    svg,
+    /<line data-role="fret-boundary" x1="120" y1="52" x2="120" y2="172" stroke="#b8b8b8" stroke-width="1"\/>/,
+  )
+  assert.match(
+    svg,
+    /<line data-role="fret-boundary" x1="660" y1="52" x2="660" y2="172" stroke="#b8b8b8" stroke-width="1"\/>/,
+  )
+  assert.match(
+    svg,
+    /<circle cx="390" cy="52" r="12" fill="#fffdf9" stroke="#2F6B5F" stroke-width="2"\/>/,
+  )
+  assert.doesNotMatch(svg, /<circle cx="174" cy="52" r="12"/)
   parseXml(svg)
 })
 

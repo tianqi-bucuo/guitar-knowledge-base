@@ -14,18 +14,26 @@ function stringY(string: number): number {
   return TOP + STRING_PITCH * (string - 1)
 }
 
+function displayedFretCount(definition: FretboardDefinition): number {
+  return definition.startFret === 0
+    ? definition.endFret
+    : definition.endFret - definition.startFret + 1
+}
+
+function displayedFretPitch(definition: FretboardDefinition): number {
+  return (RIGHT - LEFT) / displayedFretCount(definition)
+}
+
 function fretCenter(definition: FretboardDefinition, fret: number): number {
   if (fret === 0) {
     return OPEN_X
   }
 
   if (definition.startFret === 0) {
-    return LEFT + 54 + (fret - 1) * 108
+    return LEFT + (fret - 0.5) * displayedFretPitch(definition)
   }
 
-  const count = definition.endFret - definition.startFret + 1
-  const pitch = (RIGHT - LEFT) / count
-  return LEFT + (fret - definition.startFret + 0.5) * pitch
+  return LEFT + (fret - definition.startFret + 0.5) * displayedFretPitch(definition)
 }
 
 function positionSvg(definition: FretboardDefinition, position: FretPosition): string {
@@ -61,7 +69,7 @@ function description(definition: FretboardDefinition): string {
 
 export function renderFretboard(definition: FretboardDefinition): string {
   const count = definition.endFret - definition.startFret + 1
-  const pitch = (RIGHT - LEFT) / count
+  const pitch = displayedFretPitch(definition)
   const fretLabels = Array.from({ length: count }, (_, index) => definition.startFret + index)
     .filter((fret) => fret > 0)
     .map((fret) => {
@@ -69,10 +77,10 @@ export function renderFretboard(definition: FretboardDefinition): string {
       return `<text x="${formatNumber(x)}" y="196" font-family="${CJK_FONT}" font-size="11" text-anchor="middle" fill="${SVG_TOKENS.mutedInk}">${fret} 品</text>`
     })
     .join("")
-  const boundaryXs =
-    definition.startFret === 0 && definition.endFret === 5
-      ? [120, 228, 336, 444, 552, 660]
-      : Array.from({ length: count + 1 }, (_, index) => LEFT + index * pitch)
+  const boundaryXs = Array.from(
+    { length: displayedFretCount(definition) + 1 },
+    (_, index) => LEFT + index * pitch,
+  )
   const boundaries = boundaryXs
     .map(
       (x) =>
@@ -89,7 +97,7 @@ export function renderFretboard(definition: FretboardDefinition): string {
     definition.startFret === 0
       ? `<line data-role="nut" x1="${LEFT}" y1="${TOP}" x2="${LEFT}" y2="${stringY(6)}" stroke="${SVG_TOKENS.ink}" stroke-width="8"/>`
       : ""
-  const legend = `<g data-role="legend"><circle cx="48" cy="210" r="8" fill="${SVG_TOKENS.surface}" stroke="${SVG_TOKENS.root}" stroke-width="4"/><text x="62" y="214" font-family="${CJK_FONT}" font-size="12" font-weight="700" fill="${SVG_TOKENS.root}">根音（C）</text><circle cx="150" cy="210" r="8" fill="${SVG_TOKENS.surface}" stroke="${SVG_TOKENS.tone}" stroke-width="2"/><text x="164" y="214" font-family="${CJK_FONT}" font-size="12" fill="${SVG_TOKENS.mutedInk}">音</text></g>`
+  const legend = `<g data-role="legend"><circle cx="48" cy="210" r="8" fill="${SVG_TOKENS.surface}" stroke="${SVG_TOKENS.root}" stroke-width="4"/><text x="62" y="214" font-family="${CJK_FONT}" font-size="12" font-weight="700" fill="${SVG_TOKENS.root}">根音</text><circle cx="150" cy="210" r="8" fill="${SVG_TOKENS.surface}" stroke="${SVG_TOKENS.tone}" stroke-width="2"/><text x="164" y="214" font-family="${CJK_FONT}" font-size="12" fill="${SVG_TOKENS.mutedInk}">音</text></g>`
   const body = `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" fill="${SVG_TOKENS.surface}"/><text x="48" y="28" font-family="${CJK_FONT}" font-size="18" font-weight="700" fill="${SVG_TOKENS.ink}">${escapeXml(definition.title)}</text>${fretLabels}${boundaries}${strings}${nut}${definition.positions.map((position) => positionSvg(definition, position)).join("")}${legend}`
 
   return wrapSvg({
