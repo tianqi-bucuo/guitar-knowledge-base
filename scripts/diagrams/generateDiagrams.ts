@@ -227,7 +227,11 @@ export async function generateDiagrams(
   return publicResults(prepared)
 }
 
-async function findSvgFiles(outputRoot: string, relativeRoot = ""): Promise<string[]> {
+async function findSvgFiles(
+  outputRoot: string,
+  expectedNames: ReadonlySet<string>,
+  relativeRoot = "",
+): Promise<string[]> {
   const directory =
     relativeRoot.length === 0 ? outputRoot : join(outputRoot, ...relativeRoot.split("/"))
   const entries = await readdir(directory, { withFileTypes: true })
@@ -236,7 +240,9 @@ async function findSvgFiles(outputRoot: string, relativeRoot = ""): Promise<stri
   for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name, "en-US"))) {
     const relativePath = posix.join(relativeRoot, entry.name)
     if (entry.isDirectory()) {
-      files.push(...(await findSvgFiles(outputRoot, relativePath)))
+      if (!expectedNames.has(relativePath)) {
+        files.push(...(await findSvgFiles(outputRoot, expectedNames, relativePath)))
+      }
     } else if (extname(entry.name).toLocaleLowerCase("en-US") === ".svg") {
       files.push(relativePath)
     }
@@ -251,7 +257,7 @@ export async function checkDiagrams(options: GenerateDiagramOptions): Promise<Ge
   const expectedNames = new Set(prepared.map(({ file }) => file))
   let actualNames: string[] = []
   try {
-    actualNames = await findSvgFiles(options.outputRoot)
+    actualNames = await findSvgFiles(options.outputRoot, expectedNames)
   } catch (error) {
     if (errorCode(error) !== "ENOENT") {
       throw error

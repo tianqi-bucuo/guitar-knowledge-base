@@ -1,6 +1,16 @@
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
-import { lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises"
+import {
+  chmod,
+  lstat,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  rm,
+  symlink,
+  writeFile,
+} from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 import test from "node:test"
@@ -252,6 +262,26 @@ test("check reports a directory at an expected SVG path as out of date", async (
     checkDiagrams({ dataRoot, outputRoot }),
     (error: Error) => error.message === "DIAGRAM_OUT_OF_DATE chord-c-major.svg",
   )
+  assert.equal((await lstat(expectedPath)).isDirectory(), true)
+})
+
+test("check reports an unreadable expected-name directory as out of date", async (t) => {
+  const { dataRoot, outputRoot } = await makeWorkspace(t)
+  await writeData(dataRoot)
+  await generateDiagrams({ dataRoot, outputRoot })
+  const expectedPath = join(outputRoot, "chord-c-major.svg")
+  await rm(expectedPath)
+  await mkdir(expectedPath)
+  await chmod(expectedPath, 0o000)
+
+  try {
+    await assert.rejects(
+      checkDiagrams({ dataRoot, outputRoot }),
+      (error: Error) => error.message === "DIAGRAM_OUT_OF_DATE chord-c-major.svg",
+    )
+  } finally {
+    await chmod(expectedPath, 0o700)
+  }
   assert.equal((await lstat(expectedPath)).isDirectory(), true)
 })
 
