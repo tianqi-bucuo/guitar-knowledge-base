@@ -46,6 +46,8 @@ const shortSafetyBlock =
   "安全边界：本页不用于诊断或治疗。出现疼痛、麻木或针刺感、无力、肿胀、动作控制下降或明显不适时，立即停止；症状持续、反复或加重时，请向合格医疗专业人士求助。"
 const fullSafetyBlock =
   "本页只提供一般性练习与安全信息，不用于诊断或治疗。出现疼痛、麻木或针刺感、无力、肿胀、动作控制下降或明显不适时，立即停止本项练习。症状持续、反复或加重，或已影响日常活动或握持能力时，请向合格医疗专业人士求助；严重疼痛、外伤后失去感觉或无法活动时，按所在地急诊指引及时就医。"
+const forbiddenFixedPracticeQuotaPattern =
+  /(?:[0-9]+\s*(?:秒钟?|分钟|小时|次|遍|回|组|轮|天|日|周|星期)|[0-9]+\s*BPM|BPM\s*[0-9]+)/iu
 
 interface ExpectedLesson {
   file: string
@@ -305,6 +307,7 @@ const expectedLessons: ExpectedLesson[] = [
     diagrams: ["f-major-simplified", "f-major-barre"],
     links: [
       "02-和弦系统/F简化指法与横按准备",
+      "02-和弦系统/C-Am-F-G和弦进行",
       "01-持琴与基础动作/正确按弦",
       "00-从这里开始/学习路线总览",
     ],
@@ -608,7 +611,8 @@ test(
       const targets = normalizedInternalTargets(page)
       for (const target of expected.links)
         assert.ok(targets.has(target), `${expected.file} must link ${target}`)
-      assert.doesNotMatch(page.body, /F\/C|\b\d+\s*BPM\b|\bBPM\s*\d+\b/iu, expected.file)
+      assert.doesNotMatch(page.body, /F\/C/iu, expected.file)
+      assert.doesNotMatch(page.body, forbiddenFixedPracticeQuotaPattern, expected.file)
     }
 
     const gPage = pageByFile.get("content/02-和弦系统/G和弦.md")!
