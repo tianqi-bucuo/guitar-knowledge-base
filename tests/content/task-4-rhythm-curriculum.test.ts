@@ -58,6 +58,41 @@ const lessonSections = [
   "参考来源与延伸阅读",
 ]
 
+const exactSourceDefinitions: Record<string, string> = {
+  "omt-notating":
+    "[^omt-notating]: [Notating Rhythm](https://viva.pressbooks.pub/openmusictheory/chapter/notating-rhythm/) — Mark Gotham、Chelsey Hamm、Bryn Hughes，Open Music Theory；访问日期：2026-10-01。",
+  "omt-simple":
+    "[^omt-simple]: [Simple Meter and Time Signatures](https://viva.pressbooks.pub/openmusictheory/chapter/simple-meter-and-time-signatures/) — Mark Gotham、Chelsey Hamm、Kris Shaffer，Open Music Theory；访问日期：2026-10-01。",
+  "omt-compound":
+    "[^omt-compound]: [Compound Meter and Time Signatures](https://viva.pressbooks.pub/openmusictheory/chapter/compound-meters-and-time-signatures/) — Mark Gotham、Chelsey Hamm，Open Music Theory；访问日期：2026-10-01。",
+  "omt-syncopation":
+    "[^omt-syncopation]: [Other Rhythmic Essentials](https://viva.pressbooks.pub/openmusictheory/chapter/other-rhythmic-essentials/) — Mark Gotham、Chelsey Hamm、Bryn Hughes，Open Music Theory；访问日期：2026-10-01。",
+  "metronome-fender":
+    "[^metronome-fender]: [How to Improve Your Timing with a Metronome](https://www.fender.com/articles/techniques/how-to-improve-your-timing-with-a-metronome) — Fender Musical Instruments Corporation；访问日期：2026-10-01。",
+  "tabs-fender":
+    "[^tabs-fender]: [How to Read Tabs](https://www.fender.com/articles/techniques/how-to-read-tabs) — Fender Musical Instruments Corporation；访问日期：2026-10-01。",
+  "strum-fender":
+    "[^strum-fender]: [6 Ways to Strum Like a Pro](https://www.fender.com/articles/techniques/how-to-strum-beginner-guitar-tips) — Fender Musical Instruments Corporation；访问日期：2026-10-01。",
+  "dynamics-fender":
+    "[^dynamics-fender]: [How to Use Dynamics to Improve Your Guitar Playing](https://www.fender.com/articles/techniques/how-to-use-dynamics-to-improve-guitar-playing) — Fender Musical Instruments Corporation；访问日期：2026-10-01。",
+  "safety-bapam":
+    "[^safety-bapam]: [Returning to Playing and Performance for Instrumental Musicians](https://www.bapam.org.uk/return-to-play/) — British Association for Performing Arts Medicine；访问日期：2026-10-01。",
+  "safety-nhs-rsi":
+    "[^safety-nhs-rsi]: [Repetitive strain injury (RSI)](https://www.nhs.uk/conditions/repetitive-strain-injury-rsi/) — UK National Health Service；访问日期：2026-10-01。",
+}
+
+const quarterNoteGrid = ["四分音符", "口数  1  2  3  4", "动作  拍 拍 拍 拍"].join("\n")
+const eighthNoteGrid = [
+  "八分音符",
+  "口数  1  &  2  &  3  &  4  &",
+  "动作  拍 移 拍 移 拍 移 拍 移",
+].join("\n")
+const sixteenthNoteGrid = [
+  "十六分音符",
+  "口数  1 e & a  2 e & a  3 e & a  4 e & a",
+  "动作  拍 移 移 移  拍 移 移 移  拍 移 移 移  拍 移 移 移",
+].join("\n")
+
 const fourDownstrokesPattern = ["口数  1  2  3  4", "动作  ↓  ↓  ↓  ↓", "重音  >  ·  ·  ·"].join(
   "\n",
 )
@@ -155,7 +190,7 @@ const expectedLessons: ExpectedLesson[] = [
       "03-节奏系统/放松而稳定的扫弦动作",
     ],
     diagrams: [],
-    visiblePatterns: [],
+    visiblePatterns: [quarterNoteGrid, eighthNoteGrid, sixteenthNoteGrid],
   },
   {
     file: "content/03-节奏系统/放松而稳定的扫弦动作.md",
@@ -359,6 +394,21 @@ function footnoteIds(body: string): { definitions: string[]; references: string[
   return { definitions: sorted(new Set(definitions)), references: sorted(new Set(references)) }
 }
 
+function footnoteDefinitionLines(body: string): Map<string, string> {
+  return new Map(
+    [...body.matchAll(/^(\[\^([a-z0-9-]+)\]:.*)$/gmu)].map((match) => [match[2], match[1]]),
+  )
+}
+
+function tableCells(body: string): string[][][] {
+  const tree = unified().use(remarkParse).use(remarkGfm).parse(body)
+  const tables: string[][][] = []
+  visit(tree, "table", (node) => {
+    tables.push(node.children.map((row) => row.children.map((cell) => toString(cell).trim())))
+  })
+  return tables
+}
+
 function normalizedInternalTargets(page: PageRecord): Set<string> {
   return new Set(
     page.links
@@ -454,6 +504,13 @@ test(
       const ids = footnoteIds(page.body)
       assert.deepEqual(ids.definitions, sorted(expected.sources), `${expected.file} definitions`)
       assert.deepEqual(ids.references, ids.definitions, `${expected.file} references`)
+      const definitions = footnoteDefinitionLines(page.body)
+      for (const id of expected.sources)
+        assert.equal(
+          definitions.get(id),
+          exactSourceDefinitions[id],
+          `${expected.file} exact source ${id}`,
+        )
       for (const definition of page.body.match(/^\[\^[a-z0-9-]+\]:.*$/gmu) ?? [])
         assert.match(definition, /访问日期：2026-10-01。$/u, `${expected.file}: ${definition}`)
       assert.equal(
@@ -524,12 +581,18 @@ test(
 
     const meter = pageByFile.get("content/03-节奏系统/节拍拍号与小节.md")!.body
     const sixEight = pageByFile.get("content/03-节奏系统/六八拍伴奏.md")!.body
-    const meterTree = unified().use(remarkParse).use(remarkGfm).parse(meter)
-    const meterTableColumnCounts: number[][] = []
-    visit(meterTree, "table", (node) => {
-      meterTableColumnCounts.push(node.children.map((row) => row.children.length))
-    })
-    assert.deepEqual(meterTableColumnCounts, [[4, 4, 4, 4]], "meter table column counts")
+    assert.deepEqual(
+      tableCells(meter),
+      [
+        [
+          ["拍号", "分组", "口数", "拍手动作"],
+          ["4/4", "4×2", "1 & 2 & 3 & 4 &", "在 1 2 3 4 拍手，& 继续默数"],
+          ["3/4", "3×2", "1 & 2 & 3 &", "在 1 2 3 拍手，& 继续默数"],
+          ["6/8", "2×3、即 3+3", "1 2 3 | 4 5 6", "在第 1、4 格拍手，其余格继续口数"],
+        ],
+      ],
+      "exact meter comparison table",
+    )
     for (const body of [meter, sixEight]) {
       assert.match(body, /3×2/u)
       assert.match(body, /2×3/u)
