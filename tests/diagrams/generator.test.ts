@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { spawnSync } from "node:child_process"
-import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises"
+import { lstat, mkdir, mkdtemp, readFile, readdir, rm, symlink, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join, resolve } from "node:path"
 import test from "node:test"
@@ -143,6 +143,52 @@ test("rejects non-array and empty YAML roots before touching old output", async 
   }
 })
 
+test("rejects identical data and output roots without changing source bytes", async (t) => {
+  const { dataRoot } = await makeWorkspace(t)
+  await writeData(dataRoot)
+  await writeFile(join(dataRoot, "old.svg"), "old output bytes", "utf8")
+  const before = await bytesByName(dataRoot)
+
+  await assert.rejects(
+    generateDiagrams({ dataRoot, outputRoot: dataRoot }),
+    (error: Error) =>
+      error.message === "DIAGRAM_ROOT_OVERLAP: dataRoot and outputRoot must not overlap",
+  )
+  assert.deepEqual(await bytesByName(dataRoot), before)
+})
+
+test("rejects an output ancestor without changing inputs or old output", async (t) => {
+  const { root, dataRoot } = await makeWorkspace(t)
+  await writeData(dataRoot)
+  await writeFile(join(root, "old.svg"), "ancestor output bytes", "utf8")
+  const beforeData = await bytesByName(dataRoot)
+
+  await assert.rejects(
+    generateDiagrams({ dataRoot, outputRoot: root }),
+    (error: Error) =>
+      error.message === "DIAGRAM_ROOT_OVERLAP: dataRoot and outputRoot must not overlap",
+  )
+  assert.deepEqual(await bytesByName(dataRoot), beforeData)
+  assert.equal(await readFile(join(root, "old.svg"), "utf8"), "ancestor output bytes")
+})
+
+test("rejects a symlink alias of dataRoot without changing the alias target", async (t) => {
+  const { root, dataRoot } = await makeWorkspace(t)
+  await writeData(dataRoot)
+  await writeFile(join(dataRoot, "old.svg"), "aliased output bytes", "utf8")
+  const aliasRoot = join(root, "alias-diagrams")
+  await symlink(dataRoot, aliasRoot)
+  const before = await bytesByName(dataRoot)
+
+  await assert.rejects(
+    generateDiagrams({ dataRoot, outputRoot: aliasRoot }),
+    (error: Error) =>
+      error.message === "DIAGRAM_ROOT_OVERLAP: dataRoot and outputRoot must not overlap",
+  )
+  assert.equal((await lstat(aliasRoot)).isSymbolicLink(), true)
+  assert.deepEqual(await bytesByName(dataRoot), before)
+})
+
 test("rejects duplicate ids within one family and across families", async (t) => {
   const within = await makeWorkspace(t)
   await writeData(within.dataRoot, { ...testData(), chords: [cMajor, cMajor] })
@@ -194,6 +240,21 @@ test("check reports missing and changed expected files without mutating output",
   assert.deepEqual(await bytesByName(outputRoot), before)
 })
 
+test("check reports a directory at an expected SVG path as out of date", async (t) => {
+  const { dataRoot, outputRoot } = await makeWorkspace(t)
+  await writeData(dataRoot)
+  await generateDiagrams({ dataRoot, outputRoot })
+  const expectedPath = join(outputRoot, "chord-c-major.svg")
+  await rm(expectedPath)
+  await mkdir(expectedPath)
+
+  await assert.rejects(
+    checkDiagrams({ dataRoot, outputRoot }),
+    (error: Error) => error.message === "DIAGRAM_OUT_OF_DATE chord-c-major.svg",
+  )
+  assert.equal((await lstat(expectedPath)).isDirectory(), true)
+})
+
 test("check reports unexpected SVG files without mutating output", async (t) => {
   const { dataRoot, outputRoot } = await makeWorkspace(t)
   await writeData(dataRoot)
@@ -206,6 +267,27 @@ test("check reports unexpected SVG files without mutating output", async (t) => 
     /DIAGRAM_UNEXPECTED_FILE unexpected\.svg/,
   )
   assert.deepEqual(await bytesByName(outputRoot), before)
+})
+
+test("check reports nested unexpected SVGs without mutating the nested tree", async (t) => {
+  const { dataRoot, outputRoot } = await makeWorkspace(t)
+  await writeData(dataRoot)
+  await generateDiagrams({ dataRoot, outputRoot })
+  const nestedRoot = join(outputRoot, "nested")
+  await mkdir(nestedRoot)
+  await writeFile(join(nestedRoot, "stale.svg"), "nested stale bytes", "utf8")
+  await writeFile(join(nestedRoot, "notes.txt"), "ignored non-SVG bytes", "utf8")
+  const beforeRoot = (await readdir(outputRoot)).sort()
+  const beforeNested = (await readdir(nestedRoot)).sort()
+
+  await assert.rejects(
+    checkDiagrams({ dataRoot, outputRoot }),
+    (error: Error) => error.message === "DIAGRAM_UNEXPECTED_FILE nested/stale.svg",
+  )
+  assert.deepEqual((await readdir(outputRoot)).sort(), beforeRoot)
+  assert.deepEqual((await readdir(nestedRoot)).sort(), beforeNested)
+  assert.equal(await readFile(join(nestedRoot, "stale.svg"), "utf8"), "nested stale bytes")
+  assert.equal(await readFile(join(nestedRoot, "notes.txt"), "utf8"), "ignored non-SVG bytes")
 })
 
 test("CLI returns 0 for write/check, 1 for generation errors, and 2 for usage errors", async (t) => {

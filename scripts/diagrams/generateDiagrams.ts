@@ -1,5 +1,25 @@
-import { mkdir, mkdtemp, readFile, readdir, rename, rm, writeFile } from "node:fs/promises"
-import { basename, dirname, extname, join, resolve } from "node:path"
+import {
+  lstat,
+  mkdir,
+  mkdtemp,
+  readFile,
+  readdir,
+  realpath,
+  rename,
+  rm,
+  writeFile,
+} from "node:fs/promises"
+import {
+  basename,
+  dirname,
+  extname,
+  isAbsolute,
+  join,
+  posix,
+  relative,
+  resolve,
+  sep,
+} from "node:path"
 import { load } from "js-yaml"
 import { renderChord } from "./renderChord"
 import { renderFretboard } from "./renderFretboard"
@@ -103,6 +123,52 @@ function errorCode(error: unknown): string | undefined {
     : undefined
 }
 
+function isWithin(parent: string, candidate: string): boolean {
+  const path = relative(parent, candidate)
+  return path === "" || (!path.startsWith(`..${sep}`) && path !== ".." && !isAbsolute(path))
+}
+
+function rootsOverlap(left: string, right: string): boolean {
+  return isWithin(left, right) || isWithin(right, left)
+}
+
+async function canonicalPath(path: string): Promise<string> {
+  let candidate = resolve(path)
+  const missingSegments: string[] = []
+
+  while (true) {
+    try {
+      return resolve(await realpath(candidate), ...missingSegments)
+    } catch (error) {
+      if (errorCode(error) !== "ENOENT") {
+        throw error
+      }
+      const parent = dirname(candidate)
+      if (parent === candidate) {
+        throw error
+      }
+      missingSegments.unshift(basename(candidate))
+      candidate = parent
+    }
+  }
+}
+
+async function assertSeparateRoots(options: GenerateDiagramOptions): Promise<void> {
+  const dataRoot = resolve(options.dataRoot)
+  const outputRoot = resolve(options.outputRoot)
+  if (rootsOverlap(dataRoot, outputRoot)) {
+    throw new Error("DIAGRAM_ROOT_OVERLAP: dataRoot and outputRoot must not overlap")
+  }
+
+  const [canonicalDataRoot, canonicalOutputRoot] = await Promise.all([
+    canonicalPath(dataRoot),
+    canonicalPath(outputRoot),
+  ])
+  if (rootsOverlap(canonicalDataRoot, canonicalOutputRoot)) {
+    throw new Error("DIAGRAM_ROOT_OVERLAP: dataRoot and outputRoot must not overlap")
+  }
+}
+
 async function replaceOutput(outputRoot: string, prepared: PreparedDiagram[]): Promise<void> {
   const absoluteOutput = resolve(outputRoot)
   const outputName = basename(absoluteOutput)
@@ -155,19 +221,37 @@ async function replaceOutput(outputRoot: string, prepared: PreparedDiagram[]): P
 export async function generateDiagrams(
   options: GenerateDiagramOptions,
 ): Promise<GeneratedDiagram[]> {
+  await assertSeparateRoots(options)
   const prepared = await prepareDiagrams(options)
   await replaceOutput(options.outputRoot, prepared)
   return publicResults(prepared)
 }
 
+async function findSvgFiles(outputRoot: string, relativeRoot = ""): Promise<string[]> {
+  const directory =
+    relativeRoot.length === 0 ? outputRoot : join(outputRoot, ...relativeRoot.split("/"))
+  const entries = await readdir(directory, { withFileTypes: true })
+  const files: string[] = []
+
+  for (const entry of entries.sort((left, right) => left.name.localeCompare(right.name, "en-US"))) {
+    const relativePath = posix.join(relativeRoot, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...(await findSvgFiles(outputRoot, relativePath)))
+    } else if (extname(entry.name).toLocaleLowerCase("en-US") === ".svg") {
+      files.push(relativePath)
+    }
+  }
+
+  return files
+}
+
 export async function checkDiagrams(options: GenerateDiagramOptions): Promise<GeneratedDiagram[]> {
+  await assertSeparateRoots(options)
   const prepared = await prepareDiagrams(options)
   const expectedNames = new Set(prepared.map(({ file }) => file))
   let actualNames: string[] = []
   try {
-    actualNames = (await readdir(options.outputRoot)).filter(
-      (name) => extname(name).toLocaleLowerCase("en-US") === ".svg",
-    )
+    actualNames = await findSvgFiles(options.outputRoot)
   } catch (error) {
     if (errorCode(error) !== "ENOENT") {
       throw error
@@ -178,9 +262,12 @@ export async function checkDiagrams(options: GenerateDiagramOptions): Promise<Ge
   for (const diagram of prepared) {
     let actual: string | undefined
     try {
-      actual = await readFile(diagram.path, "utf8")
+      const entry = await lstat(diagram.path)
+      if (entry.isFile()) {
+        actual = await readFile(diagram.path, "utf8")
+      }
     } catch (error) {
-      if (errorCode(error) !== "ENOENT") {
+      if (!["EISDIR", "ENOENT", "ENOTDIR"].includes(errorCode(error) ?? "")) {
         throw error
       }
     }

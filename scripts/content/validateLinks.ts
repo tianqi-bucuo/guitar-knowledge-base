@@ -368,11 +368,11 @@ function validateSvg(path: string, displayPath: string): Resolution | undefined 
       if (attributeName.startsWith("on") || qualifiedName.startsWith("on")) {
         return invalid(`SVG 不得包含事件属性 ${attribute.name}`)
       }
-      if (
-        (attributeName === "href" || qualifiedName === "xlink:href") &&
-        /^(?:https?:|\/\/|data:)/iu.test(attribute.value.trim())
-      ) {
-        return invalid(`SVG 不得包含外部引用 ${attribute.name}`)
+      if (attributeName === "href" || qualifiedName === "xlink:href") {
+        const reference = attribute.value.trim()
+        if (!reference.startsWith("#") || reference.length === 1) {
+          return invalid(`SVG 引用必须是非空本地 fragment ${attribute.name}`)
+        }
       }
     }
   }

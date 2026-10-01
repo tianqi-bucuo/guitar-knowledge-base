@@ -288,6 +288,32 @@ test("rejects network, protocol-relative, and data SVG references", () => {
   )
 })
 
+test("rejects SVG href protocols hidden by XML character references", () => {
+  const page = pageWithTargets([
+    "assets/unsafe-https-character-reference.svg",
+    "assets/unsafe-protocol-relative-character-reference.svg",
+    "assets/unsafe-data-character-reference.svg",
+  ])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET", "INVALID_SVG_ASSET", "INVALID_SVG_ASSET"],
+  )
+})
+
+test("rejects every empty or non-fragment SVG href", () => {
+  const page = pageWithTargets([
+    "assets/unsafe-javascript-href.svg",
+    "assets/unsafe-relative-href.svg",
+    "assets/unsafe-empty-href.svg",
+  ])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET", "INVALID_SVG_ASSET", "INVALID_SVG_ASSET"],
+  )
+})
+
 test("accepts generated-style SVG with a local fragment reference", () => {
   const page = pageWithTargets(["assets/safe-generated.svg"])
 
