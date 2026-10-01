@@ -640,7 +640,8 @@ test(
     assert.match(items[2], /\[\[02-和弦系统\/和弦图读法\|和弦图读法\]\]/u)
     assert.match(items[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
     assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
-    for (const item of items.slice(5)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
+    for (const item of items.slice(6)) assert.doesNotMatch(item, /\[\[/u)
 
     const crossing = parsePage("content/01-持琴与基础动作/相邻弦与跨弦.md")
     const section = crossing.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""

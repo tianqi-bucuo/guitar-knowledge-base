@@ -642,7 +642,8 @@ test(
     assert.equal(items.length, 10)
     assert.match(items[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
     assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
-    for (const item of items.slice(5)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
+    for (const item of items.slice(6)) assert.doesNotMatch(item, /\[\[/u)
 
     const fullF = parsePage("content/02-和弦系统/F大横按与移动和弦.md")
     const nextSection = fullF.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""
@@ -654,14 +655,14 @@ test(
 )
 
 test(
-  "the existing validators accept all forty-three current pages",
+  "the existing validators accept all fifty-one current pages",
   { skip: missingLessonFiles.length > 0 },
   () => {
     const manifest = loadManifest("data/content-manifest.yml")
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 43)
+    assert.equal(pages.length, 51)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])

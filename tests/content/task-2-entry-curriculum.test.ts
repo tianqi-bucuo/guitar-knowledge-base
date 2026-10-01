@@ -320,6 +320,14 @@ const task3LinkContextFiles = [
   "content/04-演奏技巧/击弦与勾弦.md",
   "content/04-演奏技巧/滑音.md",
   "content/04-演奏技巧/自然泛音与打板.md",
+  "content/05-弹唱与伴奏/根据人声选择调.md",
+  "content/05-弹唱与伴奏/变调夹原理与用法.md",
+  "content/05-弹唱与伴奏/和弦级数与移调.md",
+  "content/05-弹唱与伴奏/听辨歌曲结构.md",
+  "content/05-弹唱与伴奏/主歌与副歌的伴奏对比.md",
+  "content/05-弹唱与伴奏/前奏间奏与尾奏.md",
+  "content/05-弹唱与伴奏/弹唱协调训练.md",
+  "content/05-弹唱与伴奏/完整歌曲编配流程.md",
 ]
 const task3LinkContext = task3LinkContextFiles.filter(existsSync).map((file) => parsePage(file))
 
@@ -479,7 +487,8 @@ test(
     const routeItems = [...orderedLinkSection.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
     assert.match(routeItems[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
     assert.match(routeItems[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
-    for (const item of routeItems.slice(5)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(routeItems[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
+    for (const item of routeItems.slice(6)) assert.doesNotMatch(item, /\[\[/u)
 
     for (const expected of expectedPages) {
       const page = pageByFile.get(expected.file)

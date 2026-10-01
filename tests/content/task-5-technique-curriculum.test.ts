@@ -331,6 +331,7 @@ const expectedLessons: ExpectedLesson[] = [
       "03-节奏系统/六八拍伴奏",
       "00-从这里开始/学习路线总览",
       "01-持琴与基础动作/认识民谣吉他",
+      "05-弹唱与伴奏/根据人声选择调",
     ],
     tables: [
       [
@@ -765,20 +766,23 @@ test(
     const items = [...ordered.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
     assert.equal(items.length, 10)
     assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
-    for (const item of items.slice(5)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
+    for (const item of items.slice(6)) assert.doesNotMatch(item, /\[\[/u)
 
     const sixEight = parsePage("content/03-节奏系统/六八拍伴奏.md")
     const nextSection = section(sixEight.body, "下一步与相关词条")
     assert.match(nextSection, /下一步.*\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
 
     const finalPage = pageByFile.get("content/04-演奏技巧/自然泛音与打板.md")!
-    assert.match(section(finalPage.body, "下一步与相关词条"), /下一步.*根据人声选择调/u)
-    assert.doesNotMatch(finalPage.body, /\[\[[^\]]*根据人声选择调/u)
+    assert.match(
+      section(finalPage.body, "下一步与相关词条"),
+      /下一步.*\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u,
+    )
   },
 )
 
 test(
-  "the existing validators accept all forty-three current pages without error diagnostics",
+  "the existing validators accept all fifty-one current pages without error diagnostics",
   {
     skip: missingLessonFiles.length > 0,
   },
@@ -787,7 +791,7 @@ test(
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 43)
+    assert.equal(pages.length, 51)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])
@@ -800,6 +804,6 @@ test(
       diagnostics.filter(({ severity }) => severity === "error"),
       [],
     )
-    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 38)
+    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 29)
   },
 )
