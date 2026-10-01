@@ -81,7 +81,8 @@ const ALLOWED_SVG_ATTRIBUTES = new Set([
   "href",
 ])
 const XML_DECLARATION_DATA =
-  /^version[\t\n\r ]*=[\t\n\r ]*(?:"1\.[01]"|'1\.[01]')(?:[\t\n\r ]+encoding[\t\n\r ]*=[\t\n\r ]*(?:"[A-Za-z][A-Za-z0-9._-]*"|'[A-Za-z][A-Za-z0-9._-]*'))?(?:[\t\n\r ]+standalone[\t\n\r ]*=[\t\n\r ]*(?:"(?:yes|no)"|'(?:yes|no)'))?$/u
+  /^version[\t\n\r ]*=[\t\n\r ]*(?:"1\.[01]"|'1\.[01]')(?:[\t\n\r ]+encoding[\t\n\r ]*=[\t\n\r ]*(?:"([A-Za-z][A-Za-z0-9._-]*)"|'([A-Za-z][A-Za-z0-9._-]*)'))?(?:[\t\n\r ]+standalone[\t\n\r ]*=[\t\n\r ]*(?:"(?:yes|no)"|'(?:yes|no)'))?$/u
+const UTF8_ENCODING = /^UTF-8$/iu
 
 function deduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   return [...new Map(diagnostics.map((item) => [JSON.stringify(item), item])).values()]
@@ -204,12 +205,26 @@ function isAllowedSvgAttribute(attribute: {
   return ALLOWED_SVG_ATTRIBUTES.has(attribute.name) && attribute.namespaceURI == null
 }
 
+function decodeUtf8Svg(bytes: Uint8Array): string | undefined {
+  const hasBom = bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf
+  try {
+    return new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(
+      hasBom ? bytes.subarray(3) : bytes,
+    )
+  } catch {
+    return undefined
+  }
+}
+
 function isValidXmlDeclaration(node: Node, document: Document): boolean {
+  const declaration = XML_DECLARATION_DATA.exec(node.nodeValue ?? "")
+  const encoding = declaration?.[1] ?? declaration?.[2]
   return (
     node.parentNode?.nodeType === 9 &&
     document.childNodes.item(0) === node &&
     node.nodeName === "xml" &&
-    XML_DECLARATION_DATA.test(node.nodeValue ?? "")
+    declaration !== null &&
+    (encoding === undefined || UTF8_ENCODING.test(encoding))
   )
 }
 
@@ -470,11 +485,15 @@ function validateSvg(path: string, displayPath: string): Resolution | undefined 
     code: "INVALID_SVG_ASSET",
     message: `${message}: ${displayPath}`,
   })
-  let source: string
+  let bytes: Uint8Array
   try {
-    source = readFileSync(path, "utf8")
+    bytes = readFileSync(path)
   } catch {
     return invalid("SVG 无法读取")
+  }
+  const source = decodeUtf8Svg(bytes)
+  if (source === undefined) {
+    return invalid("SVG 必须使用有效 UTF-8 编码")
   }
   if (/<!DOCTYPE\b/iu.test(source)) {
     return invalid("SVG 不得包含 DOCTYPE")

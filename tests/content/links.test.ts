@@ -401,6 +401,48 @@ test("rejects a case-invalid XML declaration processing instruction", () => {
   )
 })
 
+test("rejects UTF-8 bytes whose XML declaration claims UTF-16", () => {
+  const page = pageWithTargets(["assets/unsafe-utf16-declaration-on-utf8.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET"],
+  )
+})
+
+test("accepts a valid XML declaration after one UTF-8 BOM", () => {
+  const page = pageWithTargets(["assets/safe-utf8-bom-declaration.svg"])
+
+  assert.deepEqual(validateLinks([page], contentRoot), [])
+})
+
+test("rejects invalid UTF-8 bytes instead of decoding replacement characters", () => {
+  const root = mkdtempSync(join(tmpdir(), "guitar-svg-invalid-utf8-"))
+  const assets = join(root, "assets")
+  try {
+    mkdirSync(assets, { recursive: true })
+    writeFileSync(
+      join(assets, "invalid.svg"),
+      Buffer.concat([
+        Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"><title>', "utf8"),
+        Buffer.from([0xc3, 0x28]),
+        Buffer.from("</title></svg>", "utf8"),
+      ]),
+    )
+    const page: PageRecord = {
+      ...pageWithTargets([], ["assets/invalid.svg"]),
+      file: join(root, "source.md"),
+    }
+
+    assert.deepEqual(
+      validateLinks([page], root).map(({ code }) => code),
+      ["INVALID_SVG_ASSET"],
+    )
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
 test("accepts only one first-node XML declaration with complete ordered grammar", () => {
   const root = mkdtempSync(join(tmpdir(), "guitar-svg-declaration-"))
   const assets = join(root, "assets")
@@ -409,6 +451,7 @@ test("accepts only one first-node XML declaration with complete ordered grammar"
   const valid = [
     ["minimal", svg('<?xml version="1.0"?>')],
     ["complete", svg("<?xml version = '1.1' encoding = 'UTF-8' standalone = 'no'?>")],
+    ["lowercase-encoding", svg('<?xml version="1.0" encoding="utf-8"?>')],
   ] as const
   const invalid = [
     ["missing-version", svg('<?xml encoding="UTF-8"?>')],
