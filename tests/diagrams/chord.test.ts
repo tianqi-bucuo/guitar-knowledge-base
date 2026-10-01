@@ -6,6 +6,7 @@ import { DOMParser } from "@xmldom/xmldom"
 import { renderChord } from "../../scripts/diagrams/renderChord"
 import { escapeXml, formatNumber, wrapSvg } from "../../scripts/diagrams/svg"
 import type { ChordDefinition } from "../../scripts/diagrams/types"
+import { validateChord } from "../../scripts/diagrams/validateDefinitions"
 
 const cMajor: ChordDefinition = {
   id: "c-major",
@@ -23,6 +24,15 @@ const fMajorBarre: ChordDefinition = {
   frets: [1, 3, 3, 2, 1, 1],
   fingers: [1, 3, 4, 2, 1, 1],
   barres: [{ fret: 1, fromString: 1, toString: 6, finger: 1 }],
+}
+
+const fMajorSimplified: ChordDefinition = {
+  id: "f-major-simplified",
+  title: "F 大三和弦简化按法（F/C）",
+  baseFret: 1,
+  frets: ["x", "x", 3, 2, 1, 1],
+  fingers: [null, null, 3, 2, 1, 1],
+  barres: [{ fret: 1, fromString: 1, toString: 2, finger: 1 }],
 }
 
 function parseXml(svg: string) {
@@ -133,6 +143,43 @@ test("renders a full F barre before ordinary dots with actual six-string endpoin
     /<line data-role="barre" data-fret="1" data-from-string="1" data-to-string="6" data-finger="1" x1="40" y1="112" x2="200" y2="112" stroke="#8A4B2A" stroke-width="20" stroke-linecap="round"\/>/,
   )
   assert.match(svg, />横按 1 指<\/text>/)
+  assert.match(
+    svg,
+    /<desc id="chord-f-major-barre-desc">[^<]+横按 1 指，第 1 品第 1 弦至第 6 弦。<\/desc>/,
+  )
+  assert.doesNotMatch(svg, /。；/)
+})
+
+test("fits the approved long simplified-F title inside the padded 20..220 span", () => {
+  const svg = renderChord(fMajorSimplified)
+
+  assert.match(
+    svg,
+    /<text x="120" y="30" font-family="Noto Sans CJK SC, PingFang SC, Microsoft YaHei, sans-serif" font-size="14" font-weight="700" text-anchor="middle" dominant-baseline="middle" fill="#2b2b2b" textLength="200" lengthAdjust="spacingAndGlyphs">F 大三和弦简化按法（F\/C）<\/text>/,
+  )
+  assert.doesNotMatch(
+    renderChord(cMajor),
+    /y="30"[^>]*(?:textLength="200"|lengthAdjust="spacingAndGlyphs")/,
+  )
+})
+
+test("renders legal multiple barres separately with one deduplicated finger label", () => {
+  const definition = validateChord({
+    id: "two-barres",
+    title: "双横按测试",
+    baseFret: 1,
+    frets: [3, 3, "x", "x", 1, 1],
+    fingers: [2, 2, null, null, 1, 1],
+    barres: [
+      { fret: 1, fromString: 1, toString: 2, finger: 1 },
+      { fret: 3, fromString: 5, toString: 6, finger: 2 },
+    ],
+  })
+  const svg = renderChord(definition)
+
+  assert.equal((svg.match(/data-role="barre"/g) ?? []).length, 2)
+  assert.equal((svg.match(/>横按 1、2 指<\/text>/g) ?? []).length, 1)
+  assert.doesNotMatch(svg, />横按 [12] 指<\/text>/)
 })
 
 test("labels a higher position without drawing a false nut", () => {

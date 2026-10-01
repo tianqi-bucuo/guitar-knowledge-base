@@ -68,7 +68,7 @@ test("renders the reviewed teaching/test strum with fixed geometry, ordered cell
   assert.match(first, /<rect x="0" y="0" width="720" height="220" fill="#fffdf9"\/>/)
   assert.match(first, /font-family="Noto Sans CJK SC, PingFang SC, Microsoft YaHei, sans-serif"/)
   assert.match(first, /<text x="48" y="28"[^>]*>基础扫弦教学／测试节奏<\/text>/)
-  assert.match(first, /<text x="48" y="52"[^>]*>4\/4 拍 · 每拍 4 等分<\/text>/)
+  assert.match(first, /<text x="48" y="52"[^>]*>4\/4 拍号 · 四分音符细分<\/text>/)
   assert.match(
     first,
     /<rect x="48" y="76" width="156" height="96" fill="#fffdf9" stroke="#b8b8b8"\/>/,
@@ -114,6 +114,20 @@ test("preserves each supported meter and subdivision count, including readable 1
     assert.equal((svg.match(/data-cell-index=/g) ?? []).length, expectedCount)
     assert.equal((svg.match(/<rect x="/g) ?? []).length, expectedCount + 1)
     parseXml(svg)
+  }
+})
+
+test("names subdivision denominators as note values in visible and accessible text", () => {
+  for (const [subdivision, noteValue] of [
+    [4, "四分音符"],
+    [8, "八分音符"],
+    [16, "十六分音符"],
+  ] as const) {
+    const svg = renderRhythm(definition("4/4", subdivision))
+
+    assert.match(svg, new RegExp(`>4/4 拍号 · ${noteValue}细分<\\/text>`))
+    assert.match(svg, new RegExp(`<desc[^>]*>[^<]*4/4 拍号，${noteValue}细分，共`))
+    assert.doesNotMatch(svg, /每拍 \d+ 等分/)
   }
 })
 

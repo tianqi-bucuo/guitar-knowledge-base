@@ -174,6 +174,9 @@ export function validateChord(value: unknown): ChordDefinition {
     if (fret !== "x" && !isIntegerInRange(fret, 0)) {
       fail("CHORD_FRET_STATE", normalizedId, "fret must be x, 0, or a positive integer")
     }
+    if (fret !== "x" && fret > 0 && (fret < baseFret || fret > baseFret + 4)) {
+      fail("CHORD_FRET_DISPLAY", normalizedId, "fret must be within the five-fret display")
+    }
     return fret as StringState
   }) as ChordDefinition["frets"]
   const fingers = rawFingers.map((finger) => {

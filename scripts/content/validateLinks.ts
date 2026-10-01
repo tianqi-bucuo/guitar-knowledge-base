@@ -36,6 +36,51 @@ type Resolution =
   | { kind: "resolved"; target: string }
   | { kind: "error"; code: string; message: string }
 
+const SVG_NAMESPACE = "http://www.w3.org/2000/svg"
+const XMLNS_NAMESPACE = "http://www.w3.org/2000/xmlns/"
+const XLINK_NAMESPACE = "http://www.w3.org/1999/xlink"
+const ALLOWED_SVG_ELEMENTS = new Set([
+  "svg",
+  "title",
+  "desc",
+  "g",
+  "defs",
+  "use",
+  "rect",
+  "line",
+  "circle",
+  "text",
+])
+const ALLOWED_SVG_ATTRIBUTES = new Set([
+  "role",
+  "aria-labelledby",
+  "id",
+  "width",
+  "height",
+  "viewBox",
+  "x",
+  "y",
+  "x1",
+  "y1",
+  "x2",
+  "y2",
+  "cx",
+  "cy",
+  "r",
+  "fill",
+  "stroke",
+  "stroke-width",
+  "stroke-linecap",
+  "font-family",
+  "font-size",
+  "font-weight",
+  "text-anchor",
+  "dominant-baseline",
+  "textLength",
+  "lengthAdjust",
+  "href",
+])
+
 function deduplicateDiagnostics(diagnostics: Diagnostic[]): Diagnostic[] {
   return [...new Map(diagnostics.map((item) => [JSON.stringify(item), item])).values()]
 }
@@ -80,6 +125,95 @@ function fileSystemError(path: string, error: unknown): Resolution {
     code: "INVALID_LOCAL_ASSET",
     message: `无法检查本地附件: ${path}`,
   }
+}
+
+function containsUnsafeCssUrl(value: string): boolean {
+  for (const character of value) {
+    const code = character.codePointAt(0) ?? 0
+    if (code <= 0x1f || code === 0x7f || character === "\\") {
+      return true
+    }
+  }
+
+  const lower = value.toLocaleLowerCase("en-US")
+  let cursor = 0
+  while (cursor < lower.length) {
+    const start = lower.indexOf("url", cursor)
+    if (start === -1) {
+      return false
+    }
+    const previous = start === 0 ? "" : lower[start - 1]
+    if (previous !== "" && /[a-z0-9_-]/u.test(previous)) {
+      cursor = start + 3
+      continue
+    }
+
+    let opening = start + 3
+    while (opening < lower.length && /[ \t\n\r\f]/u.test(lower[opening])) {
+      opening += 1
+    }
+    if (lower[opening] !== "(") {
+      cursor = start + 3
+      continue
+    }
+
+    const closing = lower.indexOf(")", opening + 1)
+    if (closing === -1) {
+      return true
+    }
+    let reference = value.slice(opening + 1, closing).trim()
+    if (
+      reference.length >= 2 &&
+      (reference[0] === '"' || reference[0] === "'") &&
+      reference.at(-1) === reference[0]
+    ) {
+      reference = reference.slice(1, -1).trim()
+    }
+    if (
+      !reference.startsWith("#") ||
+      reference.length === 1 ||
+      [...reference].some((character) => /[\s"'()\\]/u.test(character))
+    ) {
+      return true
+    }
+    cursor = closing + 1
+  }
+
+  return false
+}
+
+function isAllowedSvgAttribute(attribute: {
+  name: string
+  namespaceURI?: string | null
+  value: string
+}): boolean {
+  if (attribute.name === "xmlns") {
+    return attribute.namespaceURI === XMLNS_NAMESPACE && attribute.value === SVG_NAMESPACE
+  }
+  if (attribute.name === "xmlns:xlink") {
+    return attribute.namespaceURI === XMLNS_NAMESPACE && attribute.value === XLINK_NAMESPACE
+  }
+  if (attribute.name === "xlink:href") {
+    return attribute.namespaceURI === XLINK_NAMESPACE
+  }
+  if (attribute.name.startsWith("data-") && attribute.name.length > "data-".length) {
+    return attribute.namespaceURI == null
+  }
+  return ALLOWED_SVG_ATTRIBUTES.has(attribute.name) && attribute.namespaceURI == null
+}
+
+function hasForbiddenProcessingInstruction(document: Document): boolean {
+  const nodes = [
+    ...Array.from(document.childNodes ?? []),
+    ...Array.from(document.getElementsByTagName("*")).flatMap((element) =>
+      Array.from(element.childNodes ?? []),
+    ),
+  ]
+  return nodes.some(
+    (node) =>
+      node.nodeType === 7 &&
+      !(node.parentNode?.nodeType === 9 && node.nodeName.toLocaleLowerCase("en-US") === "xml"),
+  )
 }
 
 function contentRelativeFile(page: PageRecord, contentRoot: string): string {
@@ -353,13 +487,22 @@ function validateSvg(path: string, displayPath: string): Resolution | undefined 
   } catch {
     return invalid("SVG 无法解析")
   }
-  if (parseError || document.documentElement?.tagName !== "svg") {
+  const root = document.documentElement
+  if (
+    parseError ||
+    root?.localName !== "svg" ||
+    root.namespaceURI !== SVG_NAMESPACE ||
+    hasForbiddenProcessingInstruction(document)
+  ) {
     return invalid("SVG 无法解析或根元素不是 <svg>")
   }
 
   for (const element of Array.from(document.getElementsByTagName("*"))) {
-    const elementName = (element.localName || element.tagName).toLocaleLowerCase("en-US")
-    if (elementName === "script" || elementName === "foreignobject") {
+    const elementName = element.localName || element.tagName
+    if (element.namespaceURI !== SVG_NAMESPACE) {
+      return invalid(`SVG 元素必须使用 SVG namespace <${element.tagName}>`)
+    }
+    if (!ALLOWED_SVG_ELEMENTS.has(elementName)) {
       return invalid(`SVG 不得包含 <${elementName}>`)
     }
     for (const attribute of Array.from(element.attributes)) {
@@ -368,16 +511,25 @@ function validateSvg(path: string, displayPath: string): Resolution | undefined 
       if (attributeName.startsWith("on") || qualifiedName.startsWith("on")) {
         return invalid(`SVG 不得包含事件属性 ${attribute.name}`)
       }
+      if (attributeName === "style" || qualifiedName === "style") {
+        return invalid("SVG 不得包含 style 属性")
+      }
+      if (!isAllowedSvgAttribute(attribute)) {
+        return invalid(`SVG 不得包含未允许的属性 ${attribute.name}`)
+      }
       if (attributeName === "href" || qualifiedName === "xlink:href") {
         const reference = attribute.value.trim()
         if (!reference.startsWith("#") || reference.length === 1) {
           return invalid(`SVG 引用必须是非空本地 fragment ${attribute.name}`)
         }
       }
+      if (containsUnsafeCssUrl(attribute.value)) {
+        return invalid(`SVG 属性只允许非空本地 fragment URL ${attribute.name}`)
+      }
     }
   }
 
-  const titles = Array.from(document.getElementsByTagName("title"))
+  const titles = Array.from(document.getElementsByTagNameNS(SVG_NAMESPACE, "title"))
   if (!titles.some((title) => (title.textContent ?? "").trim().length > 0)) {
     return {
       kind: "error",

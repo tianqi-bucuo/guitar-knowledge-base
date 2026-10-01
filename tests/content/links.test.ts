@@ -1,5 +1,13 @@
 import assert from "node:assert/strict"
-import { chmodSync, mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs"
+import {
+  chmodSync,
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
@@ -256,6 +264,19 @@ test("accepts titled SVG and rejects untitled, DOCTYPE, malformed, and non-SVG a
   assert.ok(!diagnostics.some((item) => item.message.includes("valid.svg")))
 })
 
+test("requires the SVG namespace on the root and every descendant element", () => {
+  const page = pageWithTargets([
+    "assets/wrong-namespace.svg",
+    "assets/missing-namespace.svg",
+    "assets/wrong-descendant-namespace.svg",
+  ])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET", "INVALID_SVG_ASSET", "INVALID_SVG_ASSET"],
+  )
+})
+
 test("rejects script and foreignObject elements case-insensitively", () => {
   const page = pageWithTargets(["assets/unsafe-script.svg", "assets/unsafe-foreign-object.svg"])
 
@@ -315,9 +336,65 @@ test("rejects every empty or non-fragment SVG href", () => {
 })
 
 test("accepts generated-style SVG with a local fragment reference", () => {
-  const page = pageWithTargets(["assets/safe-generated.svg"])
+  const page = pageWithTargets([
+    "assets/valid.svg",
+    "assets/safe-generated.svg",
+    "assets/safe-local-paint.svg",
+  ])
 
   assert.deepEqual(validateLinks([page], contentRoot), [])
+
+  const diagrams = readdirSync("content/assets/diagrams")
+    .filter((file) => file.endsWith(".svg"))
+    .sort()
+  const productionPage: PageRecord = {
+    ...pageWithTargets(
+      [],
+      diagrams.map((file) => `assets/diagrams/${file}`),
+    ),
+    file: "content/diagram-validator-probe.md",
+  }
+  assert.equal(diagrams.length, 14)
+  assert.deepEqual(validateLinks([productionPage], "content"), [])
+})
+
+test("rejects xml:base that redirects a local-looking fragment", () => {
+  const page = pageWithTargets(["assets/unsafe-xml-base.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET"],
+  )
+})
+
+test("rejects elements and processing instructions outside the generated SVG vocabulary", () => {
+  const page = pageWithTargets([
+    "assets/unsafe-style-element.svg",
+    "assets/unsafe-image-element.svg",
+    "assets/unsafe-fe-image-element.svg",
+    "assets/unsafe-namespaced-element.svg",
+    "assets/unsafe-stylesheet-pi.svg",
+    "assets/unsafe-other-pi.svg",
+  ])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    Array.from({ length: 6 }, () => "INVALID_SVG_ASSET"),
+  )
+})
+
+test("rejects style attributes and unsafe CSS URL values after XML decoding", () => {
+  const page = pageWithTargets([
+    "assets/unsafe-style-attribute.svg",
+    "assets/unsafe-external-paint.svg",
+    "assets/unsafe-external-paint-character-reference.svg",
+    "assets/unsafe-backslash-paint.svg",
+  ])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    Array.from({ length: 4 }, () => "INVALID_SVG_ASSET"),
+  )
 })
 
 test("rejects SVG and non-SVG asset symlinks whose real paths escape the content root", () => {
@@ -351,7 +428,11 @@ test("stabilizes broken, cyclic, and non-file assets while accepting an in-root 
   const assets = join(temporaryContentRoot, "assets")
   try {
     mkdirSync(join(assets, "directory.bin"), { recursive: true })
-    writeFileSync(join(assets, "valid.svg"), "<svg><title>站内图示</title></svg>", "utf8")
+    writeFileSync(
+      join(assets, "valid.svg"),
+      '<svg xmlns="http://www.w3.org/2000/svg"><title>站内图示</title></svg>',
+      "utf8",
+    )
     writeFileSync(join(assets, "unreadable.png"), "private", "utf8")
     chmodSync(join(assets, "unreadable.png"), 0o000)
     symlinkSync("valid.svg", join(assets, "in-root.svg"))
@@ -389,4 +470,37 @@ test("the three published seed pages have no link diagnostics", () => {
   ]
 
   assert.deepEqual(validateLinks(pages, "content"), [])
+})
+
+test("roadmap preserves three exact previews and links both wide diagrams to their originals", () => {
+  const roadmap = parsePage("content/00-从这里开始/学习路线总览.md")
+
+  assert.deepEqual(roadmap.embeds, [
+    "../assets/diagrams/chord-c-major.svg",
+    "../assets/diagrams/fretboard-c-major-scale.svg",
+    "../assets/diagrams/rhythm-basic-eighth-strum.svg",
+  ])
+  assert.match(
+    roadmap.body,
+    /!\[C 大三和弦图：六弦到一弦为 x-3-2-0-1-0\]\(\.\.\/assets\/diagrams\/chord-c-major\.svg\)/,
+  )
+  assert.match(
+    roadmap.body,
+    /!\[C 大调 0–5 品指板音位图，根音 C 另有文字和粗轮廓标记\]\(\.\.\/assets\/diagrams\/fretboard-c-major-scale\.svg\)/,
+  )
+  assert.match(
+    roadmap.body,
+    /!\[4\/4 基础八分音符交替扫弦图，重音在第 1 与第 3 拍\]\(\.\.\/assets\/diagrams\/rhythm-basic-eighth-strum\.svg\)/,
+  )
+  assert.deepEqual(
+    roadmap.linkTargets?.filter(({ raw }) => raw.startsWith("../assets/diagrams/")),
+    [
+      { raw: "../assets/diagrams/chord-c-major.svg", kind: "markdown-image" },
+      { raw: "../assets/diagrams/fretboard-c-major-scale.svg", kind: "markdown-image" },
+      { raw: "../assets/diagrams/fretboard-c-major-scale.svg", kind: "markdown-link" },
+      { raw: "../assets/diagrams/rhythm-basic-eighth-strum.svg", kind: "markdown-image" },
+      { raw: "../assets/diagrams/rhythm-basic-eighth-strum.svg", kind: "markdown-link" },
+    ],
+  )
+  assert.equal((roadmap.body.match(/打开原图（移动端可放大）/gu) ?? []).length, 2)
 })

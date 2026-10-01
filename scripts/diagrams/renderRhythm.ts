@@ -24,6 +24,12 @@ const ACTION_NAMES: Record<RhythmCell["stroke"], string> = {
   mute: "闷音",
 }
 
+const SUBDIVISION_NAMES: Record<RhythmDefinition["subdivision"], string> = {
+  4: "四分音符",
+  8: "八分音符",
+  16: "十六分音符",
+}
+
 function rhythmDescription(definition: RhythmDefinition): string {
   const actions = definition.cells
     .map(
@@ -31,7 +37,7 @@ function rhythmDescription(definition: RhythmDefinition): string {
         `第 ${index + 1} 格${cell.label}${ACTION_NAMES[cell.stroke]}${cell.accent ? "重音" : ""}`,
     )
     .join("；")
-  return `${definition.title}，${definition.meter} 拍、每拍 ${definition.subdivision} 等分，共 ${definition.cells.length} 格：${actions}。`
+  return `${definition.title}，${definition.meter} 拍号，${SUBDIVISION_NAMES[definition.subdivision]}细分，共 ${definition.cells.length} 格：${actions}。`
 }
 
 export function renderRhythm(definition: RhythmDefinition): string {
@@ -51,7 +57,7 @@ export function renderRhythm(definition: RhythmDefinition): string {
       return `<g data-cell-index="${index}" data-label="${escapeXml(cell.label)}" data-stroke="${cell.stroke}" data-accent="${cell.accent}"><rect x="${formatNumber(x)}" y="${CELL_TOP}" width="${formatNumber(cellWidth)}" height="${CELL_HEIGHT}" fill="${SVG_TOKENS.surface}" stroke="${SVG_TOKENS.grid}"/> <text x="${formatNumber(center)}" y="100" font-family="${CJK_FONT}" font-size="13" text-anchor="middle" fill="${SVG_TOKENS.mutedInk}">${escapeXml(cell.label)}</text>${accent}<text x="${formatNumber(center)}" y="150" font-family="${CJK_FONT}" font-size="24" font-weight="700" text-anchor="middle" fill="${SVG_TOKENS.ink}">${ACTIONS[cell.stroke]}</text>${rule}</g>`
     })
     .join("")
-  const body = `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" fill="${SVG_TOKENS.surface}"/><text x="48" y="28" font-family="${CJK_FONT}" font-size="18" font-weight="700" fill="${SVG_TOKENS.ink}">${escapeXml(definition.title)}</text><text x="48" y="52" font-family="${CJK_FONT}" font-size="12" fill="${SVG_TOKENS.mutedInk}">${definition.meter} 拍 · 每拍 ${definition.subdivision} 等分</text>${cells}<text x="48" y="200" font-family="${CJK_FONT}" font-size="12" fill="${SVG_TOKENS.mutedInk}">图例：↓ 下扫　↑ 上扫　— 休止${muteLegend}　&gt; 重音</text>`
+  const body = `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" fill="${SVG_TOKENS.surface}"/><text x="48" y="28" font-family="${CJK_FONT}" font-size="18" font-weight="700" fill="${SVG_TOKENS.ink}">${escapeXml(definition.title)}</text><text x="48" y="52" font-family="${CJK_FONT}" font-size="12" fill="${SVG_TOKENS.mutedInk}">${definition.meter} 拍号 · ${SUBDIVISION_NAMES[definition.subdivision]}细分</text>${cells}<text x="48" y="200" font-family="${CJK_FONT}" font-size="12" fill="${SVG_TOKENS.mutedInk}">图例：↓ 下扫　↑ 上扫　— 休止${muteLegend}　&gt; 重音</text>`
 
   return wrapSvg({
     id: definition.id,

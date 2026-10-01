@@ -7,6 +7,7 @@ const STRING_X = [40, 72, 104, 136, 168, 200] as const
 const STRING_NUMBERS = [6, 5, 4, 3, 2, 1] as const
 const GRID_Y = [92, 132, 172, 212, 252, 292] as const
 const CJK_FONT = "Noto Sans CJK SC, PingFang SC, Microsoft YaHei, sans-serif"
+const LONG_TITLE_CODE_POINT_THRESHOLD = 12
 
 function fretY(fret: number, baseFret: number): number {
   return 112 + 40 * (fret - baseFret)
@@ -33,13 +34,16 @@ function describeChord(definition: ChordDefinition): string {
   const strings = definition.frets.map((fret, index) =>
     describeString(fret, definition.fingers[index]),
   )
-  const barres = definition.barres.map(
-    (barre) =>
-      `横按 ${barre.finger} 指，第 ${barre.fret} 品第 ${barre.fromString} 弦至第 ${barre.toString} 弦`,
-  )
-  const suffix = barres.length === 0 ? "" : `；${barres.join("；")}`
+  const clauses = [
+    definition.title,
+    `从第六弦到第一弦为${strings.join("、")}`,
+    ...definition.barres.map(
+      (barre) =>
+        `横按 ${barre.finger} 指，第 ${barre.fret} 品第 ${barre.fromString} 弦至第 ${barre.toString} 弦`,
+    ),
+  ]
 
-  return `${definition.title}；从第六弦到第一弦为${strings.join("、")}。${suffix}`
+  return `${clauses.join("；")}。`
 }
 
 function renderGrid(baseFret: number): string {
@@ -54,7 +58,23 @@ function renderBarre(barre: Barre, baseFret: number): string {
   const x2 = Math.max(stringX(barre.fromString), stringX(barre.toString))
   const y = fretY(barre.fret, baseFret)
 
-  return `<line data-role="barre" data-fret="${barre.fret}" data-from-string="${barre.fromString}" data-to-string="${barre.toString}" data-finger="${barre.finger}" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${SVG_TOKENS.root}" stroke-width="20" stroke-linecap="round"/><text x="120" y="306" font-family="${CJK_FONT}" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="middle" fill="${SVG_TOKENS.root}">横按 ${barre.finger} 指</text>`
+  return `<line data-role="barre" data-fret="${barre.fret}" data-from-string="${barre.fromString}" data-to-string="${barre.toString}" data-finger="${barre.finger}" x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="${SVG_TOKENS.root}" stroke-width="20" stroke-linecap="round"/>`
+}
+
+function renderBarreLabel(barres: Barre[]): string {
+  if (barres.length === 0) {
+    return ""
+  }
+  const fingers = [...new Set(barres.map((barre) => barre.finger))].sort(
+    (left, right) => left - right,
+  )
+  return `<text x="120" y="306" font-family="${CJK_FONT}" font-size="12" font-weight="700" text-anchor="middle" dominant-baseline="middle" fill="${SVG_TOKENS.root}">横按 ${fingers.join("、")} 指</text>`
+}
+
+function renderTitle(title: string): string {
+  const longTitle = Array.from(title).length > LONG_TITLE_CODE_POINT_THRESHOLD
+  const fit = longTitle ? ' textLength="200" lengthAdjust="spacingAndGlyphs"' : ""
+  return `<text x="120" y="30" font-family="${CJK_FONT}" font-size="${longTitle ? 14 : 20}" font-weight="700" text-anchor="middle" dominant-baseline="middle" fill="${SVG_TOKENS.ink}"${fit}>${escapeXml(title)}</text>`
 }
 
 function renderStringGroup(definition: ChordDefinition, index: number): string {
@@ -81,10 +101,11 @@ export function renderChord(definition: ChordDefinition): string {
       : `<text x="24" y="116" font-family="${CJK_FONT}" font-size="12" font-weight="400" text-anchor="middle" dominant-baseline="middle" fill="${SVG_TOKENS.mutedInk}">${formatNumber(definition.baseFret)} 品</text>`
   const body = [
     `<rect x="0" y="0" width="${WIDTH}" height="${HEIGHT}" fill="${SVG_TOKENS.surface}"/>`,
-    `<text x="120" y="30" font-family="${CJK_FONT}" font-size="20" font-weight="700" text-anchor="middle" dominant-baseline="middle" fill="${SVG_TOKENS.ink}">${escapeXml(definition.title)}</text>`,
+    renderTitle(definition.title),
     baseFretLabel,
     renderGrid(definition.baseFret),
     ...definition.barres.map((barre) => renderBarre(barre, definition.baseFret)),
+    renderBarreLabel(definition.barres),
     ...STRING_X.map((_, index) => renderStringGroup(definition, index)),
   ].join("")
 

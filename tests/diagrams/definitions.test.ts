@@ -73,6 +73,27 @@ test("enforces chord finger ranges and fret agreement without coercing values", 
   )
 })
 
+test("keeps every ordinary positive fret inside the five-fret display window", () => {
+  const highPositionChord = {
+    ...cMajor,
+    id: "high-position-chord",
+    title: "高把位和弦",
+    baseFret: 7,
+    frets: ["x", 7, 11, 0, "x", "x"],
+    fingers: [null, 1, 4, null, null, null],
+  }
+
+  assert.doesNotThrow(() => validateChord(highPositionChord))
+  assert.throws(
+    () => validateChord({ ...highPositionChord, frets: ["x", 6, 11, 0, "x", "x"] }),
+    /CHORD_FRET_DISPLAY.*high-position-chord/,
+  )
+  assert.throws(
+    () => validateChord({ ...highPositionChord, frets: ["x", 7, 12, 0, "x", "x"] }),
+    /CHORD_FRET_DISPLAY.*high-position-chord/,
+  )
+})
+
 test("accepts a coherent F barre and rejects reversed, out-of-range, duplicate, and incoherent barres", () => {
   const fMajor = {
     ...cMajor,

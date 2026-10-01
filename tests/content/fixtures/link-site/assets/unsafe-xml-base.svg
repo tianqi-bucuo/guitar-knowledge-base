@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" xml:base="https://example.test/remote.svg"><title>外部基础 URI</title><defs><circle id="dot" cx="1" cy="1" r="1"/></defs><use href="#dot"/></svg>
