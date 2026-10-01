@@ -416,6 +416,66 @@ test("accepts a valid XML declaration after one UTF-8 BOM", () => {
   assert.deepEqual(validateLinks([page], contentRoot), [])
 })
 
+test("rejects a second leading UTF-8 BOM without an XML declaration", () => {
+  const page = pageWithTargets(["assets/unsafe-double-utf8-bom.svg"])
+
+  assert.deepEqual(
+    validateLinks([page], contentRoot).map(({ code }) => code),
+    ["INVALID_SVG_ASSET"],
+  )
+})
+
+test("enforces BOM and document-level text boundaries around the SVG root", () => {
+  const root = mkdtempSync(join(tmpdir(), "guitar-svg-wrapper-"))
+  const assets = join(root, "assets")
+  const bom = Buffer.from([0xef, 0xbb, 0xbf])
+  const svg = Buffer.from(
+    '<svg xmlns="http://www.w3.org/2000/svg"><title>SVG wrapper probe</title></svg>',
+    "utf8",
+  )
+  const declaration = Buffer.from('<?xml version="1.0"?>', "utf8")
+  const cases = [
+    ["single-bom", Buffer.concat([bom, svg]), true],
+    ["single-bom-declaration", Buffer.concat([bom, declaration, svg]), true],
+    [
+      "xml-whitespace-comments",
+      Buffer.from(
+        ' \t\r\n<!--before--><svg xmlns="http://www.w3.org/2000/svg"><title>safe wrapper</title></svg><!--after-->\n',
+        "utf8",
+      ),
+      true,
+    ],
+    ["double-bom-declaration", Buffer.concat([bom, bom, declaration, svg]), false],
+    ["outside-feff", Buffer.concat([Buffer.from("<!--before-->", "utf8"), bom, svg]), false],
+    ["outside-text-before", Buffer.concat([Buffer.from("x", "utf8"), svg]), false],
+    ["outside-text-after", Buffer.concat([svg, Buffer.from("x", "utf8")]), false],
+  ] as const
+
+  try {
+    mkdirSync(assets, { recursive: true })
+    for (const [name, bytes] of cases) {
+      writeFileSync(join(assets, `${name}.svg`), bytes)
+    }
+    const probe = (accepted: boolean): PageRecord => ({
+      ...pageWithTargets(
+        [],
+        cases
+          .filter(([, , expected]) => expected === accepted)
+          .map(([name]) => `assets/${name}.svg`),
+      ),
+      file: join(root, "source.md"),
+    })
+
+    assert.deepEqual(validateLinks([probe(true)], root), [])
+    assert.deepEqual(
+      validateLinks([probe(false)], root).map(({ code }) => code),
+      Array.from({ length: 4 }, () => "INVALID_SVG_ASSET"),
+    )
+  } finally {
+    rmSync(root, { recursive: true, force: true })
+  }
+})
+
 test("rejects invalid UTF-8 bytes instead of decoding replacement characters", () => {
   const root = mkdtempSync(join(tmpdir(), "guitar-svg-invalid-utf8-"))
   const assets = join(root, "assets")

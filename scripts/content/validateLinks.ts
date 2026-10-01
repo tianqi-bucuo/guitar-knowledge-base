@@ -207,13 +207,45 @@ function isAllowedSvgAttribute(attribute: {
 
 function decodeUtf8Svg(bytes: Uint8Array): string | undefined {
   const hasBom = bytes[0] === 0xef && bytes[1] === 0xbb && bytes[2] === 0xbf
+  const content = hasBom ? bytes.subarray(3) : bytes
+  if (hasBom && content[0] === 0xef && content[1] === 0xbb && content[2] === 0xbf) {
+    return undefined
+  }
   try {
-    return new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(
-      hasBom ? bytes.subarray(3) : bytes,
-    )
+    return new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(content)
   } catch {
     return undefined
   }
+}
+
+function hasValidDocumentPrefix(source: string): boolean {
+  let cursor = 0
+  while (cursor < source.length) {
+    if (/[\t\n\r ]/u.test(source[cursor])) {
+      cursor += 1
+      continue
+    }
+    if (source.startsWith("<!--", cursor)) {
+      const end = source.indexOf("-->", cursor + 4)
+      if (end === -1) return false
+      cursor = end + 3
+      continue
+    }
+    if (source.startsWith("<?", cursor)) {
+      const end = source.indexOf("?>", cursor + 2)
+      if (end === -1) return false
+      cursor = end + 2
+      continue
+    }
+    return source[cursor] === "<"
+  }
+  return false
+}
+
+function hasForbiddenDocumentText(document: Document): boolean {
+  return Array.from(document.childNodes ?? []).some(
+    (node) => node.nodeType === 3 && !/^[\t\n\r ]*$/u.test(node.nodeValue ?? ""),
+  )
 }
 
 function isValidXmlDeclaration(node: Node, document: Document): boolean {
@@ -495,6 +527,9 @@ function validateSvg(path: string, displayPath: string): Resolution | undefined 
   if (source === undefined) {
     return invalid("SVG 必须使用有效 UTF-8 编码")
   }
+  if (!hasValidDocumentPrefix(source)) {
+    return invalid("SVG 根元素外只允许 XML 空白、注释或声明")
+  }
   if (/<!DOCTYPE\b/iu.test(source)) {
     return invalid("SVG 不得包含 DOCTYPE")
   }
@@ -523,6 +558,7 @@ function validateSvg(path: string, displayPath: string): Resolution | undefined 
     parseError ||
     root?.localName !== "svg" ||
     root.namespaceURI !== SVG_NAMESPACE ||
+    hasForbiddenDocumentText(document) ||
     hasForbiddenProcessingInstruction(document)
   ) {
     return invalid("SVG 无法解析或根元素不是 <svg>")
