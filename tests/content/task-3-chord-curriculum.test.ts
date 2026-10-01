@@ -310,6 +310,7 @@ const expectedLessons: ExpectedLesson[] = [
       "02-和弦系统/C-Am-F-G和弦进行",
       "01-持琴与基础动作/正确按弦",
       "00-从这里开始/学习路线总览",
+      "03-节奏系统/节拍拍号与小节",
     ],
   },
 ]
@@ -637,7 +638,8 @@ test(
     const items = [...ordered.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
     assert.equal(items.length, 10)
     assert.match(items[2], /\[\[02-和弦系统\/和弦图读法\|和弦图读法\]\]/u)
-    for (const item of items.slice(3)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(items[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
+    for (const item of items.slice(4)) assert.doesNotMatch(item, /\[\[/u)
 
     const crossing = parsePage("content/01-持琴与基础动作/相邻弦与跨弦.md")
     const section = crossing.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""

@@ -302,6 +302,16 @@ const task3LinkContextFiles = [
   "content/02-和弦系统/C-Am-F-G和弦进行.md",
   "content/02-和弦系统/F简化指法与横按准备.md",
   "content/02-和弦系统/F大横按与移动和弦.md",
+  "content/03-节奏系统/节拍拍号与小节.md",
+  "content/03-节奏系统/第一次使用节拍器.md",
+  "content/03-节奏系统/四分八分与十六分音符.md",
+  "content/03-节奏系统/放松而稳定的扫弦动作.md",
+  "content/03-节奏系统/四拍全下扫.md",
+  "content/03-节奏系统/基础八分音符扫弦.md",
+  "content/03-节奏系统/重音与强弱层次.md",
+  "content/03-节奏系统/切分节奏入门.md",
+  "content/03-节奏系统/三拍子伴奏.md",
+  "content/03-节奏系统/六八拍伴奏.md",
 ]
 const task3LinkContext = task3LinkContextFiles.filter(existsSync).map((file) => parsePage(file))
 
@@ -458,6 +468,9 @@ test(
       10,
       "学习路线总览 must keep ten ordered module items",
     )
+    const routeItems = [...orderedLinkSection.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
+    assert.match(routeItems[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
+    for (const item of routeItems.slice(4)) assert.doesNotMatch(item, /\[\[/u)
 
     for (const expected of expectedPages) {
       const page = pageByFile.get(expected.file)

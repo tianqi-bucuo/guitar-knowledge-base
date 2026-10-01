@@ -658,7 +658,7 @@ test("stabilizes broken, cyclic, and non-file assets while accepting an in-root 
   }
 })
 
-test("the twenty-five currently published pages have no link diagnostics", () => {
+test("the thirty-five currently published pages have no link diagnostics", () => {
   const pages = [
     parsePage("content/index.md"),
     parsePage("content/00-从这里开始/如何使用知识库.md"),
@@ -685,6 +685,16 @@ test("the twenty-five currently published pages have no link diagnostics", () =>
     parsePage("content/02-和弦系统/C-Am-F-G和弦进行.md"),
     parsePage("content/02-和弦系统/F简化指法与横按准备.md"),
     parsePage("content/02-和弦系统/F大横按与移动和弦.md"),
+    parsePage("content/03-节奏系统/节拍拍号与小节.md"),
+    parsePage("content/03-节奏系统/第一次使用节拍器.md"),
+    parsePage("content/03-节奏系统/四分八分与十六分音符.md"),
+    parsePage("content/03-节奏系统/放松而稳定的扫弦动作.md"),
+    parsePage("content/03-节奏系统/四拍全下扫.md"),
+    parsePage("content/03-节奏系统/基础八分音符扫弦.md"),
+    parsePage("content/03-节奏系统/重音与强弱层次.md"),
+    parsePage("content/03-节奏系统/切分节奏入门.md"),
+    parsePage("content/03-节奏系统/三拍子伴奏.md"),
+    parsePage("content/03-节奏系统/六八拍伴奏.md"),
   ]
 
   assert.deepEqual(validateLinks(pages, "content"), [])
