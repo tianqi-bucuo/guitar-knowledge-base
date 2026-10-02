@@ -163,12 +163,12 @@ export function validateMetadata(pages: PageRecord[], manifest: Manifest): Diagn
       }
 
       const prerequisites = frontmatter.prerequisites
-      if (!Array.isArray(prerequisites) || prerequisites.length === 0) {
+      if (!Array.isArray(prerequisites)) {
         addDiagnostic(
           diagnostics,
           page,
           "LESSON_PREREQUISITES_REQUIRED",
-          "lesson 必须有非空 prerequisites 数组",
+          "lesson 必须显式提供 prerequisites 数组（课程起点可为空）",
         )
       } else if (prerequisites.some((item) => !normalizedString(item))) {
         addDiagnostic(

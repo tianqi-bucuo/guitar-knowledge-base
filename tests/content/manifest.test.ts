@@ -131,15 +131,32 @@ test("rejects release page bounds that cannot describe a release", () => {
   })
 })
 
-test("rejects release bounds outside the fixed 60-to-80 contract", () => {
-  const mutations: Array<(release: Record<string, unknown>) => void> = [
-    (release) => (release.minPages = 59),
-    (release) => (release.maxPages = 81),
-  ]
+test("accepts configurable positive integer release bounds", () => {
+  withManifest(
+    (manifest) => {
+      manifest.release = { minPages: 97, maxPages: 97 }
+    },
+    (path) => assert.deepEqual(loadManifest(path).release, { minPages: 97, maxPages: 97 }),
+  )
+})
 
-  for (const mutate of mutations) {
+test("rejects invalid or reversed release bounds", () => {
+  const invalid = [
+    { minPages: 0, maxPages: 97 },
+    { minPages: -1, maxPages: 97 },
+    { minPages: 60.5, maxPages: 97 },
+    { minPages: "60", maxPages: 97 },
+    { maxPages: 97 },
+    { minPages: 97 },
+    { minPages: 98, maxPages: 97 },
+    { minPages: 60, maxPages: 0 },
+    { minPages: 60, maxPages: -1 },
+    { minPages: 60, maxPages: 97.5 },
+    { minPages: 60, maxPages: "97" },
+  ]
+  for (const release of invalid) {
     expectManifestError("MANIFEST_INVALID_RELEASE_BOUNDS", (manifest) => {
-      mutate(manifest.release as Record<string, unknown>)
+      manifest.release = release
     })
   }
 })

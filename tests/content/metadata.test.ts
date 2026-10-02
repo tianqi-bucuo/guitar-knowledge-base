@@ -117,12 +117,25 @@ test("invalid page type and lesson level are rejected by centralized enums", () 
   assert.ok(codes([invalidLevel]).includes("INVALID_LEVEL"))
 })
 
-test("lessons require a non-empty prerequisites string array", () => {
-  const missing = lesson("content/missing-prerequisites.md", { prerequisites: [] })
+test("lessons accept an explicit empty prerequisite array", () => {
+  const page = parsePage(validFixture)
+  page.frontmatter.prerequisites = []
+  assert.deepEqual(validateMetadata([page], loadManifest(fixtureManifest)), [])
+})
+
+test("lessons still require an array with only non-empty prerequisite strings", () => {
+  const missing = lesson("content/missing-prerequisites.md", { prerequisites: undefined })
+  const nonArray = lesson("content/non-array-prerequisites.md", { prerequisites: "持琴" })
   const malformed = lesson("content/malformed-prerequisites.md", { prerequisites: ["  "] })
 
   assert.ok(codes([missing]).includes("LESSON_PREREQUISITES_REQUIRED"))
+  assert.ok(codes([nonArray]).includes("LESSON_PREREQUISITES_REQUIRED"))
   assert.ok(codes([malformed]).includes("INVALID_PREREQUISITES"))
+  assert.ok(
+    codes([lesson("content/empty-item.md", { prerequisites: [""] })]).includes(
+      "INVALID_PREREQUISITES",
+    ),
+  )
 })
 
 test("draft must be a real boolean", () => {
