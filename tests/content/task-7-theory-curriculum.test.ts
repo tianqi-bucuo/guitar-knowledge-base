@@ -872,6 +872,31 @@ test("theory boundary guards allow descriptive musical and practice observations
     for (const guard of guards) assert.doesNotMatch(sample, guard, sample)
 })
 
+test(
+  "published theory pages reject unsupported attribution, promises, and prescriptions",
+  { skip: missingLessonFiles.length > 0 },
+  () => {
+    for (const expected of expectedLessons) {
+      const body = pageByFile.get(expected.file)!.body
+      assert.doesNotMatch(
+        body,
+        unsupportedDirectSourceAttributionPattern,
+        `${expected.file} source attribution`,
+      )
+      assert.doesNotMatch(
+        body,
+        fixedLearningOutcomePromisePattern,
+        `${expected.file} learning-outcome promise`,
+      )
+      assert.doesNotMatch(
+        body,
+        fixedBiomechanicalPrescriptionPattern,
+        `${expected.file} biomechanical prescription`,
+      )
+    }
+  },
+)
+
 test("temporary mutation copies reject every high-risk theory boundary break", () => {
   const mutations: Array<{
     name: string
