@@ -30,7 +30,11 @@
     "diagrams:generate": "tsx scripts/generate-diagrams.ts --write",
     "diagrams:check": "tsx scripts/generate-diagrams.ts --check",
     "build:site": "npm run quartz -- build",
+    "dev": "npm run quartz -- build --serve --port 8080",
+    "check:site-output": "tsx scripts/check-site-output.ts",
+    "test:site-output": "tsx --test tests/site/build-output.test.ts",
     "verify": "npm test && npm run check && npm run check:content && npm run diagrams:check && npm run build:site",
+    "verify:release": "npm test && npm run check && npm run check:release && npm run diagrams:check && npm run check:sources && npm run build:site && npm run check:site-output && npm run test:site-output",
     "profile": "0x -D prof ./quartz/bootstrap-cli.mjs build --concurrency=1"
   },
   "engines": {
