@@ -157,7 +157,7 @@ function catalogRecords(page: PageRecord, diagnostics: Diagnostic[]): SourceReco
         sourceSection = node.depth === 2 && toString(node).trim() === "有序链接"
         category = false
       } else if (sourceSection) category = true
-    } else if (sourceSection && category && node.type === "list" && !node.ordered) {
+    } else if (sourceSection && category && node.type === "list") {
       for (const item of node.children) {
         const start = item.position?.start.offset
         const end = item.position?.end.offset

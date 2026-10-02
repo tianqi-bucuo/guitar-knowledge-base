@@ -91,6 +91,64 @@ test("pins verified DNS address while preserving hostname and TLS identity", asy
   assert.equal((await probeSource("https://example.com/", ipv6.deps)).status, 200)
 })
 
+test("rejects IANA reserved and documentation IPv6 ranges before literal or DNS connection", async () => {
+  const addresses = [
+    "2d00::1",
+    "2dff:ffff::1",
+    "2e00::1",
+    "2fff:ffff::1",
+    "3000::1",
+    "37ff:ffff::1",
+    "3800::1",
+    "3bff:ffff::1",
+    "3c00::1",
+    "3e00::1",
+    "3f00::1",
+    "3f80::1",
+    "3fc0::1",
+    "3fe0::1",
+    "3ff0::1",
+    "3ff8::1",
+    "3ffc::1",
+    "3ffe::1",
+    "3fff::1",
+    // Unlisted gaps in 2000::/3 are reserved too, including beyond documentation /20.
+    "2000::1",
+    "2001:1000::1",
+    "2001:6000::1",
+    "2003:4000::1",
+    "2420::1",
+    "2610:200::1",
+    "2620:200::1",
+    "2640::1",
+    "2810::1",
+    "2a20::1",
+    "2c10::1",
+    "3fff:1000::1",
+    "3fff:ffff::1",
+  ]
+  for (const address of addresses) {
+    const { deps, calls } = dependencies()
+    const literal = await probeSource(`http://[${address}]/`, deps)
+    assert.match(literal.warning ?? "", /Unsafe/, `literal ${address}`)
+    assert.equal(calls.length, 0, `literal ${address}`)
+    deps.resolve = async () => [publicAddress, { address, family: 6 }]
+    const resolved = await probeSource("https://example.com/", deps)
+    assert.match(resolved.warning ?? "", /Unsafe/, `resolved ${address}`)
+    assert.equal(calls.length, 0, `resolved ${address}`)
+  }
+  for (const address of [
+    "2001:4860:4860::8888",
+    "2606:4700:4700::1111",
+    "2a00:1450::1",
+    "2410::1",
+  ]) {
+    const { deps, calls } = dependencies()
+    assert.equal((await probeSource(`http://[${address}]/`, deps)).status, 200, address)
+    assert.equal(calls.length, 1, address)
+  }
+})
+
 test("HEAD unsupported alone enables GET; redirects are manually revalidated and bounded", async () => {
   const fallback = dependencies([{ status: 405 }, { status: 200 }])
   assert.equal((await probeSource("https://example.com/", fallback.deps)).status, 200)

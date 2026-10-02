@@ -220,6 +220,22 @@ test("catalog source rows require the exact structured bullet shape", () => {
   }
 })
 
+test("rejects ordered catalog source rows while preserving navigation outside categories", () => {
+  const { pages, manifest } = fixture(
+    undefined,
+    `- ${record()}\n\n1. ${record("https://example.com/unexpected", undefined, "Extra")}`,
+  )
+  const audit = auditSources(pages, manifest)
+  assert.deepEqual(
+    audit.diagnostics.map(({ code, file }) => ({ code, file })),
+    [{ code: "MALFORMED_CATALOG_ENTRY", file: "refs/catalog.md" }],
+  )
+  assert.deepEqual(
+    audit.sources.map(({ url }) => url),
+    ["https://example.com/a"],
+  )
+})
+
 test("deterministic report is formatter-stable and escapes Markdown cell payloads", async () => {
   const { pages, manifest } = fixture(
     undefined,
