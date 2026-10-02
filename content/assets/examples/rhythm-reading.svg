@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="340" viewBox="0 0 900 340" role="img" aria-labelledby="rhythm-title rhythm-desc">
+  <title id="rhythm-title">原创四四拍节奏与时值时间轴</title>
+  <desc id="rhythm-desc">附点四分从0起，八分从1.5起，四分休止从2起，两个八分从3和3.5起。四分为1，总长4，四次起音。下方实条为发声时间，空框为休止。</desc>
+  <rect width="900" height="340" fill="#ffffff"/>
+  <g fill="#17212b" font-family="sans-serif" font-size="18">
+    <text x="32" y="35" font-size="23" font-weight="700">4/4：声音与沉默都占时间</text>
+    <text x="32" y="69">单声部节奏谱例 · 四分音符 = 1 个时值单位</text>
+    <text x="42" y="112" font-size="24">4</text><text x="42" y="139" font-size="24">4</text>
+    <text x="105" y="180">附点四分</text><text x="363" y="180">八分</text>
+    <text x="434" y="180">四分休止</text><text x="603" y="180">八分</text><text x="683" y="180">八分</text>
+    <text x="134" y="267">0</text><text x="290" y="267">1</text><text x="448" y="267">2</text><text x="608" y="267">3</text><text x="770" y="267">4</text>
+    <text x="32" y="309">口数：1 &amp; 2 &amp; 3 &amp; 4 &amp;；起音：1、2&amp;、4、4&amp;；第3拍止音。</text>
+  </g>
+  <g fill="#17212b" stroke="#17212b" stroke-width="2">
+    <line x1="92" y1="140" x2="805" y2="140"/>
+    <line x1="92" y1="92" x2="92" y2="146"/><line x1="805" y1="92" x2="805" y2="146"/>
+    <circle cx="140" cy="140" r="7"/><line x1="147" y1="140" x2="147" y2="94"/><circle cx="160" cy="135" r="2"/>
+    <circle cx="380" cy="140" r="7"/><line x1="387" y1="140" x2="387" y2="94"/>
+    <line x1="387" y1="94" x2="401" y2="106"/><line x1="401" y1="106" x2="398" y2="119"/>
+    <line x1="464" y1="95" x2="474" y2="110"/><line x1="474" y1="110" x2="462" y2="121"/>
+    <line x1="462" y1="121" x2="474" y2="131"/><line x1="474" y1="131" x2="461" y2="138"/><line x1="461" y1="138" x2="469" y2="146"/>
+    <circle cx="620" cy="140" r="7"/><line x1="627" y1="140" x2="627" y2="94"/>
+    <circle cx="700" cy="140" r="7"/><line x1="707" y1="140" x2="707" y2="94"/>
+    <line x1="627" y1="94" x2="707" y2="94" stroke-width="5"/>
+  </g>
+  <g fill="#17212b" stroke="#17212b" stroke-width="1">
+    <rect x="140" y="198" width="236" height="39"/><rect x="380" y="198" width="76" height="39"/>
+    <rect x="460" y="198" width="156" height="39" fill="#ffffff"/>
+    <rect x="620" y="198" width="76" height="39"/><rect x="700" y="198" width="80" height="39"/>
+    <line x1="140" y1="240" x2="780" y2="240"/>
+    <line x1="140" y1="240" x2="140" y2="248"/><line x1="300" y1="240" x2="300" y2="248"/>
+    <line x1="460" y1="240" x2="460" y2="248"/><line x1="620" y1="240" x2="620" y2="248"/><line x1="780" y1="240" x2="780" y2="248"/>
+  </g>
+  <g font-family="sans-serif" font-size="18" text-anchor="middle">
+    <text x="258" y="224" fill="#ffffff">1.5</text><text x="418" y="224" fill="#ffffff">0.5</text>
+    <text x="538" y="224" fill="#17212b">休止 1</text><text x="658" y="224" fill="#ffffff">0.5</text><text x="740" y="224" fill="#ffffff">0.5</text>
+  </g>
+</svg>
