@@ -41,7 +41,7 @@ const lessonSections = [
   "下一步与相关词条",
   "参考来源与延伸阅读",
 ]
-const tupleNotice = "本页所有指法数字均按六弦到一弦书写；`x` 表示不弹/制音，`0` 表示空弦。"
+const tupleNotice = "本页所有指法数字均按低音六弦到高音一弦书写；`x` 表示不弹/制音，`0` 表示空弦。"
 const shortSafetyBlock =
   "安全边界：本页不用于诊断或治疗。出现疼痛、麻木或针刺感、无力、肿胀、动作控制下降或明显不适时，立即停止；症状持续、反复或加重时，请向合格医疗专业人士求助。"
 const fullSafetyBlock =
@@ -617,6 +617,14 @@ test(
     }
 
     const gPage = pageByFile.get("content/02-和弦系统/G和弦.md")!
+    const reading = pageByFile.get("content/02-和弦系统/和弦图读法.md")!.body
+    assert.match(reading, /跳过开头的 `x`.*第一个.*(?:`0`|正品位)/u)
+    for (const example of [
+      "C `x-3-2-0-1-0` 从第 5 弦 3 品起",
+      "G `3-2-0-0-3-3` 从第 6 弦 3 品起",
+      "完整 F `1-3-3-2-1-1` 从第 6 弦 1 品起",
+    ])
+      assert.ok(reading.includes(example), example)
     assert.match(gPage.body, /本批采用.*四指变体|四指变体.*本批采用/u)
     assert.match(gPage.body, /其他.*G.*按法|G.*其他.*形/u)
     const aPage = pageByFile.get("content/02-和弦系统/Am与A和弦.md")!

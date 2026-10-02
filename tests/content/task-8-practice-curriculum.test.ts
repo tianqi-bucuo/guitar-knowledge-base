@@ -166,6 +166,7 @@ const expectedLinks = [
     "07-练习与复盘/阶段测验",
     "03-节奏系统/第一次使用节拍器",
     "02-和弦系统/和弦转换方法",
+    "08-保养安全与排错/疼痛疲劳与停止练习边界",
   ],
   [
     "07-练习与复盘/错误诊断与修正",
@@ -547,7 +548,7 @@ test("temporary practice mutations reject every required high-risk boundary brea
     [2, "调查不证明因果", "调查已经证明因果"],
     [2, "不证明它对所有人最有效", "慢练对所有人最佳"],
     [0, "https://pmc.ncbi.nlm.nih.gov/articles/PMC11020086/", "https://example.com/wrong-source"],
-    [0, "[^ommp-frontiers]。", "。"],
+    [0, "量表。[^ommp-frontiers]", "量表。"],
     [0, "[^practice-abrsm] 一次", "一次"],
     ...["120 BPM", "练习 10 分钟", "重复 20 次", "连续正确五次", "坚持两周"].map(
       (dose): [number, string, string] => [0, "## 核心概念", `## 核心概念\n\n${dose}`],

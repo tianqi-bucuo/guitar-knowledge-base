@@ -750,7 +750,7 @@ test("roadmap preserves three exact previews and links both wide diagrams to the
   ])
   assert.match(
     roadmap.body,
-    /!\[C 大三和弦图：六弦到一弦为 x-3-2-0-1-0\]\(\.\.\/assets\/diagrams\/chord-c-major\.svg\)/,
+    /!\[C 大三和弦图：低音六弦到高音一弦为 x-3-2-0-1-0\]\(\.\.\/assets\/diagrams\/chord-c-major\.svg\)/,
   )
   assert.match(
     roadmap.body,

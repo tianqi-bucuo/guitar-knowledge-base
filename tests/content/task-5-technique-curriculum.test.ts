@@ -684,6 +684,8 @@ test(
     assert.match(frettingMute, /停止有效按压.*仍.*轻触/u)
     assert.match(frettingMute, /完全离弦.*杂声/u)
     assert.match(frettingMute, /持续按压.*延音/u)
+    assert.match(frettingMute, /第 3 弦第 2 品.*单音/u)
+    assert.match(frettingMute, /发声的空弦.*直接轻触.*不能.*松开其他.*手指/u)
     const palmMute = pageByFile.get("content/04-演奏技巧/右手制音.md")!.body
     assert.match(palmMute, /琴桥附近/u)
     assert.match(palmMute, /音色.*延音|延音.*音色/u)

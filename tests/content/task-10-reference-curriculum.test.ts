@@ -292,6 +292,7 @@ test("glossary defines representative concepts and final practice/care increment
     ["标准调弦", "00-从这里开始/吉他调音与标准音", "低音六弦到高音一弦"],
     ["标准定弦", "00-从这里开始/吉他调音与标准音", "低音六弦到高音一弦"],
     ["小调", "06-基础乐理与指板/调与调号", "共享调号"],
+    ["八度", "06-基础乐理与指板/音高音名与唱名", "完整音名"],
     ["清晰速度", "07-练习与复盘/慢练与逐级提速", "自填"],
     ["弦距", "08-保养安全与排错/弦距琴颈与品丝基础", "距离"],
     ["打品", "08-保养安全与排错/闷音与杂音排查", "品丝"],
@@ -301,6 +302,9 @@ test("glossary defines representative concepts and final practice/care increment
     assert.ok(row.includes(target), `${term}: canonical definition missing`)
     assert.ok(row.includes(concept), `${term}: defining distinction missing`)
   }
+  const octave = page.body.split("\n").find((line) => line.startsWith("- **八度**"))!
+  assert.match(octave, /升降号拼写.*相同/u)
+  assert.ok(octave.includes("E2→E3"))
   for (const term of [
     "基线",
     "复盘",

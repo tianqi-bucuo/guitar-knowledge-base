@@ -126,7 +126,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
     orderedSteps: [
       "先完成调音。",
-      "确认目标品位。",
+      "确认目标品位，并把夹具位置作为后续按法的相对零点。",
       "把夹具放在目标品丝后方，不压在品丝上。",
       "只用足以让琴弦清楚发声的最小需要压力。",
       "按本站保守操作步骤，从六弦到一弦逐根检查杂音与音准。",
@@ -749,13 +749,18 @@ test(
     const body = pageByFile.get("content/05-弹唱与伴奏/变调夹原理与用法.md")!.body
     assert.match(body, /可移动上弦枕/u)
     assert.match(body, /缩短.*有效弦长|有效弦长.*缩短/u)
-    assert.match(body, /整体升高/u)
+    assert.match(body, /相对零点/u)
+    assert.ok(body.includes("相对 C 形 `x-3-2-0-1-0`"))
+    assert.ok(body.includes("绝对发声位置 `x-5-4-2-3-2`，实响为 D"))
+    assert.match(body, /相对 `0`.*变调夹.*按住/u)
+    assert.match(body, /同一绝对品位.*不会.*自动升高/u)
     assert.match(body, /保留.*开放和弦.*形/u)
     assert.match(body, /品丝后方/u)
     assert.match(body, /不压在品丝上/u)
     assert.match(body, /压力不足.*杂音|杂音.*压力不足/u)
     assert.match(body, /压力过大.*(?:跑音|音准)|(?:跑音|音准).*压力过大/u)
     assert.match(body, /本站.*保守操作.*六弦到一弦逐根检查/u)
+    assert.match(body, /低音六弦到高音一弦/u)
     assert.match(body, /不是 D'Addario 的逐字规定/u)
     assert.match(body, /C 形.*手上按法.*D.*实响和弦/u)
     assert.match(body, /本批只用全六弦常规夹法/u)

@@ -101,7 +101,7 @@ const expectedLessons: ExpectedLesson[] = [
     claimAnchors: {
       "octave-puget": "A–G 七个字母循环",
       "solfege-libretexts": "本站采用首调唱名",
-      "fretboard-yamaha": "标准定弦从六弦到一弦",
+      "fretboard-yamaha": "标准定弦从低音六弦到高音一弦",
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
@@ -186,7 +186,7 @@ const expectedLessons: ExpectedLesson[] = [
     claimAnchors: {
       "steps-puget": "E–F、B–C 是相邻自然音中的半音",
       "accidentals-puget": "升号把音升高半音",
-      "enharmonic-puget": "当前等温吉他品位语境",
+      "enharmonic-puget": "在当前十二平均律语境，C♯ 与 D♭",
       "circle-yamaha": "两品相差一个全音",
       "safety-bapam": safetyBlock,
     },
