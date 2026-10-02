@@ -393,6 +393,7 @@ const expectedLessons: ExpectedLesson[] = [
       "02-和弦系统/C-G-Am-Em和弦进行": "C-G-Am-Em和弦进行",
       "02-和弦系统/C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
       "00-从这里开始/学习路线总览": "学习路线总览",
+      "07-练习与复盘/有效练习流程": "有效练习流程",
     },
     table: [
       ["级数", "音名构成", "质量", "C 大调和弦"],
@@ -619,8 +620,11 @@ function assertTheorySnapshot(root: string): void {
   assert.ok(pitch.includes("6→1弦：E2 | A2 | D3 | G3 | B3 | E4"))
   const finalPage = pages.find(({ expected }) => expected.file.endsWith("顺阶和弦与级数.md"))!.page
     .body
-  assert.ok(finalPage.includes("下一步是有效练习流程；该页属于后续批次，当前保持纯文字。"))
-  assert.doesNotMatch(finalPage, /\[\[[^\]]*有效练习流程/u)
+  assert.ok(
+    finalPage.includes(
+      "下一步进入 [[07-练习与复盘/有效练习流程|有效练习流程]]，把理论与演奏任务组织成可观察、可复盘的练习循环。",
+    ),
+  )
 }
 
 function replaceTempText(root: string, relativeFile: string, from: string, to: string): void {
@@ -814,7 +818,11 @@ test(
       items[6],
       "7. 基础乐理与指板：从 [[06-基础乐理与指板/音高音名与唱名|音高音名与唱名]] 进入，连接音名、指板、音程、音阶、调号、三和弦与级数。",
     )
-    for (const item of items.slice(7)) assert.doesNotMatch(item, /\[\[/u)
+    assert.equal(
+      items[7],
+      "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
+    )
+    for (const item of items.slice(8)) assert.doesNotMatch(item, /\[\[/u)
 
     const arrangement = parsePage("content/05-弹唱与伴奏/完整歌曲编配流程.md")
     const next = section(arrangement.body, "下一步与相关词条")
@@ -823,12 +831,18 @@ test(
         "下一步进入 [[06-基础乐理与指板/音高音名与唱名|音高音名与唱名]]，把编配时已经使用的音名、调与级数拆开验证。",
       ),
     )
-    assert.match(next, /未来可转记到练习日志模板/u)
-    assert.doesNotMatch(next, /\[\[[^\]]*练习日志模板/u)
+    assert.ok(
+      next.includes(
+        "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。",
+      ),
+    )
 
     const finalPage = pageByFile.get("content/06-基础乐理与指板/顺阶和弦与级数.md")!.body
-    assert.ok(finalPage.includes("下一步是有效练习流程；该页属于后续批次，当前保持纯文字。"))
-    assert.doesNotMatch(finalPage, /\[\[[^\]]*有效练习流程/u)
+    assert.ok(
+      finalPage.includes(
+        "下一步进入 [[07-练习与复盘/有效练习流程|有效练习流程]]，把理论与演奏任务组织成可观察、可复盘的练习循环。",
+      ),
+    )
   },
 )
 
@@ -967,8 +981,8 @@ test("temporary mutation copies reject every high-risk theory boundary break", (
     {
       name: "future handoff",
       file: "content/06-基础乐理与指板/顺阶和弦与级数.md",
-      from: "下一步是有效练习流程；该页属于后续批次，当前保持纯文字。",
-      to: "下一步进入 [[07-练习与复盘/有效练习流程|有效练习流程]]。",
+      from: "下一步进入 [[07-练习与复盘/有效练习流程|有效练习流程]]，把理论与演奏任务组织成可观察、可复盘的练习循环。",
+      to: "下一步进入 [[07-练习与复盘/有效练习流程|有效练习流程]]，把理论与演奏任务组织成可观察、可复盘的练习循环。另见 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]。",
     },
     {
       name: "fixed practice quota",
@@ -1004,14 +1018,14 @@ test("temporary mutation copies reject every high-risk theory boundary break", (
 })
 
 test(
-  "the existing validators accept all fifty-nine pages with only twenty author warnings",
+  "the existing validators accept all sixty-five pages with only twelve author warnings",
   { skip: missingLessonFiles.length > 0 },
   async () => {
     const manifest = loadManifest("data/content-manifest.yml")
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 59)
+    assert.equal(pages.length, 65)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])
@@ -1024,6 +1038,6 @@ test(
       diagnostics.filter(({ severity }) => severity === "error"),
       [],
     )
-    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 20)
+    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 12)
   },
 )

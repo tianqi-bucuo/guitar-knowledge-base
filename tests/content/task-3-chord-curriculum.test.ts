@@ -642,7 +642,11 @@ test(
     assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
     assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
     assert.match(items[6], /\[\[06-基础乐理与指板\/音高音名与唱名\|音高音名与唱名\]\]/u)
-    for (const item of items.slice(7)) assert.doesNotMatch(item, /\[\[/u)
+    assert.equal(
+      items[7],
+      "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
+    )
+    for (const item of items.slice(8)) assert.doesNotMatch(item, /\[\[/u)
 
     const crossing = parsePage("content/01-持琴与基础动作/相邻弦与跨弦.md")
     const section = crossing.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""
