@@ -453,7 +453,7 @@ test("route and the two earlier lessons hand off to published practice pages", (
     items[8],
     "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
   )
-  for (const item of items.slice(9)) assert.doesNotMatch(item, /\[\[/u)
+  assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
   assert.ok(
     readFileSync("content/06-基础乐理与指板/顺阶和弦与级数.md", "utf8").includes(theoryHandoff),
   )
@@ -581,7 +581,7 @@ test("temporary practice mutations reject every required high-risk boundary brea
     }
   }
 })
-test("author and release modes report exactly the remaining future inventory", async () => {
+test("author and release modes accept all 75 published pages without diagnostics", async () => {
   if (!titles.every((title) => existsSync(join("content", directory, `${title}.md`)))) return
   const manifest = loadManifest("data/content-manifest.yml")
   assert.equal(
@@ -590,7 +590,7 @@ test("author and release modes report exactly the remaining future inventory", a
         existsSync(join("content", entry.file)) &&
         parsePage(join("content", entry.file)).frontmatter.draft === false,
     ).length,
-    70,
+    75,
   )
   const author = await validateContent({
     contentRoot: "content",
@@ -603,7 +603,7 @@ test("author and release modes report exactly the remaining future inventory", a
     mode: "release",
   })
   assert.equal(author.filter((item) => item.severity === "error").length, 0)
-  assert.equal(author.filter((item) => item.severity === "warning").length, 6)
-  assert.equal(release.filter((item) => item.severity === "error").length, 6)
+  assert.equal(author.filter((item) => item.severity === "warning").length, 0)
+  assert.equal(release.filter((item) => item.severity === "error").length, 0)
   assert.equal(release.filter((item) => item.severity === "warning").length, 0)
 })

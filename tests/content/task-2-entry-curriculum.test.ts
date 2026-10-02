@@ -49,6 +49,11 @@ const expectedPages: ExpectedPage[] = [
       "00-从这里开始/学习路线总览",
       "00-从这里开始/开始前自测",
       "01-持琴与基础动作/认识民谣吉他",
+      "09-术语与参考资料/吉他术语表",
+      "09-术语与参考资料/和弦索引",
+      "09-术语与参考资料/节奏型索引",
+      "09-术语与参考资料/常见问题索引",
+      "09-术语与参考资料/参考来源总表",
     ],
   },
   {
@@ -347,6 +352,11 @@ const task3LinkContextFiles = [
   "content/08-保养安全与排错/更换琴弦.md",
   "content/08-保养安全与排错/弦距琴颈与品丝基础.md",
   "content/08-保养安全与排错/清洁湿度与存放.md",
+  "content/09-术语与参考资料/吉他术语表.md",
+  "content/09-术语与参考资料/和弦索引.md",
+  "content/09-术语与参考资料/节奏型索引.md",
+  "content/09-术语与参考资料/常见问题索引.md",
+  "content/09-术语与参考资料/参考来源总表.md",
 ]
 const task3LinkContext = task3LinkContextFiles.filter(existsSync).map((file) => parsePage(file))
 
@@ -479,7 +489,7 @@ test(
 )
 
 test(
-  "route previews and primary links stay inside the current Task 2 batch",
+  "route previews and primary links connect all ten published modules",
   {
     skip: missingFiles.length > 0,
   },
@@ -516,7 +526,7 @@ test(
       routeItems[8],
       "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     )
-    for (const item of routeItems.slice(9)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(routeItems[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
 
     for (const expected of expectedPages) {
       const page = pageByFile.get(expected.file)

@@ -106,7 +106,7 @@ const related = [
   ["更换琴弦", "左手制音", "右手制音", "练习日志模板"],
   ["弦距琴颈与品丝基础", "清洁湿度与存放", "闷音与杂音排查"],
   ["清洁湿度与存放", "认识民谣吉他", "吉他调音与标准音", "练习日志模板"],
-  ["更换琴弦", "疼痛疲劳与停止练习边界", "练习日志模板", "学习路线总览"],
+  ["更换琴弦", "疼痛疲劳与停止练习边界", "练习日志模板", "学习路线总览", "吉他术语表"],
 ]
 const headers = [
   ["可观察现象", "当下行动", "可记录的信息", "求助边界"],
@@ -219,7 +219,10 @@ function assertCareSnapshot(root: string): void {
     assert.ok(core.includes(safety))
     const steps = body.split("## 图示与操作步骤")[1].split("## 常见错误及修正")[0]
     if (index === 1 || index === 2)
-      assert.ok(steps.includes("按低音六弦到高音一弦排列"), `${titles[index]} explicit string order`)
+      assert.ok(
+        steps.includes("按低音六弦到高音一弦排列"),
+        `${titles[index]} explicit string order`,
+      )
     if (index > 0) {
       assert.equal(body.split(equipment).length - 1, 1)
       assert.ok(steps.trimStart().startsWith(equipment))
@@ -283,7 +286,11 @@ function assertCareSnapshot(root: string): void {
     ).length
     assert.ok(count >= 900 && count <= 1800, `${titles[index]} Chinese count: ${count}`)
     if (index === 4)
-      assert.ok(body.includes("下一步是吉他术语表；该页属于后续批次，当前保持纯文字。"))
+      assert.ok(
+        body.includes(
+          "下一步进入 [[09-术语与参考资料/吉他术语表|吉他术语表]]，查阅本库术语与相关课程。",
+        ),
+      )
   }
 }
 
@@ -296,7 +303,10 @@ test("care entry is linked from route item nine and stage assessment", () => {
       "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     ),
   )
-  assert.doesNotMatch((route.match(/^10\. .+$/mu) ?? [""])[0], /\[\[/u)
+  assert.match(
+    (route.match(/^10\. .+$/mu) ?? [""])[0],
+    /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u,
+  )
   assert.ok(
     readFileSync("content/07-练习与复盘/阶段测验.md", "utf8").includes(
       "下一步进入 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]，把自我复盘中的身体警讯与器材问题分流到安全处理边界。",
@@ -314,7 +324,7 @@ test("snapshot rejects representative missing safety, unsafe string order, wrong
       "先剪断受张力的弦再拆除[^care-yamaha-booklet]",
     ],
     [4, urls["humidity-taylor"], "https://example.com/wrong"],
-    [4, "## 核心概念", "## 核心概念\n\n[[09-术语与参考资料/吉他术语表|吉他术语表]]"],
+    [4, "## 核心概念", "## 核心概念\n\n[[09-术语与参考资料/不存在|不存在]]"],
   ]
   for (const [index, from, to] of mutations) {
     const temporary = mkdtempSync(join(tmpdir(), "task9-care-"))

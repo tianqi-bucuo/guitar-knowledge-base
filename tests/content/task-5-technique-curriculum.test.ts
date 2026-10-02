@@ -776,7 +776,7 @@ test(
       items[8],
       "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     )
-    for (const item of items.slice(9)) assert.doesNotMatch(item, /\[\[/u)
+    assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
 
     const sixEight = parsePage("content/03-节奏系统/六八拍伴奏.md")
     const nextSection = section(sixEight.body, "下一步与相关词条")
@@ -791,7 +791,7 @@ test(
 )
 
 test(
-  "the existing validators accept all seventy current pages without error diagnostics",
+  "the existing validators accept all seventy-five published pages without diagnostics",
   {
     skip: missingLessonFiles.length > 0,
   },
@@ -800,7 +800,7 @@ test(
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 70)
+    assert.equal(pages.length, 75)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])
@@ -813,6 +813,6 @@ test(
       diagnostics.filter(({ severity }) => severity === "error"),
       [],
     )
-    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 6)
+    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 0)
   },
 )
