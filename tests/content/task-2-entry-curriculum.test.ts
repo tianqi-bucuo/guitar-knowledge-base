@@ -342,6 +342,11 @@ const task3LinkContextFiles = [
   "content/07-练习与复盘/练习日志模板.md",
   "content/07-练习与复盘/错误诊断与修正.md",
   "content/07-练习与复盘/阶段测验.md",
+  "content/08-保养安全与排错/疼痛疲劳与停止练习边界.md",
+  "content/08-保养安全与排错/闷音与杂音排查.md",
+  "content/08-保养安全与排错/更换琴弦.md",
+  "content/08-保养安全与排错/弦距琴颈与品丝基础.md",
+  "content/08-保养安全与排错/清洁湿度与存放.md",
 ]
 const task3LinkContext = task3LinkContextFiles.filter(existsSync).map((file) => parsePage(file))
 
@@ -507,7 +512,11 @@ test(
       routeItems[7],
       "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
-    for (const item of routeItems.slice(8)) assert.doesNotMatch(item, /\[\[/u)
+    assert.equal(
+      routeItems[8],
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+    )
+    for (const item of routeItems.slice(9)) assert.doesNotMatch(item, /\[\[/u)
 
     for (const expected of expectedPages) {
       const page = pageByFile.get(expected.file)

@@ -646,7 +646,11 @@ test(
       items[7],
       "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
-    for (const item of items.slice(8)) assert.doesNotMatch(item, /\[\[/u)
+    assert.equal(
+      items[8],
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+    )
+    for (const item of items.slice(9)) assert.doesNotMatch(item, /\[\[/u)
 
     const crossing = parsePage("content/01-持琴与基础动作/相邻弦与跨弦.md")
     const section = crossing.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""

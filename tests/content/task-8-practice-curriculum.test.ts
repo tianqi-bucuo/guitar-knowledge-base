@@ -180,6 +180,7 @@ const expectedLinks = [
     "04-演奏技巧/分解和弦基础",
     "04-演奏技巧/击弦与勾弦",
     "07-练习与复盘/练习日志模板",
+    "08-保养安全与排错/疼痛疲劳与停止练习边界",
   ],
 ]
 const tables: string[][][] = [
@@ -287,7 +288,8 @@ const theoryHandoff =
   "下一步进入 [[07-练习与复盘/有效练习流程|有效练习流程]]，把理论与演奏任务组织成可观察、可复盘的练习循环。"
 const arrangementHandoff =
   "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。"
-const futureHandoff = "下一步是疼痛疲劳与停止练习边界；该页属于后续批次，当前保持纯文字。"
+const careHandoff =
+  "下一步进入 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]，把自我复盘中的身体警讯与器材问题分流到安全处理边界。"
 
 function rejectsQuota(body: string): boolean {
   const number = "(?:[0-9]+|[零〇一二两三四五六七八九十百千万]+)"
@@ -353,7 +355,7 @@ function assertLesson(root: string, index: number): void {
   assert.ok(body.includes(safety), "exact safety block")
   assert.equal(rejectsQuota(body), false, "fixed practice quota")
   assert.equal(rejectsCopyright(body), false, "copyright material")
-  assert.doesNotMatch(body, /\[\[08-|<img|<svg|总分\s*[:：]\s*\d|及格线|颁发证书/u)
+  assert.doesNotMatch(body, /<img|<svg|总分\s*[:：]\s*\d|及格线|颁发证书/u)
   const prose = body.split("## 参考来源与延伸阅读")[0]
   const actualSources = [...body.matchAll(/^\[\^([^\]]+)\]:/gmu)].map((match) => match[1])
   assert.deepEqual(actualSources.sort(), [...sources[index]].sort())
@@ -420,7 +422,7 @@ function assertLesson(root: string, index: number): void {
       body,
       /自我复盘 checkpoint，不是等级考试、资格认证、医疗\/职业能力判断；没有总分和证书/u,
     )
-    assert.ok(body.includes(futureHandoff))
+    assert.ok(body.includes(careHandoff))
     for (const result of ["当前项稳定", "带条件继续", "回到专项", "停止并求助"])
       assert.ok(body.includes(`\u0060${result}\u0060：`), result)
     assert.match(body, /录音.*可选/u)
@@ -447,7 +449,11 @@ test("route and the two earlier lessons hand off to published practice pages", (
   assert.ok(route.includes(routeHandoff), "practice route handoff is missing")
   const items = route.match(/^\d+\. .+$/gmu) ?? []
   assert.equal(items.length, 10)
-  for (const item of items.slice(8)) assert.doesNotMatch(item, /\[\[/u)
+  assert.equal(
+    items[8],
+    "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+  )
+  for (const item of items.slice(9)) assert.doesNotMatch(item, /\[\[/u)
   assert.ok(
     readFileSync("content/06-基础乐理与指板/顺阶和弦与级数.md", "utf8").includes(theoryHandoff),
   )
@@ -547,7 +553,7 @@ test("temporary practice mutations reject every required high-risk boundary brea
       (dose): [number, string, string] => [0, "## 核心概念", `## 核心概念\n\n${dose}`],
     ),
     [1, "[[07-练习与复盘/有效练习流程|有效练习流程]]", "[[有效练习流程]]"],
-    [5, futureHandoff, "[[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]"],
+    [5, careHandoff, "[[09-术语与参考资料/吉他术语表|吉他术语表]]"],
     [5, "## 核心概念", "## 核心概念\n\n总分：100，及格线：60，颁发证书。"],
     ...["当前项稳定", "带条件继续", "回到专项", "停止并求助"].map(
       (result): [number, string, string] => [5, `\u0060${result}\u0060：`, "失败："],
@@ -584,7 +590,7 @@ test("author and release modes report exactly the remaining future inventory", a
         existsSync(join("content", entry.file)) &&
         parsePage(join("content", entry.file)).frontmatter.draft === false,
     ).length,
-    65,
+    70,
   )
   const author = await validateContent({
     contentRoot: "content",
@@ -597,7 +603,7 @@ test("author and release modes report exactly the remaining future inventory", a
     mode: "release",
   })
   assert.equal(author.filter((item) => item.severity === "error").length, 0)
-  assert.equal(author.filter((item) => item.severity === "warning").length, 12)
-  assert.equal(release.filter((item) => item.severity === "error").length, 12)
+  assert.equal(author.filter((item) => item.severity === "warning").length, 6)
+  assert.equal(release.filter((item) => item.severity === "error").length, 6)
   assert.equal(release.filter((item) => item.severity === "warning").length, 0)
 })

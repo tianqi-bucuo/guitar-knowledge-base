@@ -772,7 +772,11 @@ test(
       items[7],
       "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
-    for (const item of items.slice(8)) assert.doesNotMatch(item, /\[\[/u)
+    assert.equal(
+      items[8],
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+    )
+    for (const item of items.slice(9)) assert.doesNotMatch(item, /\[\[/u)
 
     const sixEight = parsePage("content/03-节奏系统/六八拍伴奏.md")
     const nextSection = section(sixEight.body, "下一步与相关词条")
@@ -787,7 +791,7 @@ test(
 )
 
 test(
-  "the existing validators accept all sixty-five current pages without error diagnostics",
+  "the existing validators accept all seventy current pages without error diagnostics",
   {
     skip: missingLessonFiles.length > 0,
   },
@@ -796,7 +800,7 @@ test(
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 65)
+    assert.equal(pages.length, 70)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])
@@ -809,6 +813,6 @@ test(
       diagnostics.filter(({ severity }) => severity === "error"),
       [],
     )
-    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 12)
+    assert.equal(diagnostics.filter(({ severity }) => severity === "warning").length, 6)
   },
 )
