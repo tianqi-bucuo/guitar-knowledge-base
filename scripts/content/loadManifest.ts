@@ -164,6 +164,33 @@ function parsePages(value: unknown): ManifestEntry[] {
   })
 }
 
+function parseSearchAssertions(
+  value: unknown,
+  pages: ManifestEntry[],
+): Manifest["searchAssertions"] {
+  if (value === undefined) return undefined
+  const assertions = asArray(value, "MANIFEST_INVALID_SEARCH_ASSERTION", "searchAssertions")
+  const queries = new Set<string>()
+  const permalinks = new Set(pages.map((page) => page.permalink))
+  return assertions.map((item) => {
+    const assertion = asRecord(item, "MANIFEST_INVALID_SEARCH_ASSERTION", "search assertion")
+    const query = nonEmptyString(assertion.query, "MANIFEST_INVALID_SEARCH_ASSERTION", "query")
+    if (
+      query !== query.trim() ||
+      typeof assertion.canonicalPermalink !== "string" ||
+      !permalinks.has(assertion.canonicalPermalink) ||
+      assertion.maxRank !== 5
+    ) {
+      fail(
+        "MANIFEST_INVALID_SEARCH_ASSERTION",
+        "query must be trimmed, canonicalPermalink must name a known page, and maxRank must be integer 5",
+      )
+    }
+    validateUnique(query, queries, "MANIFEST_DUPLICATE_SEARCH_QUERY")
+    return { query, canonicalPermalink: assertion.canonicalPermalink, maxRank: 5 }
+  })
+}
+
 export function loadManifest(path: string): Manifest {
   let raw: unknown
   try {
@@ -198,10 +225,13 @@ export function loadManifest(path: string): Manifest {
     )
   }
 
+  const pages = parsePages(document.pages)
+  const searchAssertions = parseSearchAssertions(document.searchAssertions, pages)
   return {
     version: 1,
     release: { minPages, maxPages },
     modules: parseModules(document.modules),
-    pages: parsePages(document.pages),
+    pages,
+    ...(searchAssertions === undefined ? {} : { searchAssertions }),
   }
 }

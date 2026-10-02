@@ -20,14 +20,19 @@ type FolderState = {
 }
 
 let currentExplorerState: Array<FolderState>
+function syncExplorerExpanded(explorer: Element) {
+  const expanded = String(!explorer.classList.contains("collapsed"))
+  explorer.setAttribute("aria-expanded", expanded)
+  for (const control of explorer.querySelectorAll(".explorer-toggle, .explorer-content")) {
+    control.setAttribute("aria-expanded", expanded)
+  }
+}
+
 function toggleExplorer(this: HTMLElement) {
   const nearestExplorer = this.closest(".explorer") as HTMLElement
   if (!nearestExplorer) return
   const explorerCollapsed = nearestExplorer.classList.toggle("collapsed")
-  nearestExplorer.setAttribute(
-    "aria-expanded",
-    nearestExplorer.getAttribute("aria-expanded") === "true" ? "false" : "true",
-  )
+  syncExplorerExpanded(nearestExplorer)
 
   if (!explorerCollapsed) {
     // Stop <html> from being scrollable when mobile explorer is open
@@ -276,12 +281,12 @@ document.addEventListener("nav", async (e: CustomEventMap["nav"]) => {
 
     if (mobileExplorer.checkVisibility()) {
       explorer.classList.add("collapsed")
-      explorer.setAttribute("aria-expanded", "false")
 
       // Allow <html> to be scrollable when mobile explorer is collapsed
       document.documentElement.classList.remove("mobile-no-scroll")
     }
 
+    syncExplorerExpanded(explorer)
     mobileExplorer.classList.remove("hide-until-loaded")
   }
 })

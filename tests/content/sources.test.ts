@@ -273,6 +273,7 @@ test("source CLI writes deterministic bytes, checks without mutation, rejects ar
     const { pages, manifest } = fixture()
     const base = yaml.load(readFileSync("data/content-manifest.yml", "utf8")) as Manifest
     base.pages = manifest.pages
+    delete base.searchAssertions
     mkdirSync(join(root, "content", "refs"), { recursive: true })
     for (const page of pages) writeFileSync(join(root, "content", page.contentPath!), page.body)
     writeFileSync(join(root, "manifest.yml"), yaml.dump(base))
@@ -331,6 +332,7 @@ test("online CLI keeps health warnings non-blocking and cannot follow an output 
     )
     const base = yaml.load(readFileSync("data/content-manifest.yml", "utf8")) as Manifest
     base.pages = manifest.pages
+    delete base.searchAssertions
     mkdirSync(join(root, "content", "refs"), { recursive: true })
     mkdirSync(join(root, "reports"))
     for (const page of pages) writeFileSync(join(root, "content", page.contentPath!), page.body)

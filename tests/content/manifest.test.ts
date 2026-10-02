@@ -72,6 +72,46 @@ test("loads the canonical curriculum manifest", () => {
   assert.ok(manifest.pages.length > 0)
 })
 
+test("keeps search assertions optional in version-1 fixtures and returns them when supplied", () => {
+  assert.equal(loadManifest(validFixture).searchAssertions, undefined)
+  withManifest(
+    (manifest) => {
+      manifest.searchAssertions = [{ query: "学习路线", canonicalPermalink: "/", maxRank: 5 }]
+    },
+    (path) => {
+      assert.deepEqual(loadManifest(path).searchAssertions, [
+        { query: "学习路线", canonicalPermalink: "/", maxRank: 5 },
+      ])
+    },
+  )
+})
+
+test("rejects malformed, duplicate, or unknown search assertions", () => {
+  const valid = { query: "学习路线", canonicalPermalink: "/", maxRank: 5 }
+  const invalid = [
+    null,
+    {},
+    { ...valid, query: "" },
+    { ...valid, query: " 学习路线 " },
+    { ...valid, canonicalPermalink: "/start/missing" },
+    { ...valid, canonicalPermalink: "start/learning-path" },
+    { ...valid, maxRank: 4 },
+    { ...valid, maxRank: 5.5 },
+    { ...valid, maxRank: "5" },
+  ]
+  for (const assertion of invalid) {
+    expectManifestError("MANIFEST_INVALID_SEARCH_ASSERTION", (manifest) => {
+      manifest.searchAssertions = [assertion]
+    })
+  }
+  expectManifestError("MANIFEST_INVALID_SEARCH_ASSERTION", (manifest) => {
+    manifest.searchAssertions = {}
+  })
+  expectManifestError("MANIFEST_DUPLICATE_SEARCH_QUERY", (manifest) => {
+    manifest.searchAssertions = [valid, valid]
+  })
+})
+
 test("rejects duplicate page ids", () => {
   assert.throws(
     () => loadManifest("tests/content/fixtures/invalid-manifest.yml"),

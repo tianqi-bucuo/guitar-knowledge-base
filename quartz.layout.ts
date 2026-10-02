@@ -1,5 +1,6 @@
 import { PageLayout, SharedLayout } from "./quartz/cfg"
 import * as Component from "./quartz/components"
+import type { Root } from "hast"
 
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
@@ -16,7 +17,11 @@ export const defaultContentPageLayout: PageLayout = {
       component: Component.Breadcrumbs(),
       condition: (page) => page.fileData.slug !== "index",
     }),
-    Component.ArticleTitle(),
+    Component.ConditionalRender({
+      component: Component.ArticleTitle(),
+      condition: ({ tree }) =>
+        !(tree as Root).children.some((node) => node.type === "element" && node.tagName === "h1"),
+    }),
     Component.ContentMeta(),
     Component.TagList(),
   ],

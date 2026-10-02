@@ -93,6 +93,7 @@ export interface Manifest {
   release: { minPages: number; maxPages: number }
   modules: Array<{ id: ModuleId; directory: string; target: number }>
   pages: ManifestEntry[]
+  searchAssertions?: Array<{ query: string; canonicalPermalink: string; maxRank: 5 }>
 }
 
 export interface Diagnostic {

@@ -2,6 +2,22 @@ version: 1
 release:
   minPages: 60
   maxPages: 80
+searchAssertions:
+  - query: 横按
+    canonicalPermalink: /chords/barre-and-movable
+    maxRank: 5
+  - query: 六八拍
+    canonicalPermalink: /rhythm/six-eight
+    maxRank: 5
+  - query: 手腕
+    canonicalPermalink: /basics/fretting-hand
+    maxRank: 5
+  - query: 变调夹
+    canonicalPermalink: /accompaniment/capo
+    maxRank: 5
+  - query: 顺阶和弦
+    canonicalPermalink: /theory/diatonic-chords
+    maxRank: 5
 modules:
   - id: start
     directory: 00-从这里开始
