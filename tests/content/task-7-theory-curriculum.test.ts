@@ -520,6 +520,17 @@ function normalizedInternalTargets(page: PageRecord): string[] {
 const arabicFixedQuotaPattern =
   /(?:\d+\s*(?:BPM|秒钟?|分钟|小时|次|遍|回|组|轮|天|日|周|星期)|BPM\s*\d+)/giu
 const chineseQuotaNumber = "[零〇一二两三四五六七八九十百千万]+"
+const theoryQuantity = `(?:\\d+(?:\\.\\d+)?|${chineseQuotaNumber})`
+const unsupportedDirectSourceAttributionPattern =
+  /(?:0\s*半音|纯一度)[^。！？\n]{0,40}(?<!不)(?:是|来自|属于)(?:来源(?:半音)?表|来源|脚注)[^。！？\n]{0,20}直接(?:列出|给出|标出|记载)/iu
+const fixedLearningOutcomePromisePattern = new RegExp(
+  `${theoryQuantity}\\s*(?:天|日|周|星期|个月|月|年)\\s*(?:内|以内|之内)?\\s*(?:即可|就能|可以|能|可)?\\s*(?:学会|掌握|精通|完成)`,
+  "iu",
+)
+const fixedBiomechanicalPrescriptionPattern = new RegExp(
+  `(?:手腕|手指|拇指|手臂|手肘|肘部|肩(?:部|颈)?|身体|关节)[^。！？；;\\n]{0,40}(?:固定|保持|维持|设为|弯曲)[^。！？；;\\n]{0,40}${theoryQuantity}\\s*(?:度|°|牛顿|N\\b)`,
+  "iu",
+)
 const chineseFixedQuotaPatterns = [
   new RegExp(`${chineseQuotaNumber}\\s*BPM`, "giu"),
   new RegExp(
@@ -587,6 +598,21 @@ function assertTheorySnapshot(root: string): void {
       assert.equal(definitions.get(id), exactSourceDefinitions[id], `${expected.file} ${id}`)
     assert.equal(body.split(safetyBlock).length - 1, 1, `${expected.file} safety`)
     assert.deepEqual(fixedPracticeQuotaMatches(body), [], `${expected.file} quota`)
+    assert.doesNotMatch(
+      body,
+      unsupportedDirectSourceAttributionPattern,
+      `${expected.file} source attribution`,
+    )
+    assert.doesNotMatch(
+      body,
+      fixedLearningOutcomePromisePattern,
+      `${expected.file} learning-outcome promise`,
+    )
+    assert.doesNotMatch(
+      body,
+      fixedBiomechanicalPrescriptionPattern,
+      `${expected.file} biomechanical prescription`,
+    )
   }
 
   const pitch = pages.find(({ expected }) => expected.file.endsWith("音高音名与唱名.md"))!.page.body
@@ -830,6 +856,22 @@ test(
   },
 )
 
+test("theory boundary guards allow descriptive musical and practice observations", () => {
+  const allowed = [
+    "纯一度的 0 半音是本站机械计数；它不是来源半音表直接列出的条目。",
+    "把一周的练习记录按错音类型比较，不给学会期限。",
+    "手腕保持自然；C–F 是纯四度，力度不按牛顿指定。",
+  ]
+  const guards = [
+    unsupportedDirectSourceAttributionPattern,
+    fixedLearningOutcomePromisePattern,
+    fixedBiomechanicalPrescriptionPattern,
+  ]
+
+  for (const sample of allowed)
+    for (const guard of guards) assert.doesNotMatch(sample, guard, sample)
+})
+
 test("temporary mutation copies reject every high-risk theory boundary break", () => {
   const mutations: Array<{
     name: string
@@ -854,6 +896,12 @@ test("temporary mutation copies reject every high-risk theory boundary break", (
       file: "content/06-基础乐理与指板/音程入门.md",
       from: "| C–E        |        3 |      4 | 大三度 |",
       to: "| C–E        |        3 |      3 | 大三度 |",
+    },
+    {
+      name: "unsupported direct-source attribution",
+      file: "content/06-基础乐理与指板/音程入门.md",
+      from: "它不是来源半音表直接列出的条目。",
+      to: "0 半音是来源半音表直接列出的条目。",
     },
     {
       name: "major-triad formula",
@@ -902,6 +950,18 @@ test("temporary mutation copies reject every high-risk theory boundary break", (
       file: "content/06-基础乐理与指板/指板上的音名.md",
       from: "以下是本站原创练习，正确性由音名与品位对应关系判断。",
       to: "以下是本站原创练习，正确性由音名与品位对应关系判断。练习 10 分钟。",
+    },
+    {
+      name: "fixed learning-outcome promise",
+      file: "content/06-基础乐理与指板/指板上的音名.md",
+      from: "以下是本站原创练习，正确性由音名与品位对应关系判断。",
+      to: "以下是本站原创练习，正确性由音名与品位对应关系判断。一周内即可学会零到五品。",
+    },
+    {
+      name: "fixed biomechanical prescription",
+      file: "content/06-基础乐理与指板/指板上的音名.md",
+      from: "以下是本站原创练习，正确性由音名与品位对应关系判断。",
+      to: "以下是本站原创练习，正确性由音名与品位对应关系判断。手腕固定 30 度并维持 5 牛顿按压力。",
     },
   ]
 
