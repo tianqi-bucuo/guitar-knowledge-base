@@ -67,6 +67,11 @@ function verifyPageCoverage(
       assert.ok(target, `${page.id}: canonical redirect target missing`)
       const url = new URL(target, `https://local.test/${canonicalFile}`)
       assert.equal(
+        url.origin,
+        "https://local.test",
+        `${page.id}: canonical redirect must remain on the local origin`,
+      )
+      assert.equal(
         decodeURIComponent(url.pathname),
         `/${slug}`,
         `${page.id}: canonical redirect target mismatch`,
@@ -93,6 +98,39 @@ test("coverage acceptance rejects a missing required canonical page without touc
     assert.throws(
       () => verifyPageCoverage(directory, [required[1]], {}),
       /missing required canonical output/u,
+    )
+  } finally {
+    rmSync(directory, { recursive: true, force: true })
+  }
+})
+
+test("canonical alias coverage accepts local redirects and rejects external origins at the same path", () => {
+  const directory = mkdtempSync(path.join(tmpdir(), "guitar-alias-origin-"))
+  try {
+    const page: ManifestEntry = {
+      id: "lesson",
+      file: "lesson.md",
+      title: "Lesson",
+      module: "start",
+      type: "lesson",
+      permalink: "/canonical",
+      required: true,
+    }
+    const index = { lesson: { title: "Lesson", content: "Lesson content" } }
+    writeFileSync(
+      path.join(directory, "lesson.html"),
+      "<!doctype html><article><h1>Lesson</h1></article>",
+    )
+    const alias = path.join(directory, "canonical.html")
+    writeFileSync(alias, '<meta http-equiv="refresh" content="0; url=./lesson">')
+    assert.doesNotThrow(() => verifyPageCoverage(directory, [page], index))
+    writeFileSync(
+      alias,
+      '<meta http-equiv="refresh" content="0; url=https://external.test/lesson">',
+    )
+    assert.throws(
+      () => verifyPageCoverage(directory, [page], index),
+      /canonical redirect must remain on the local origin/u,
     )
   } finally {
     rmSync(directory, { recursive: true, force: true })

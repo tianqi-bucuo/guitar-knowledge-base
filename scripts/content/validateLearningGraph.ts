@@ -62,6 +62,12 @@ function cycleComponents(edges: Map<string, Set<string>>): string[][] {
   return cycles
 }
 
+/**
+ * Validate learning dependencies and navigation using canonical manifest identities.
+ * Each page must provide a content-root-relative contentPath matching ManifestEntry.file;
+ * absolute page.file paths alone do not satisfy this precondition. Resolved links must
+ * use the same identities for source and target (with an optional target fragment).
+ */
 export function validateLearningGraph(
   pages: PageRecord[],
   manifest: Manifest,

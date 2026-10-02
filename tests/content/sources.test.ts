@@ -101,6 +101,45 @@ test("compares cited-only and catalog-only identities without ordinary outbound 
   )
 })
 
+test("report counts resolved uncatalogued citations while excluding outbound and invalid notes", () => {
+  const { pages, manifest } = fixture(
+    `A[^one] B[^two] C[^again] Missing[^missing] Duplicate[^duplicate] Invalid[^invalid].
+[Recommendation](https://example.com/ordinary)
+
+[^one]: ${record()}
+[^two]: ${record("https://example.com/b")}
+[^again]: ${record("https://example.com/b/")}
+[^duplicate]: ${record("https://example.com/duplicate")}
+[^DUPLICATE]: ${record("https://example.com/duplicate")}
+[^invalid]: ${record("https://example.com/invalid", "2026-02-30")}
+[^orphan]: ${record("https://example.com/orphan")}`,
+  )
+  const audit = auditSources(pages, manifest)
+  assert.deepEqual(
+    audit.diagnostics.map((diagnostic) => diagnostic.code),
+    [
+      "DUPLICATE_FOOTNOTE_DEFINITION",
+      "FOOTNOTE_DEFINITION_MISSING",
+      "INVALID_ACCESS_DATE",
+      "ORPHAN_FOOTNOTE_DEFINITION",
+      "SOURCE_NOT_IN_CATALOG",
+    ],
+  )
+  assert.deepEqual(audit.sources, [
+    {
+      url: "https://example.com/a",
+      title: "Title",
+      publisher: "Publisher",
+      accessDate: "2026-10-01",
+      citedBy: ["lesson.md"],
+    },
+  ])
+  const report = renderSourceAudit(pages, manifest, audit)
+  assert.ok(report.split("\n").includes("Unique cited sources: 2"))
+  assert.ok(report.split("\n").includes("Catalog sources: 1"))
+  assert.equal(renderSourceAudit([...pages].reverse(), manifest, audit), report)
+})
+
 test("accepts historical publisher-first bibliography while catalog remains strict", () => {
   const { pages, manifest } = fixture(
     "Text[^one].\n\n[^one]: Publisher，[Title](https://example.com/a)，访问日期：2026-10-01。",

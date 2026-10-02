@@ -184,7 +184,10 @@ function catalogRecords(page: PageRecord, diagnostics: Diagnostic[]): SourceReco
   return records
 }
 
-export function auditSources(pages: PageRecord[], manifest: Manifest): SourceAudit {
+function analyzeSources(
+  pages: PageRecord[],
+  manifest: Manifest,
+): { audit: SourceAudit; uniqueCitedSources: number } {
   const diagnostics: Diagnostic[] = []
   const entries = new Map(manifest.pages.map((entry) => [entry.file, entry]))
   const publication = new Map<string, PageRecord>()
@@ -309,16 +312,24 @@ export function auditSources(pages: PageRecord[], manifest: Manifest): SourceAud
         ),
       )
   return {
-    diagnostics: diagnostics.sort(
-      (a, b) => compare(a.file, b.file) || compare(a.code, b.code) || compare(a.message, b.message),
-    ),
-    sources: [...catalogMap.values()]
-      .sort((a, b) => compare(a.url, b.url))
-      .map((record) => ({
-        ...record,
-        citedBy: [...(citations.get(record.url)?.pages ?? [])].sort(compare),
-      })),
+    audit: {
+      diagnostics: diagnostics.sort(
+        (a, b) =>
+          compare(a.file, b.file) || compare(a.code, b.code) || compare(a.message, b.message),
+      ),
+      sources: [...catalogMap.values()]
+        .sort((a, b) => compare(a.url, b.url))
+        .map((record) => ({
+          ...record,
+          citedBy: [...(citations.get(record.url)?.pages ?? [])].sort(compare),
+        })),
+    },
+    uniqueCitedSources: citations.size,
   }
+}
+
+export function auditSources(pages: PageRecord[], manifest: Manifest): SourceAudit {
+  return analyzeSources(pages, manifest).audit
 }
 
 export function markdownCell(text: string): string {
@@ -356,7 +367,7 @@ export function renderSourceAudit(
     "Deterministic offline structural audit. Citation/catalog integrity is not factual source verification or network availability.",
     "",
     `Published pages: ${pages.length}`,
-    `Unique cited sources: ${audit.sources.filter((source) => source.citedBy.length).length}`,
+    `Unique cited sources: ${analyzeSources(pages, manifest).uniqueCitedSources}`,
     `Catalog sources: ${audit.sources.length}`,
     `Footnote reference occurrences: ${references}`,
     `Footnote definitions: ${definitions}`,
