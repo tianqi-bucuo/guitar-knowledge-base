@@ -218,6 +218,8 @@ function assertCareSnapshot(root: string): void {
     assert.equal(body.split(safety).length - 1, 1)
     assert.ok(core.includes(safety))
     const steps = body.split("## 图示与操作步骤")[1].split("## 常见错误及修正")[0]
+    if (index === 1 || index === 2)
+      assert.ok(steps.includes("按低音六弦到高音一弦排列"), `${titles[index]} explicit string order`)
     if (index > 0) {
       assert.equal(body.split(equipment).length - 1, 1)
       assert.ok(steps.trimStart().startsWith(equipment))
