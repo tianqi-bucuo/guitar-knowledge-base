@@ -11,3 +11,4 @@ tsconfig.tsbuildinfo
 private/
 .replit
 replit.nix
+/reports/source-audit-online.md
