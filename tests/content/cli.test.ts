@@ -113,14 +113,16 @@ function replaceWithGeneratedPages(
     const number = index + 1
     const file = `page-${number}.md`
     const title = `测试页面 ${number}`
-    const permalink = `/tests/page-${number}`
+    const permalink =
+      index === 0 ? "/" : index === 1 ? "/start/learning-path" : `/tests/page-${number}`
     writeFileSync(
       join(fixture.contentRoot, file),
-      indexPage({ title, permalink, draft: draftForIndex(index) }),
+      indexPage({ title, permalink, draft: draftForIndex(index) }) +
+        (number < 60 ? `\n[下一页](page-${number + 1}.md)\n` : ""),
       "utf8",
     )
     return {
-      id: `page-${number}`,
+      id: index === 0 ? "home" : index === 1 ? "learning-path" : `page-${number}`,
       title,
       module: moduleForIndex(index),
       type: "index",

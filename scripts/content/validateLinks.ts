@@ -716,7 +716,7 @@ function resolveOne(
   return resolveAssetTarget(decodedPath, source, contentRoot)
 }
 
-function analyzeLinks(pages: PageRecord[], contentRoot: string): Analysis {
+export function analyzeInternalLinks(pages: PageRecord[], contentRoot: string): Analysis {
   const indexes = buildIndexes(pages, contentRoot)
   const resolved: ResolvedLink[] = []
   const diagnostics: Diagnostic[] = []
@@ -759,9 +759,9 @@ function analyzeLinks(pages: PageRecord[], contentRoot: string): Analysis {
 }
 
 export function resolveInternalLinks(pages: PageRecord[], contentRoot: string): ResolvedLink[] {
-  return analyzeLinks(pages, contentRoot).resolved
+  return analyzeInternalLinks(pages, contentRoot).resolved
 }
 
 export function validateLinks(pages: PageRecord[], contentRoot: string): Diagnostic[] {
-  return analyzeLinks(pages, contentRoot).diagnostics
+  return analyzeInternalLinks(pages, contentRoot).diagnostics
 }

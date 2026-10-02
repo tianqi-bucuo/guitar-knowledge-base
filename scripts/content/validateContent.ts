@@ -3,7 +3,8 @@ import { isAbsolute, relative, resolve, sep } from "node:path"
 import { posix } from "node:path"
 import { loadManifest } from "./loadManifest"
 import { parsePage, type PageRecord } from "./parsePage"
-import { validateLinks } from "./validateLinks"
+import { analyzeInternalLinks } from "./validateLinks"
+import { validateLearningGraph } from "./validateLearningGraph"
 import { validateMetadata } from "./validateMetadata"
 import { validateStructure } from "./validateStructure"
 import type { Diagnostic, Manifest, ValidationMode } from "./types"
@@ -272,15 +273,17 @@ export async function validateContent(options: ValidationOptions): Promise<Diagn
   }
 
   const collection = collectPages(manifest, options)
+  const links = analyzeInternalLinks(collection.pages, options.contentRoot)
   const diagnostics = [
     ...collection.diagnostics,
     ...validateMetadata(collection.pages, manifest),
     ...validateStructure(collection.pages),
-    ...validateLinks(collection.pages, options.contentRoot),
+    ...links.diagnostics,
     ...validateModuleCoverage(manifest, collection.pages, options.mode),
   ]
 
   if (options.mode === "release") {
+    diagnostics.push(...validateLearningGraph(collection.pages, manifest, links.resolved))
     for (const page of collection.pages) {
       if (page.frontmatter.draft === true) {
         diagnostics.push(
