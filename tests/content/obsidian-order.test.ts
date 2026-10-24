@@ -1,44 +1,42 @@
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { existsSync, readFileSync, readdirSync } from "node:fs"
+import path from "node:path"
 import test from "node:test"
 import { loadManifest } from "../../scripts/content/loadManifest"
 
 const manifest = loadManifest("data/content-manifest.yml")
-const snippetPath = "content/.obsidian/snippets/curriculum-order.css"
 
-function declaredOrders(css: string): Map<string, number> {
-  return new Map(
-    [...css.matchAll(/data-path="([^"]+\.md)"\]\) \{\s*order: (\d+);\s*\}/gu)].map((match) => [
-      match[1],
-      Number(match[2]),
-    ]),
-  )
-}
-
-test("Obsidian file explorer follows each module's manifest reading order", () => {
-  const css = readFileSync(snippetPath, "utf8")
-  const orders = declaredOrders(css)
-  const expectedFiles = new Set<string>()
-
+test("Obsidian's native alphabetical order matches each module's reading order", () => {
   for (const module of manifest.modules) {
     const pages = manifest.pages.filter(
       (page) => page.module === module.id && page.file.startsWith(`${module.directory}/`),
     )
-    pages.forEach((page, index) => {
-      expectedFiles.add(page.file)
-      assert.equal(orders.get(page.file), index + 1, `${page.id}: Obsidian order drifted`)
-    })
-  }
+    const manifestFiles = pages.map((page) => path.basename(page.file))
+    const diskFiles = readdirSync(path.join("content", module.directory))
+      .filter((file) => file.endsWith(".md"))
+      .sort()
 
-  assert.deepEqual(new Set(orders.keys()), expectedFiles)
-  assert.match(
-    css,
-    /\.nav-folder-children:has\(> \.nav-file\) \{\s*display: flex;\s*flex-direction: column;/u,
-    "ordered files need a flex parent for CSS order values to affect the Obsidian UI",
-  )
+    pages.forEach((page, index) => {
+      const expectedPrefix = `${String(index + 1).padStart(2, "0")}-`
+      assert.ok(
+        path.basename(page.file).startsWith(expectedPrefix),
+        `${page.id}: expected filename prefix ${expectedPrefix}`,
+      )
+    })
+
+    assert.deepEqual(
+      diskFiles,
+      manifestFiles,
+      `${module.id}: native filename order drifted from the curriculum manifest`,
+    )
+  }
 })
 
-test("the curriculum-order snippet is enabled in the shared vault appearance", () => {
-  const appearance = JSON.parse(readFileSync("content/.obsidian/appearance.json", "utf8"))
-  assert.ok(appearance.enabledCssSnippets.includes("curriculum-order"))
+test("native ordering does not depend on the removed CSS sorting snippet", () => {
+  assert.equal(existsSync("content/.obsidian/snippets/curriculum-order.css"), false)
+
+  const rootIgnore = readFileSync(".gitignore", "utf8")
+  const vaultIgnore = readFileSync("content/.obsidian/.gitignore", "utf8")
+  assert.match(rootIgnore, /^\/content\/\.obsidian\/appearance\.json$/mu)
+  assert.match(vaultIgnore, /^appearance\.json$/mu)
 })

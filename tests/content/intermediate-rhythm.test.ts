@@ -4,6 +4,7 @@ import { resolve } from "node:path"
 import test from "node:test"
 import { parsePage } from "../../scripts/content/parsePage"
 import { validateLinks } from "../../scripts/content/validateLinks"
+import { contentFile } from "./helpers/curriculumFiles"
 import { sectionText, tableRows } from "./helpers/lessonAssertions"
 
 const names = [
@@ -15,7 +16,7 @@ const names = [
   "连音与节奏分组",
 ]
 function page(name: string) {
-  const file = `content/03-节奏系统/${name}.md`
+  const file = contentFile(name)
   assert.ok(existsSync(file), `${name} must be a real lesson`)
   return parsePage(file)
 }

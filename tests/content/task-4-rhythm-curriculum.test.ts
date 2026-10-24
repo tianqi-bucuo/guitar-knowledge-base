@@ -59,25 +59,25 @@ const lessonSections = [
 ]
 
 const migratedLessonFiles = new Set([
-  "content/03-节奏系统/节拍拍号与小节.md",
-  "content/03-节奏系统/四分八分与十六分音符.md",
-  "content/03-节奏系统/切分节奏入门.md",
-  "content/03-节奏系统/六八拍伴奏.md",
+  "content/03-节奏系统/01-节拍拍号与小节.md",
+  "content/03-节奏系统/03-四分八分与十六分音符.md",
+  "content/03-节奏系统/11-切分节奏入门.md",
+  "content/03-节奏系统/09-六八拍伴奏.md",
 ])
 
 const expectedRhythmLessonFiles = [
-  "节拍拍号与小节.md",
-  "第一次使用节拍器.md",
-  "四分八分与十六分音符.md",
-  "放松而稳定的扫弦动作.md",
-  "四拍全下扫.md",
-  "基础八分音符扫弦.md",
-  "重音与强弱层次.md",
-  "切分节奏入门.md",
-  "三拍子伴奏.md",
-  "六八拍伴奏.md",
-  "休止附点与延音线.md",
-  "连音与节奏分组.md",
+  "01-节拍拍号与小节.md",
+  "02-第一次使用节拍器.md",
+  "03-四分八分与十六分音符.md",
+  "04-放松而稳定的扫弦动作.md",
+  "05-四拍全下扫.md",
+  "06-基础八分音符扫弦.md",
+  "07-重音与强弱层次.md",
+  "11-切分节奏入门.md",
+  "08-三拍子伴奏.md",
+  "09-六八拍伴奏.md",
+  "10-休止附点与延音线.md",
+  "12-连音与节奏分组.md",
 ]
 
 const expectedRhythmManifestTitles = [
@@ -171,7 +171,7 @@ const sixEightDiagram: DiagramContract = {
 
 const expectedLessons: ExpectedLesson[] = [
   {
-    file: "content/03-节奏系统/节拍拍号与小节.md",
+    file: "content/03-节奏系统/01-节拍拍号与小节.md",
     frontmatter: {
       title: "节拍拍号与小节",
       description: "区分脉冲、节拍、拍号与小节，并用分组理解 4/4、3/4 和 6/8",
@@ -184,15 +184,15 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["omt-simple", "omt-compound", "safety-bapam"],
     links: [
-      "02-和弦系统/F大横按与移动和弦",
-      "03-节奏系统/第一次使用节拍器",
-      "00-从这里开始/学习路线总览",
+      "02-和弦系统/12-F大横按与移动和弦",
+      "03-节奏系统/02-第一次使用节拍器",
+      "00-从这里开始/02-学习路线总览",
     ],
     diagrams: [],
     visiblePatterns: [],
   },
   {
-    file: "content/03-节奏系统/第一次使用节拍器.md",
+    file: "content/03-节奏系统/02-第一次使用节拍器.md",
     frontmatter: {
       title: "第一次使用节拍器",
       description: "认识 BPM 与拍号设置，用点击声建立可跟随且不过度追速的稳定脉冲",
@@ -204,12 +204,12 @@ const expectedLessons: ExpectedLesson[] = [
       draft: false,
     },
     sources: ["tabs-fender", "metronome-fender", "safety-bapam"],
-    links: ["03-节奏系统/节拍拍号与小节", "03-节奏系统/四分八分与十六分音符"],
+    links: ["03-节奏系统/01-节拍拍号与小节", "03-节奏系统/03-四分八分与十六分音符"],
     diagrams: [],
     visiblePatterns: [],
   },
   {
-    file: "content/03-节奏系统/四分八分与十六分音符.md",
+    file: "content/03-节奏系统/03-四分八分与十六分音符.md",
     frontmatter: {
       title: "四分八分与十六分音符",
       description: "比较四分、八分与十六分音符在四四拍中的相对时值和口数",
@@ -222,15 +222,15 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["omt-notating", "omt-simple", "safety-bapam"],
     links: [
-      "03-节奏系统/节拍拍号与小节",
-      "03-节奏系统/第一次使用节拍器",
-      "03-节奏系统/放松而稳定的扫弦动作",
+      "03-节奏系统/01-节拍拍号与小节",
+      "03-节奏系统/02-第一次使用节拍器",
+      "03-节奏系统/04-放松而稳定的扫弦动作",
     ],
     diagrams: [],
     visiblePatterns: [quarterNoteGrid, eighthNoteGrid, sixteenthNoteGrid],
   },
   {
-    file: "content/03-节奏系统/放松而稳定的扫弦动作.md",
+    file: "content/03-节奏系统/04-放松而稳定的扫弦动作.md",
     frontmatter: {
       title: "放松而稳定的扫弦动作",
       description: "用可调整、不过度紧张的拨弦手路径保持连续上下扫弦动作",
@@ -243,17 +243,17 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["strum-fender", "safety-bapam", "safety-nhs-rsi"],
     links: [
-      "01-持琴与基础动作/拨片握法与上下拨",
-      "03-节奏系统/第一次使用节拍器",
-      "03-节奏系统/四分八分与十六分音符",
-      "03-节奏系统/四拍全下扫",
-      "01-持琴与基础动作/右手位置与发力",
+      "01-持琴与基础动作/06-拨片握法与上下拨",
+      "03-节奏系统/02-第一次使用节拍器",
+      "03-节奏系统/03-四分八分与十六分音符",
+      "03-节奏系统/05-四拍全下扫",
+      "01-持琴与基础动作/04-右手位置与发力",
     ],
     diagrams: [],
     visiblePatterns: [],
   },
   {
-    file: "content/03-节奏系统/四拍全下扫.md",
+    file: "content/03-节奏系统/05-四拍全下扫.md",
     frontmatter: {
       title: "四拍全下扫",
       description: "按 1 2 3 4 的口数完成四四拍全下扫并保持每拍落点清楚",
@@ -266,15 +266,15 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["omt-simple", "metronome-fender", "safety-bapam"],
     links: [
-      "03-节奏系统/第一次使用节拍器",
-      "03-节奏系统/放松而稳定的扫弦动作",
-      "03-节奏系统/基础八分音符扫弦",
+      "03-节奏系统/02-第一次使用节拍器",
+      "03-节奏系统/04-放松而稳定的扫弦动作",
+      "03-节奏系统/06-基础八分音符扫弦",
     ],
     diagrams: [fourDownstrokesDiagram],
     visiblePatterns: [fourDownstrokesPattern],
   },
   {
-    file: "content/03-节奏系统/基础八分音符扫弦.md",
+    file: "content/03-节奏系统/06-基础八分音符扫弦.md",
     frontmatter: {
       title: "基础八分音符扫弦",
       description: "按 1 & 2 & 3 & 4 & 完成交替上下扫并保持八分音符间隔",
@@ -287,15 +287,15 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["omt-simple", "strum-fender", "safety-bapam"],
     links: [
-      "03-节奏系统/四分八分与十六分音符",
-      "03-节奏系统/四拍全下扫",
-      "03-节奏系统/重音与强弱层次",
+      "03-节奏系统/03-四分八分与十六分音符",
+      "03-节奏系统/05-四拍全下扫",
+      "03-节奏系统/07-重音与强弱层次",
     ],
     diagrams: [eighthStrumDiagram],
     visiblePatterns: [eighthStrumPattern],
   },
   {
-    file: "content/03-节奏系统/重音与强弱层次.md",
+    file: "content/03-节奏系统/07-重音与强弱层次.md",
     frontmatter: {
       title: "重音与强弱层次",
       description: "在不改变节拍位置的前提下控制重音与非重音的相对层次",
@@ -307,12 +307,12 @@ const expectedLessons: ExpectedLesson[] = [
       draft: false,
     },
     sources: ["omt-simple", "dynamics-fender", "safety-bapam"],
-    links: ["03-节奏系统/基础八分音符扫弦", "03-节奏系统/切分节奏入门"],
+    links: ["03-节奏系统/06-基础八分音符扫弦", "03-节奏系统/11-切分节奏入门"],
     diagrams: [eighthStrumDiagram],
     visiblePatterns: [eighthStrumPattern],
   },
   {
-    file: "content/03-节奏系统/切分节奏入门.md",
+    file: "content/03-节奏系统/11-切分节奏入门.md",
     frontmatter: {
       title: "切分节奏入门",
       description: "用连续八分音符动作体验弱位发声与重音形成的基础切分",
@@ -324,12 +324,12 @@ const expectedLessons: ExpectedLesson[] = [
       draft: false,
     },
     sources: ["omt-syncopation", "omt-simple", "safety-bapam"],
-    links: ["03-节奏系统/重音与强弱层次", "03-节奏系统/三拍子伴奏"],
+    links: ["03-节奏系统/07-重音与强弱层次", "03-节奏系统/08-三拍子伴奏"],
     diagrams: [],
     visiblePatterns: [syncopationPattern],
   },
   {
-    file: "content/03-节奏系统/三拍子伴奏.md",
+    file: "content/03-节奏系统/08-三拍子伴奏.md",
     frontmatter: {
       title: "三拍子伴奏",
       description: "按三拍一组建立四分音符为拍的三四拍原创伴奏型",
@@ -341,12 +341,16 @@ const expectedLessons: ExpectedLesson[] = [
       draft: false,
     },
     sources: ["omt-simple", "safety-bapam"],
-    links: ["03-节奏系统/重音与强弱层次", "03-节奏系统/六八拍伴奏", "03-节奏系统/节拍拍号与小节"],
+    links: [
+      "03-节奏系统/07-重音与强弱层次",
+      "03-节奏系统/09-六八拍伴奏",
+      "03-节奏系统/01-节拍拍号与小节",
+    ],
     diagrams: [],
     visiblePatterns: [threeFourPattern],
   },
   {
-    file: "content/03-节奏系统/六八拍伴奏.md",
+    file: "content/03-节奏系统/09-六八拍伴奏.md",
     frontmatter: {
       title: "六八拍伴奏",
       description: "按两个三连分组建立六八拍脉冲，并与三四拍的三拍分组区分",
@@ -359,10 +363,10 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["omt-compound", "omt-simple", "safety-bapam"],
     links: [
-      "03-节奏系统/三拍子伴奏",
-      "03-节奏系统/节拍拍号与小节",
-      "00-从这里开始/学习路线总览",
-      "04-演奏技巧/分解和弦基础",
+      "03-节奏系统/08-三拍子伴奏",
+      "03-节奏系统/01-节拍拍号与小节",
+      "00-从这里开始/02-学习路线总览",
+      "04-演奏技巧/01-分解和弦基础",
     ],
     diagrams: [sixEightDiagram],
     visiblePatterns: [sixEightPattern],
@@ -574,7 +578,7 @@ test(
     }
     assert.ok(
       pageByFile
-        .get("content/03-节奏系统/放松而稳定的扫弦动作.md")
+        .get("content/03-节奏系统/04-放松而稳定的扫弦动作.md")
         ?.body.includes("[^safety-nhs-rsi]"),
     )
   },
@@ -632,8 +636,8 @@ test(
       assert.doesNotMatch(body, /歌词|riff|复制.*歌曲|歌曲.*编配/iu, expected.file)
     }
 
-    const meter = pageByFile.get("content/03-节奏系统/节拍拍号与小节.md")!.body
-    const sixEight = pageByFile.get("content/03-节奏系统/六八拍伴奏.md")!.body
+    const meter = pageByFile.get("content/03-节奏系统/01-节拍拍号与小节.md")!.body
+    const sixEight = pageByFile.get("content/03-节奏系统/09-六八拍伴奏.md")!.body
     assert.deepEqual(
       tableCells(meter).at(-1),
       [
@@ -655,13 +659,13 @@ test(
     assert.match(sixEight, /分解式.*脉冲/u)
     assert.match(sixEight, /`x`.*(?:不弹|排除)|(?:不弹|排除).*`x`/u)
 
-    const eighth = pageByFile.get("content/03-节奏系统/基础八分音符扫弦.md")!.body
+    const eighth = pageByFile.get("content/03-节奏系统/06-基础八分音符扫弦.md")!.body
     assert.match(eighth, /本页.*(?:映射|练习).*不是.*(?:定律|规则)|不是.*普遍.*规则/u)
-    const accents = pageByFile.get("content/03-节奏系统/重音与强弱层次.md")!.body
+    const accents = pageByFile.get("content/03-节奏系统/07-重音与强弱层次.md")!.body
     assert.match(accents, /相对.*突出|相对.*显著/u)
     assert.match(accents, /不等于.*(?:最大|最用力)|不是.*(?:最大|最用力)/u)
     assert.match(accents, /按弦手.*(?:稳定|不需|不要).*夹|夹.*按弦手/u)
-    const syncopation = pageByFile.get("content/03-节奏系统/切分节奏入门.md")!.body
+    const syncopation = pageByFile.get("content/03-节奏系统/11-切分节奏入门.md")!.body
     assert.match(syncopation, /`空`.*不接触.*琴弦/u)
     assert.match(syncopation, /不是.*(?:制音|闷音|打击)/u)
     assert.match(syncopation, /2.*&.*4.*&.*(?:弱位|拍间|反拍)/u)
@@ -683,30 +687,30 @@ test(
         assert.match(raw, /^03-节奏系统\/.+\|.+$/u, `${expected.file}: ${raw}`)
     }
 
-    const route = parsePage("content/00-从这里开始/学习路线总览.md")
+    const route = parsePage("content/00-从这里开始/02-学习路线总览.md")
     const ordered = route.body.split("## 有序链接\n", 2)[1]?.split("\n## ", 1)[0] ?? ""
     const items = [...ordered.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
     assert.equal(items.length, 10)
-    assert.match(items[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
-    assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
-    assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
-    assert.match(items[6], /\[\[06-基础乐理与指板\/音高音名与唱名\|音高音名与唱名\]\]/u)
+    assert.match(items[3], /\[\[03-节奏系统\/01-节拍拍号与小节\|节拍拍号与小节\]\]/u)
+    assert.match(items[4], /\[\[04-演奏技巧\/01-分解和弦基础\|分解和弦基础\]\]/u)
+    assert.match(items[5], /\[\[05-弹唱与伴奏\/01-根据人声选择调\|根据人声选择调\]\]/u)
+    assert.match(items[6], /\[\[06-基础乐理与指板\/01-音高音名与唱名\|音高音名与唱名\]\]/u)
     assert.equal(
       items[7],
-      "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
+      "8. 练习与复盘：从 [[07-练习与复盘/01-有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
     assert.equal(
       items[8],
-      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     )
-    assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
+    assert.match(items[9], /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u)
 
-    const fullF = parsePage("content/02-和弦系统/F大横按与移动和弦.md")
+    const fullF = parsePage("content/02-和弦系统/12-F大横按与移动和弦.md")
     const nextSection = fullF.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""
-    assert.match(nextSection, /下一步.*\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
+    assert.match(nextSection, /下一步.*\[\[03-节奏系统\/01-节拍拍号与小节\|节拍拍号与小节\]\]/u)
 
-    const finalPage = pageByFile.get("content/03-节奏系统/六八拍伴奏.md")!
-    assert.match(finalPage.body, /下一步.*\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
+    const finalPage = pageByFile.get("content/03-节奏系统/09-六八拍伴奏.md")!
+    assert.match(finalPage.body, /下一步.*\[\[04-演奏技巧\/01-分解和弦基础\|分解和弦基础\]\]/u)
   },
 )
 

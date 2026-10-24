@@ -1,8 +1,9 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { parsePage } from "../../scripts/content/parsePage"
+import { contentFile } from "./helpers/curriculumFiles"
 import { sectionText, tableRows } from "./helpers/lessonAssertions"
-const body = (name: string) => parsePage(`content/06-基础乐理与指板/${name}.md`).body
+const body = (name: string) => parsePage(contentFile(name)).body
 function minor(text: string) {
   assert.deepEqual(tableRows(text, "小调属和弦核对"), [
     ["v", "E G B", "G", "自然小调"],

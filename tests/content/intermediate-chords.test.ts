@@ -1,10 +1,10 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { parsePage } from "../../scripts/content/parsePage"
+import { contentFile } from "./helpers/curriculumFiles"
 import { sectionText, tableRows } from "./helpers/lessonAssertions"
 
-const body = (name: string, module = "06-基础乐理与指板") =>
-  parsePage(`content/${module}/${name}.md`).body
+const body = (name: string, _module = "06-基础乐理与指板") => parsePage(contentFile(name)).body
 function sevenths(text: string) {
   const rows = tableRows(text, "七和弦核对")
   assert.deepEqual(rows, [

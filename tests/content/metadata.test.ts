@@ -191,8 +191,8 @@ test("the three published seed pages satisfy metadata validation", () => {
   const manifest = loadManifest("data/content-manifest.yml")
   const pages = [
     parsePage("content/index.md"),
-    parsePage("content/00-从这里开始/如何使用知识库.md"),
-    parsePage("content/00-从这里开始/学习路线总览.md"),
+    parsePage("content/00-从这里开始/01-如何使用知识库.md"),
+    parsePage("content/00-从这里开始/02-学习路线总览.md"),
   ]
 
   assert.deepEqual(validateMetadata(pages, manifest), [])

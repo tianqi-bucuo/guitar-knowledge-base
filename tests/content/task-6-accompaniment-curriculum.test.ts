@@ -62,7 +62,7 @@ const exactSourceDefinitions: Record<string, string> = {
 
 const expectedLessons: ExpectedLesson[] = [
   {
-    file: "content/05-弹唱与伴奏/根据人声选择调.md",
+    file: "content/05-弹唱与伴奏/01-根据人声选择调.md",
     frontmatter: {
       title: "根据人声选择调",
       description: "通过同一段材料的试唱观察人声舒适度，并把结果转成可执行的选调方向",
@@ -79,10 +79,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "04-演奏技巧/自然泛音与打板": "自然泛音与打板",
-      "02-和弦系统/C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
-      "03-节奏系统/六八拍伴奏": "六八拍伴奏",
-      "05-弹唱与伴奏/变调夹原理与用法": "变调夹原理与用法",
+      "04-演奏技巧/08-自然泛音与打板": "自然泛音与打板",
+      "02-和弦系统/10-C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
+      "03-节奏系统/09-六八拍伴奏": "六八拍伴奏",
+      "05-弹唱与伴奏/02-变调夹原理与用法": "变调夹原理与用法",
     },
     tables: [[["候选版本", "最低处", "最高处", "整段后声音", "吉他可执行性", "结论"]]],
     orderedSteps: [
@@ -94,7 +94,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/05-弹唱与伴奏/变调夹原理与用法.md",
+    file: "content/05-弹唱与伴奏/02-变调夹原理与用法.md",
     frontmatter: {
       title: "变调夹原理与用法",
       description: "理解变调夹如何升高实响音高，并用正确位置、适量压力与逐弦检查完成安装",
@@ -113,10 +113,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
-      "00-从这里开始/吉他调音与标准音": "吉他调音与标准音",
-      "02-和弦系统/F大横按与移动和弦": "F大横按与移动和弦",
-      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
+      "05-弹唱与伴奏/01-根据人声选择调": "根据人声选择调",
+      "00-从这里开始/04-吉他调音与标准音": "吉他调音与标准音",
+      "02-和弦系统/12-F大横按与移动和弦": "F大横按与移动和弦",
+      "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
     },
     tables: [
       [
@@ -134,7 +134,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/05-弹唱与伴奏/和弦级数与移调.md",
+    file: "content/05-弹唱与伴奏/03-和弦级数与移调.md",
     frontmatter: {
       title: "和弦级数与移调",
       description: "用罗马数字保存和弦关系，并把原创八小节进行移到 C 大调、G 大调与夹二品版本",
@@ -153,11 +153,11 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
-      "05-弹唱与伴奏/变调夹原理与用法": "变调夹原理与用法",
-      "02-和弦系统/C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
-      "02-和弦系统/C-G-Am-Em和弦进行": "C-G-Am-Em和弦进行",
-      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
+      "05-弹唱与伴奏/01-根据人声选择调": "根据人声选择调",
+      "05-弹唱与伴奏/02-变调夹原理与用法": "变调夹原理与用法",
+      "02-和弦系统/10-C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
+      "02-和弦系统/09-C-G-Am-Em和弦进行": "C-G-Am-Em和弦进行",
+      "05-弹唱与伴奏/04-听辨歌曲结构": "听辨歌曲结构",
     },
     tables: [
       [
@@ -174,7 +174,7 @@ const expectedLessons: ExpectedLesson[] = [
     orderedSteps: [],
   },
   {
-    file: "content/05-弹唱与伴奏/听辨歌曲结构.md",
+    file: "content/05-弹唱与伴奏/04-听辨歌曲结构.md",
     frontmatter: {
       title: "听辨歌曲结构",
       description: "用重复、对比与多项边界线索标记歌曲段落，不依赖歌词抄录",
@@ -193,16 +193,16 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "03-节奏系统/重音与强弱层次": "重音与强弱层次",
-      "03-节奏系统/切分节奏入门": "切分节奏入门",
-      "00-从这里开始/学习路线总览": "学习路线总览",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+      "03-节奏系统/07-重音与强弱层次": "重音与强弱层次",
+      "03-节奏系统/11-切分节奏入门": "切分节奏入门",
+      "00-从这里开始/02-学习路线总览": "学习路线总览",
+      "05-弹唱与伴奏/05-主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
     },
     tables: [[["段落序号", "开始线索", "结束线索", "重复或对比", "暂记标签", "再出现位置"]]],
     orderedSteps: [],
   },
   {
-    file: "content/05-弹唱与伴奏/主歌与副歌的伴奏对比.md",
+    file: "content/05-弹唱与伴奏/05-主歌与副歌的伴奏对比.md",
     frontmatter: {
       title: "主歌与副歌的伴奏对比",
       description: "用密度、重音与相对音量为同一进行设计可辨认的主歌和副歌伴奏",
@@ -222,11 +222,11 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
-      "03-节奏系统/重音与强弱层次": "重音与强弱层次",
-      "03-节奏系统/基础八分音符扫弦": "基础八分音符扫弦",
-      "04-演奏技巧/常用分解和弦型": "常用分解和弦型",
-      "05-弹唱与伴奏/前奏间奏与尾奏": "前奏间奏与尾奏",
+      "05-弹唱与伴奏/04-听辨歌曲结构": "听辨歌曲结构",
+      "03-节奏系统/07-重音与强弱层次": "重音与强弱层次",
+      "03-节奏系统/06-基础八分音符扫弦": "基础八分音符扫弦",
+      "04-演奏技巧/02-常用分解和弦型": "常用分解和弦型",
+      "05-弹唱与伴奏/06-前奏间奏与尾奏": "前奏间奏与尾奏",
     },
     tables: [
       [
@@ -241,7 +241,7 @@ const expectedLessons: ExpectedLesson[] = [
     orderedSteps: [],
   },
   {
-    file: "content/05-弹唱与伴奏/前奏间奏与尾奏.md",
+    file: "content/05-弹唱与伴奏/06-前奏间奏与尾奏.md",
     frontmatter: {
       title: "前奏间奏与尾奏",
       description: "分别设计前奏、器乐间奏与尾奏，理解它们和桥段的功能差异",
@@ -260,10 +260,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
-      "03-节奏系统/四拍全下扫": "四拍全下扫",
-      "05-弹唱与伴奏/弹唱协调训练": "弹唱协调训练",
+      "05-弹唱与伴奏/04-听辨歌曲结构": "听辨歌曲结构",
+      "05-弹唱与伴奏/05-主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+      "03-节奏系统/05-四拍全下扫": "四拍全下扫",
+      "05-弹唱与伴奏/07-弹唱协调训练": "弹唱协调训练",
     },
     tables: [
       [
@@ -276,7 +276,7 @@ const expectedLessons: ExpectedLesson[] = [
     orderedSteps: [],
   },
   {
-    file: "content/05-弹唱与伴奏/弹唱协调训练.md",
+    file: "content/05-弹唱与伴奏/07-弹唱协调训练.md",
     frontmatter: {
       title: "弹唱协调训练",
       description: "把吉他动作与说唱事件分层对齐，再合并为稳定且可退阶的弹唱",
@@ -294,11 +294,11 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
-      "03-节奏系统/第一次使用节拍器": "第一次使用节拍器",
-      "03-节奏系统/基础八分音符扫弦": "基础八分音符扫弦",
-      "05-弹唱与伴奏/完整歌曲编配流程": "完整歌曲编配流程",
+      "05-弹唱与伴奏/01-根据人声选择调": "根据人声选择调",
+      "05-弹唱与伴奏/05-主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+      "03-节奏系统/02-第一次使用节拍器": "第一次使用节拍器",
+      "03-节奏系统/06-基础八分音符扫弦": "基础八分音符扫弦",
+      "05-弹唱与伴奏/08-完整歌曲编配流程": "完整歌曲编配流程",
     },
     tables: [
       [
@@ -315,7 +315,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/05-弹唱与伴奏/完整歌曲编配流程.md",
+    file: "content/05-弹唱与伴奏/08-完整歌曲编配流程.md",
     frontmatter: {
       title: "完整歌曲编配流程",
       description: "把选调、和弦、结构、层次、段落连接和弹唱检查整合为可复核的编配流程",
@@ -335,18 +335,18 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     links: {
-      "05-弹唱与伴奏/根据人声选择调": "根据人声选择调",
-      "05-弹唱与伴奏/变调夹原理与用法": "变调夹原理与用法",
-      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
-      "05-弹唱与伴奏/听辨歌曲结构": "听辨歌曲结构",
-      "05-弹唱与伴奏/主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
-      "05-弹唱与伴奏/前奏间奏与尾奏": "前奏间奏与尾奏",
-      "05-弹唱与伴奏/弹唱协调训练": "弹唱协调训练",
-      "03-节奏系统/重音与强弱层次": "重音与强弱层次",
-      "03-节奏系统/基础八分音符扫弦": "基础八分音符扫弦",
-      "03-节奏系统/第一次使用节拍器": "第一次使用节拍器",
-      "06-基础乐理与指板/音高音名与唱名": "音高音名与唱名",
-      "07-练习与复盘/练习日志模板": "练习日志模板",
+      "05-弹唱与伴奏/01-根据人声选择调": "根据人声选择调",
+      "05-弹唱与伴奏/02-变调夹原理与用法": "变调夹原理与用法",
+      "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
+      "05-弹唱与伴奏/04-听辨歌曲结构": "听辨歌曲结构",
+      "05-弹唱与伴奏/05-主歌与副歌的伴奏对比": "主歌与副歌的伴奏对比",
+      "05-弹唱与伴奏/06-前奏间奏与尾奏": "前奏间奏与尾奏",
+      "05-弹唱与伴奏/07-弹唱协调训练": "弹唱协调训练",
+      "03-节奏系统/07-重音与强弱层次": "重音与强弱层次",
+      "03-节奏系统/06-基础八分音符扫弦": "基础八分音符扫弦",
+      "03-节奏系统/02-第一次使用节拍器": "第一次使用节拍器",
+      "06-基础乐理与指板/01-音高音名与唱名": "音高音名与唱名",
+      "07-练习与复盘/04-练习日志模板": "练习日志模板",
     },
     tables: [[["步骤", "当前选择", "可观察证据", "下一次只改一项"]]],
     orderedSteps: [
@@ -363,8 +363,8 @@ const expectedLessons: ExpectedLesson[] = [
 ]
 
 const migratedLessonFiles = new Set([
-  "content/05-弹唱与伴奏/和弦级数与移调.md",
-  "content/05-弹唱与伴奏/完整歌曲编配流程.md",
+  "content/05-弹唱与伴奏/03-和弦级数与移调.md",
+  "content/05-弹唱与伴奏/08-完整歌曲编配流程.md",
 ])
 
 const expectedAccompanimentTitles = [
@@ -376,9 +376,9 @@ const expectedAccompanimentTitles = [
 
 const expectedAccompanimentFiles = [
   ...expectedLessons.map(({ file }) => file.replace(/^content\//u, "")),
-  "05-弹唱与伴奏/声部连接与和弦配置.md",
-  "05-弹唱与伴奏/旋律配和弦与非和弦音.md",
-  "05-弹唱与伴奏/乐句分析与编配实战.md",
+  "05-弹唱与伴奏/09-声部连接与和弦配置.md",
+  "05-弹唱与伴奏/10-旋律配和弦与非和弦音.md",
+  "05-弹唱与伴奏/11-乐句分析与编配实战.md",
 ]
 
 const protectedFileDigests: Record<string, string> = {
@@ -766,7 +766,7 @@ test(
   "key selection stays non-diagnostic and returns only the approved observable conclusions",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/根据人声选择调.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/01-根据人声选择调.md")!.body
     for (const observation of ["最低处", "最高处", "整段后声音", "挤压", "喊叫", "吉他可执行性"])
       assert.ok(body.includes(observation), observation)
     assert.deepEqual(
@@ -782,7 +782,7 @@ test(
   "capo placement, inference attribution, and shape-to-sounding mapping stay distinct",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/变调夹原理与用法.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/02-变调夹原理与用法.md")!.body
     assert.match(body, /可移动上弦枕/u)
     assert.match(body, /缩短.*有效弦长|有效弦长.*缩短/u)
     assert.match(body, /相对零点/u)
@@ -807,7 +807,7 @@ test(
   "Roman-numeral transposition preserves the exact original eight-bar relationships",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/和弦级数与移调.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/03-和弦级数与移调.md")!.body
     assert.match(body, /本站原创八小节练习，不对应任何歌曲。/u)
     assert.match(body, /大写.*大和弦.*小写.*小和弦/u)
     assert.match(body, /保留.*(?:音程|级数)关系/u)
@@ -821,7 +821,7 @@ test(
   "form listening uses multiple boundary clues and a bounded cultural frame",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/听辨歌曲结构.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/04-听辨歌曲结构.md")!.body
     for (const clue of ["歌词或诗行结束", "节奏、和声或旋律到达", "配器或音量变化", "已听材料回归"])
       assert.ok(body.includes(clue), clue)
     assert.match(body, /单个线索不足/u)
@@ -836,7 +836,7 @@ test(
   "verse and chorus comparison changes controlled variables without making a universal loudness rule",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/主歌与副歌的伴奏对比.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/05-主歌与副歌的伴奏对比.md")!.body
     assert.match(body, /共同项.*调、和弦、拍号、基本脉冲/u)
     assert.match(body, /密度、重音、相对音量或音色.*一至两项/u)
     assert.match(body, /副歌较突出.*不是所有歌曲法则/u)
@@ -853,7 +853,7 @@ test(
   "intro, instrumental interlude, bridge, and ending remain functionally distinct",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/前奏间奏与尾奏.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/06-前奏间奏与尾奏.md")!.body
     assert.match(body, /前奏.*首个核心段落前/u)
     assert.match(body, /间奏.*核心段落之间.*器乐/u)
     assert.match(body, /尾奏.*最后段落.*结束/u)
@@ -863,7 +863,7 @@ test(
       ),
     )
     assert.equal(
-      pageByFile.get("content/05-弹唱与伴奏/前奏间奏与尾奏.md")!.frontmatter.permalink,
+      pageByFile.get("content/05-弹唱与伴奏/06-前奏间奏与尾奏.md")!.frontmatter.permalink,
       "/accompaniment/intro-bridge-ending",
     )
     assert.match(body, /三项.*本站原创候选/u)
@@ -874,7 +874,7 @@ test(
   "sing-and-play coordination keeps four reversible layers and exact event semantics",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/弹唱协调训练.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/07-弹唱协调训练.md")!.body
     assert.match(body, /`—`.*不新起声音/u)
     assert.match(body, /不表示停止呼吸、屏气或闷弦/u)
     assert.match(body, /第一阶段可以说 `啦`，不是必须歌唱/u)
@@ -890,7 +890,7 @@ test(
   "the arrangement workflow integrates the original exercise and preserves future text handoffs",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const body = pageByFile.get("content/05-弹唱与伴奏/完整歌曲编配流程.md")!.body
+    const body = pageByFile.get("content/05-弹唱与伴奏/08-完整歌曲编配流程.md")!.body
     assert.match(body, /本站原创八小节练习，不对应任何歌曲。/u)
     for (const check of [
       "人声是否有警讯",
@@ -900,10 +900,10 @@ test(
       "夹位与实响和弦是否记录一致",
     ])
       assert.ok(body.includes(check), check)
-    assert.match(body, /下一步进入 \[\[06-基础乐理与指板\/音高音名与唱名\|音高音名与唱名\]\]/u)
+    assert.match(body, /下一步进入 \[\[06-基础乐理与指板\/01-音高音名与唱名\|音高音名与唱名\]\]/u)
     assert.ok(
       body.includes(
-        "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。",
+        "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/04-练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。",
       ),
     )
   },
@@ -954,27 +954,27 @@ test(
       }
     }
 
-    const route = parsePage("content/00-从这里开始/学习路线总览.md")
+    const route = parsePage("content/00-从这里开始/02-学习路线总览.md")
     const items = [...section(route.body, "有序链接").matchAll(/^\d+\.\s+.*$/gmu)].map(
       (match) => match[0],
     )
     assert.equal(items.length, 10)
-    assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
-    assert.match(items[6], /\[\[06-基础乐理与指板\/音高音名与唱名\|音高音名与唱名\]\]/u)
+    assert.match(items[5], /\[\[05-弹唱与伴奏\/01-根据人声选择调\|根据人声选择调\]\]/u)
+    assert.match(items[6], /\[\[06-基础乐理与指板\/01-音高音名与唱名\|音高音名与唱名\]\]/u)
     assert.equal(
       items[7],
-      "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
+      "8. 练习与复盘：从 [[07-练习与复盘/01-有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
     assert.equal(
       items[8],
-      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     )
-    assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
+    assert.match(items[9], /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u)
 
-    const techniqueHandoff = parsePage("content/04-演奏技巧/自然泛音与打板.md")
+    const techniqueHandoff = parsePage("content/04-演奏技巧/08-自然泛音与打板.md")
     assert.match(
       section(techniqueHandoff.body, "下一步与相关词条"),
-      /下一步.*\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u,
+      /下一步.*\[\[05-弹唱与伴奏\/01-根据人声选择调\|根据人声选择调\]\]/u,
     )
   },
 )

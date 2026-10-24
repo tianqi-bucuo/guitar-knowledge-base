@@ -53,7 +53,7 @@ const lessonSections = [
 const fretboardPath = "../assets/diagrams/fretboard-c-major-scale.svg"
 const expectedLessons: ExpectedLesson[] = [
   {
-    file: "content/06-基础乐理与指板/音高音名与唱名.md",
+    file: "content/06-基础乐理与指板/01-音高音名与唱名.md",
     frontmatter: {
       title: "音高音名与唱名",
       description: "区分音高、音名、八度音区、音级与首调唱名，并用标准定弦核对具体音高",
@@ -72,14 +72,14 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "05-弹唱与伴奏/完整歌曲编配流程": "完整歌曲编配流程",
-      "00-从这里开始/吉他调音与标准音": "吉他调音与标准音",
+      "05-弹唱与伴奏/08-完整歌曲编配流程": "完整歌曲编配流程",
+      "00-从这里开始/04-吉他调音与标准音": "吉他调音与标准音",
     },
     links: {
-      "05-弹唱与伴奏/完整歌曲编配流程": "完整歌曲编配流程",
-      "00-从这里开始/吉他调音与标准音": "吉他调音与标准音",
-      "06-基础乐理与指板/指板上的音名": "指板上的音名",
-      "00-从这里开始/学习路线总览": "学习路线总览",
+      "05-弹唱与伴奏/08-完整歌曲编配流程": "完整歌曲编配流程",
+      "00-从这里开始/04-吉他调音与标准音": "吉他调音与标准音",
+      "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
+      "00-从这里开始/02-学习路线总览": "学习路线总览",
     },
     table: [
       ["回答的问题", "记号类别", "示例", "本页解释"],
@@ -92,7 +92,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/指板上的音名.md",
+    file: "content/06-基础乐理与指板/02-指板上的音名.md",
     frontmatter: {
       title: "指板上的音名",
       description: "从标准定弦和相邻品半音关系推导零到五品的自然音位置",
@@ -111,14 +111,14 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/音高音名与唱名": "音高音名与唱名",
-      "00-从这里开始/吉他调音与标准音": "吉他调音与标准音",
+      "06-基础乐理与指板/01-音高音名与唱名": "音高音名与唱名",
+      "00-从这里开始/04-吉他调音与标准音": "吉他调音与标准音",
     },
     links: {
-      "06-基础乐理与指板/音高音名与唱名": "音高音名与唱名",
-      "00-从这里开始/吉他调音与标准音": "吉他调音与标准音",
-      "06-基础乐理与指板/全音与半音": "全音与半音",
-      "01-持琴与基础动作/相邻弦与跨弦": "相邻弦与跨弦",
+      "06-基础乐理与指板/01-音高音名与唱名": "音高音名与唱名",
+      "00-从这里开始/04-吉他调音与标准音": "吉他调音与标准音",
+      "06-基础乐理与指板/03-全音与半音": "全音与半音",
+      "01-持琴与基础动作/08-相邻弦与跨弦": "相邻弦与跨弦",
     },
     table: [
       ["弦", "0–5 品自然音位置"],
@@ -132,7 +132,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [fretboardPath],
   },
   {
-    file: "content/06-基础乐理与指板/全音与半音.md",
+    file: "content/06-基础乐理与指板/03-全音与半音.md",
     frontmatter: {
       title: "全音与半音",
       description: "用单弦品格辨认全音、半音、自然音间距、临时记号与等音拼写",
@@ -157,11 +157,11 @@ const expectedLessons: ExpectedLesson[] = [
       "circle-yamaha": "两品相差一个全音",
       "safety-bapam": safetyBlock,
     },
-    prerequisiteLinks: { "06-基础乐理与指板/指板上的音名": "指板上的音名" },
+    prerequisiteLinks: { "06-基础乐理与指板/02-指板上的音名": "指板上的音名" },
     links: {
-      "06-基础乐理与指板/指板上的音名": "指板上的音名",
-      "06-基础乐理与指板/音程入门": "音程入门",
-      "06-基础乐理与指板/音高音名与唱名": "音高音名与唱名",
+      "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
+      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/01-音高音名与唱名": "音高音名与唱名",
     },
     table: [
       ["起点", "半音目标", "全音目标", "单弦位移"],
@@ -173,7 +173,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/音程入门.md",
+    file: "content/06-基础乐理与指板/04-音程入门.md",
     frontmatter: {
       title: "音程入门",
       description: "用字母跨度与半音数共同辨认常用旋律音程和和声音程",
@@ -191,11 +191,11 @@ const expectedLessons: ExpectedLesson[] = [
       "enharmonic-puget": "相同半音数也不能跳过拼写",
       "safety-bapam": safetyBlock,
     },
-    prerequisiteLinks: { "06-基础乐理与指板/全音与半音": "全音与半音" },
+    prerequisiteLinks: { "06-基础乐理与指板/03-全音与半音": "全音与半音" },
     links: {
-      "06-基础乐理与指板/全音与半音": "全音与半音",
-      "06-基础乐理与指板/大调音阶": "大调音阶",
-      "06-基础乐理与指板/指板上的音名": "指板上的音名",
+      "06-基础乐理与指板/03-全音与半音": "全音与半音",
+      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
     },
     table: [
       ["音名", "字母跨度", "半音数", "音程名"],
@@ -211,7 +211,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/大调音阶.md",
+    file: "content/06-基础乐理与指板/05-大调音阶.md",
     frontmatter: {
       title: "大调音阶",
       description: "用全全半全全全半构造 C 大调与 G 大调，并在指板上核对音级",
@@ -230,14 +230,14 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/音程入门": "音程入门",
-      "06-基础乐理与指板/指板上的音名": "指板上的音名",
+      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
     },
     links: {
-      "06-基础乐理与指板/音程入门": "音程入门",
-      "06-基础乐理与指板/指板上的音名": "指板上的音名",
-      "06-基础乐理与指板/调与调号": "调与调号",
-      "06-基础乐理与指板/全音与半音": "全音与半音",
+      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
+      "06-基础乐理与指板/06-调与调号": "调与调号",
+      "06-基础乐理与指板/03-全音与半音": "全音与半音",
     },
     table: [
       ["音级", "首调唱名", "C 大调", "G 大调", "到下一级"],
@@ -253,7 +253,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [fretboardPath],
   },
   {
-    file: "content/06-基础乐理与指板/调与调号.md",
+    file: "content/06-基础乐理与指板/06-调与调号.md",
     frontmatter: {
       title: "调与调号",
       description: "区分主音中心、调内音集合与调号，并比较 C、G、D、F 大调的升降音",
@@ -272,14 +272,14 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/大调音阶": "大调音阶",
-      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
+      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
     },
     links: {
-      "06-基础乐理与指板/大调音阶": "大调音阶",
-      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
-      "06-基础乐理与指板/三和弦构成": "三和弦构成",
-      "05-弹唱与伴奏/变调夹原理与用法": "变调夹原理与用法",
+      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
+      "06-基础乐理与指板/07-三和弦构成": "三和弦构成",
+      "05-弹唱与伴奏/02-变调夹原理与用法": "变调夹原理与用法",
     },
     table: [
       ["大调", "音阶拼写", "调号升降音"],
@@ -291,7 +291,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/三和弦构成.md",
+    file: "content/06-基础乐理与指板/07-三和弦构成.md",
     frontmatter: {
       title: "三和弦构成",
       description: "从根音、三音与五音的音程关系构造大、小、减、增三和弦",
@@ -309,17 +309,17 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/音程入门": "音程入门",
-      "06-基础乐理与指板/大调音阶": "大调音阶",
-      "02-和弦系统/和弦图读法": "和弦图读法",
+      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "02-和弦系统/01-和弦图读法": "和弦图读法",
     },
     links: {
-      "06-基础乐理与指板/音程入门": "音程入门",
-      "06-基础乐理与指板/大调音阶": "大调音阶",
-      "02-和弦系统/和弦图读法": "和弦图读法",
-      "06-基础乐理与指板/顺阶和弦与级数": "顺阶和弦与级数",
-      "02-和弦系统/C和弦": "C和弦",
-      "02-和弦系统/Am与A和弦": "Am与A和弦",
+      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "02-和弦系统/01-和弦图读法": "和弦图读法",
+      "06-基础乐理与指板/08-顺阶和弦与级数": "顺阶和弦与级数",
+      "02-和弦系统/04-C和弦": "C和弦",
+      "02-和弦系统/03-Am与A和弦": "Am与A和弦",
     },
     table: [
       ["类型", "从根音算半音", "音程构成", "示例"],
@@ -331,7 +331,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/顺阶和弦与级数.md",
+    file: "content/06-基础乐理与指板/08-顺阶和弦与级数.md",
     frontmatter: {
       title: "顺阶和弦与级数",
       description: "在大调各音级上叠置三和弦，并把 C 大调和弦映射为罗马数字级数",
@@ -349,18 +349,18 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/三和弦构成": "三和弦构成",
-      "06-基础乐理与指板/调与调号": "调与调号",
-      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
+      "06-基础乐理与指板/07-三和弦构成": "三和弦构成",
+      "06-基础乐理与指板/06-调与调号": "调与调号",
+      "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
     },
     links: {
-      "06-基础乐理与指板/三和弦构成": "三和弦构成",
-      "06-基础乐理与指板/调与调号": "调与调号",
-      "05-弹唱与伴奏/和弦级数与移调": "和弦级数与移调",
-      "02-和弦系统/C-G-Am-Em和弦进行": "C-G-Am-Em和弦进行",
-      "02-和弦系统/C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
-      "00-从这里开始/学习路线总览": "学习路线总览",
-      "07-练习与复盘/有效练习流程": "有效练习流程",
+      "06-基础乐理与指板/07-三和弦构成": "三和弦构成",
+      "06-基础乐理与指板/06-调与调号": "调与调号",
+      "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
+      "02-和弦系统/09-C-G-Am-Em和弦进行": "C-G-Am-Em和弦进行",
+      "02-和弦系统/10-C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
+      "00-从这里开始/02-学习路线总览": "学习路线总览",
+      "07-练习与复盘/01-有效练习流程": "有效练习流程",
     },
     table: [
       ["级数", "音名构成", "质量", "C 大调和弦"],
@@ -397,21 +397,21 @@ const expectedTheoryTitles = [
 
 const expectedTheoryFiles = [
   ...expectedLessons.map(({ file }) => file.replace(/^content\//u, "")),
-  "06-基础乐理与指板/五线谱简谱与六线谱.md",
-  "06-基础乐理与指板/音程转位与复音程.md",
-  "06-基础乐理与指板/小调音阶.md",
-  "06-基础乐理与指板/关系调同主音调与五度圈.md",
-  "06-基础乐理与指板/五声音阶.md",
-  "06-基础乐理与指板/调式入门.md",
-  "06-基础乐理与指板/七和弦构成.md",
-  "06-基础乐理与指板/和弦转位与低音.md",
-  "06-基础乐理与指板/挂留和弦与附加音和弦.md",
-  "06-基础乐理与指板/和声功能.md",
-  "06-基础乐理与指板/终止式与乐句.md",
-  "06-基础乐理与指板/小调和声.md",
-  "06-基础乐理与指板/副属和弦.md",
-  "06-基础乐理与指板/调式借用.md",
-  "06-基础乐理与指板/转调入门.md",
+  "06-基础乐理与指板/09-五线谱简谱与六线谱.md",
+  "06-基础乐理与指板/10-音程转位与复音程.md",
+  "06-基础乐理与指板/11-小调音阶.md",
+  "06-基础乐理与指板/12-关系调同主音调与五度圈.md",
+  "06-基础乐理与指板/13-五声音阶.md",
+  "06-基础乐理与指板/14-调式入门.md",
+  "06-基础乐理与指板/15-七和弦构成.md",
+  "06-基础乐理与指板/16-和弦转位与低音.md",
+  "06-基础乐理与指板/17-挂留和弦与附加音和弦.md",
+  "06-基础乐理与指板/18-和声功能.md",
+  "06-基础乐理与指板/19-终止式与乐句.md",
+  "06-基础乐理与指板/20-小调和声.md",
+  "06-基础乐理与指板/21-副属和弦.md",
+  "06-基础乐理与指板/22-调式借用.md",
+  "06-基础乐理与指板/23-转调入门.md",
 ]
 
 const protectedFileDigests: Record<string, string> = {
@@ -567,12 +567,13 @@ function assertTheorySnapshot(root: string): void {
     )
   }
 
-  const pitch = pages.find(({ expected }) => expected.file.endsWith("音高音名与唱名.md"))!.page.body
-  assert.ok(pitch.includes("6→1弦：E2 | A2 | D3 | G3 | B3 | E4"))
-  const finalPage = pages.find(({ expected }) => expected.file.endsWith("顺阶和弦与级数.md"))!.page
+  const pitch = pages.find(({ expected }) => expected.file.endsWith("01-音高音名与唱名.md"))!.page
     .body
-  assert.match(finalPage, /\[\[06-基础乐理与指板\/和声功能\|和声功能\]\]/u)
-  assert.match(finalPage, /\[\[07-练习与复盘\/有效练习流程\|有效练习流程\]\]/u)
+  assert.ok(pitch.includes("6→1弦：E2 | A2 | D3 | G3 | B3 | E4"))
+  const finalPage = pages.find(({ expected }) => expected.file.endsWith("08-顺阶和弦与级数.md"))!
+    .page.body
+  assert.match(finalPage, /\[\[06-基础乐理与指板\/18-和声功能\|和声功能\]\]/u)
+  assert.match(finalPage, /\[\[07-练习与复盘\/01-有效练习流程\|有效练习流程\]\]/u)
 }
 
 function replaceTempText(root: string, relativeFile: string, from: string, to: string): void {
@@ -661,20 +662,20 @@ test(
   "theory tables lock pitch, fretboard, interval, scale, key, triad, and diatonic facts",
   { skip: missingLessonFiles.length > 0 },
   () => {
-    const pitch = pageByFile.get("content/06-基础乐理与指板/音高音名与唱名.md")!.body
+    const pitch = pageByFile.get("content/06-基础乐理与指板/01-音高音名与唱名.md")!.body
     assert.ok(pitch.includes("6→1弦：E2 | A2 | D3 | G3 | B3 | E4"))
     assert.match(pitch, /两根 E 弦.*相差两个八度/u)
     assert.match(pitch, /只有.*C 大调.*C=do/u)
 
-    const intervals = pageByFile.get("content/06-基础乐理与指板/音程入门.md")!.body
+    const intervals = pageByFile.get("content/06-基础乐理与指板/04-音程入门.md")!.body
     assert.match(intervals, /C–C.*机械计数/u)
     assert.match(intervals, /C–D♯.*不能.*小三度/u)
 
-    const triads = pageByFile.get("content/06-基础乐理与指板/三和弦构成.md")!.body
+    const triads = pageByFile.get("content/06-基础乐理与指板/07-三和弦构成.md")!.body
     assert.match(triads, /三个不同音高类别/u)
     assert.match(triads, /六根弦.*三和弦/u)
 
-    const diatonic = pageByFile.get("content/06-基础乐理与指板/顺阶和弦与级数.md")!.body
+    const diatonic = pageByFile.get("content/06-基础乐理与指板/08-顺阶和弦与级数.md")!.body
     assert.ok(diatonic.includes("C–G–Am–Em = I–V–vi–iii"))
     assert.ok(diatonic.includes("C–Am–F–G = I–vi–IV–V"))
   },
@@ -726,41 +727,41 @@ test(
       }
     }
 
-    const route = parsePage("content/00-从这里开始/学习路线总览.md")
+    const route = parsePage("content/00-从这里开始/02-学习路线总览.md")
     const items = [...section(route.body, "有序链接").matchAll(/^\d+\.\s+.*$/gmu)].map(
       (match) => match[0],
     )
     assert.equal(items.length, 10)
     assert.equal(
       items[6],
-      "7. 基础乐理与指板：从 [[06-基础乐理与指板/音高音名与唱名|音高音名与唱名]] 进入，连接音名、指板、音程、音阶、调号、三和弦与级数。",
+      "7. 基础乐理与指板：从 [[06-基础乐理与指板/01-音高音名与唱名|音高音名与唱名]] 进入，连接音名、指板、音程、音阶、调号、三和弦与级数。",
     )
     assert.equal(
       items[7],
-      "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
+      "8. 练习与复盘：从 [[07-练习与复盘/01-有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
     assert.equal(
       items[8],
-      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     )
-    assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
+    assert.match(items[9], /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u)
 
-    const arrangement = parsePage("content/05-弹唱与伴奏/完整歌曲编配流程.md")
+    const arrangement = parsePage("content/05-弹唱与伴奏/08-完整歌曲编配流程.md")
     const next = section(arrangement.body, "下一步与相关词条")
     assert.ok(
       next.includes(
-        "下一步进入 [[06-基础乐理与指板/音高音名与唱名|音高音名与唱名]]，把编配时已经使用的音名、调与级数拆开验证。",
+        "下一步进入 [[06-基础乐理与指板/01-音高音名与唱名|音高音名与唱名]]，把编配时已经使用的音名、调与级数拆开验证。",
       ),
     )
     assert.ok(
       next.includes(
-        "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。",
+        "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/04-练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。",
       ),
     )
 
-    const finalPage = pageByFile.get("content/06-基础乐理与指板/顺阶和弦与级数.md")!.body
-    assert.match(finalPage, /\[\[06-基础乐理与指板\/和声功能\|和声功能\]\]/u)
-    assert.match(finalPage, /\[\[07-练习与复盘\/有效练习流程\|有效练习流程\]\]/u)
+    const finalPage = pageByFile.get("content/06-基础乐理与指板/08-顺阶和弦与级数.md")!.body
+    assert.match(finalPage, /\[\[06-基础乐理与指板\/18-和声功能\|和声功能\]\]/u)
+    assert.match(finalPage, /\[\[07-练习与复盘\/01-有效练习流程\|有效练习流程\]\]/u)
   },
 )
 
@@ -837,43 +838,43 @@ test("temporary mutation copies reject retained high-risk theory boundary breaks
   }> = [
     {
       name: "standard-tuning octave",
-      file: "content/06-基础乐理与指板/音高音名与唱名.md",
+      file: "content/06-基础乐理与指板/01-音高音名与唱名.md",
       from: "6→1弦：E2 | A2 | D3 | G3 | B3 | E4",
       to: "6→1弦：E3 | A2 | D3 | G3 | B3 | E4",
     },
     {
       name: "safety block",
-      file: "content/06-基础乐理与指板/全音与半音.md",
+      file: "content/06-基础乐理与指板/03-全音与半音.md",
       from: `> ${safetyBlock}[^safety-bapam]`,
       to: "",
     },
     {
       name: "approved source URL",
-      file: "content/06-基础乐理与指板/全音与半音.md",
+      file: "content/06-基础乐理与指板/03-全音与半音.md",
       from: "https://musictheory.pugetsound.edu/mt21c/EnharmonicNotes.html",
       to: "https://example.com/wrong-source",
     },
     {
       name: "full-path wikilink",
-      file: "content/06-基础乐理与指板/大调音阶.md",
-      from: "[[06-基础乐理与指板/音程入门|音程入门]]",
+      file: "content/06-基础乐理与指板/05-大调音阶.md",
+      from: "[[06-基础乐理与指板/04-音程入门|音程入门]]",
       to: "[[音程入门|音程入门]]",
     },
     {
       name: "fixed practice quota",
-      file: "content/06-基础乐理与指板/指板上的音名.md",
+      file: "content/06-基础乐理与指板/02-指板上的音名.md",
       from: "以下是本站原创练习，正确性由音名与品位对应关系判断。",
       to: "以下是本站原创练习，正确性由音名与品位对应关系判断。练习 10 分钟。",
     },
     {
       name: "fixed learning-outcome promise",
-      file: "content/06-基础乐理与指板/指板上的音名.md",
+      file: "content/06-基础乐理与指板/02-指板上的音名.md",
       from: "以下是本站原创练习，正确性由音名与品位对应关系判断。",
       to: "以下是本站原创练习，正确性由音名与品位对应关系判断。一周内即可学会零到五品。",
     },
     {
       name: "fixed biomechanical prescription",
-      file: "content/06-基础乐理与指板/指板上的音名.md",
+      file: "content/06-基础乐理与指板/02-指板上的音名.md",
       from: "以下是本站原创练习，正确性由音名与品位对应关系判断。",
       to: "以下是本站原创练习，正确性由音名与品位对应关系判断。手腕固定 30 度并维持 5 牛顿按压力。",
     },

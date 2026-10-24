@@ -10,7 +10,7 @@ import {
   writeFileSync,
 } from "node:fs"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { basename, join } from "node:path"
 import test from "node:test"
 import { toString } from "mdast-util-to-string"
 import remarkGfm from "remark-gfm"
@@ -20,6 +20,7 @@ import { visit } from "unist-util-visit"
 import { loadManifest } from "../../scripts/content/loadManifest"
 import { parsePage } from "../../scripts/content/parsePage"
 import { validateContent } from "../../scripts/content/validateContent"
+import { contentFile, curriculumFile } from "./helpers/curriculumFiles"
 
 const directory = "07-练习与复盘"
 const sections = [
@@ -134,55 +135,55 @@ const claimAnchors: Array<Record<string, string>> = [
 ]
 const expectedLinks = [
   [
-    "06-基础乐理与指板/顺阶和弦与级数",
-    "00-从这里开始/开始前自测",
-    "07-练习与复盘/节拍器进阶用法",
-    "00-从这里开始/学习路线总览",
-    "05-弹唱与伴奏/完整歌曲编配流程",
+    "06-基础乐理与指板/08-顺阶和弦与级数",
+    "00-从这里开始/03-开始前自测",
+    "07-练习与复盘/02-节拍器进阶用法",
+    "00-从这里开始/02-学习路线总览",
+    "05-弹唱与伴奏/08-完整歌曲编配流程",
   ],
   [
-    "07-练习与复盘/有效练习流程",
-    "03-节奏系统/第一次使用节拍器",
-    "03-节奏系统/四分八分与十六分音符",
-    "07-练习与复盘/慢练与逐级提速",
-    "03-节奏系统/基础八分音符扫弦",
+    "07-练习与复盘/01-有效练习流程",
+    "03-节奏系统/02-第一次使用节拍器",
+    "03-节奏系统/03-四分八分与十六分音符",
+    "07-练习与复盘/03-慢练与逐级提速",
+    "03-节奏系统/06-基础八分音符扫弦",
   ],
   [
-    "07-练习与复盘/节拍器进阶用法",
-    "07-练习与复盘/有效练习流程",
-    "07-练习与复盘/练习日志模板",
-    "04-演奏技巧/击弦与勾弦",
-    "02-和弦系统/和弦转换方法",
+    "07-练习与复盘/02-节拍器进阶用法",
+    "07-练习与复盘/01-有效练习流程",
+    "07-练习与复盘/04-练习日志模板",
+    "04-演奏技巧/06-击弦与勾弦",
+    "02-和弦系统/08-和弦转换方法",
   ],
   [
-    "07-练习与复盘/慢练与逐级提速",
-    "07-练习与复盘/有效练习流程",
-    "07-练习与复盘/错误诊断与修正",
-    "05-弹唱与伴奏/完整歌曲编配流程",
+    "07-练习与复盘/03-慢练与逐级提速",
+    "07-练习与复盘/01-有效练习流程",
+    "07-练习与复盘/05-错误诊断与修正",
+    "05-弹唱与伴奏/08-完整歌曲编配流程",
   ],
   [
-    "07-练习与复盘/练习日志模板",
-    "07-练习与复盘/有效练习流程",
-    "07-练习与复盘/阶段测验",
-    "03-节奏系统/第一次使用节拍器",
-    "02-和弦系统/和弦转换方法",
-    "08-保养安全与排错/疼痛疲劳与停止练习边界",
+    "07-练习与复盘/04-练习日志模板",
+    "07-练习与复盘/01-有效练习流程",
+    "07-练习与复盘/06-阶段测验",
+    "03-节奏系统/02-第一次使用节拍器",
+    "02-和弦系统/08-和弦转换方法",
+    "08-保养安全与排错/01-疼痛疲劳与停止练习边界",
   ],
   [
-    "07-练习与复盘/错误诊断与修正",
-    "05-弹唱与伴奏/完整歌曲编配流程",
-    "06-基础乐理与指板/顺阶和弦与级数",
-    "00-从这里开始/学习路线总览",
-    "00-从这里开始/吉他调音与标准音",
-    "01-持琴与基础动作/坐姿与站姿",
-    "02-和弦系统/C-Am-F-G和弦进行",
-    "03-节奏系统/节拍拍号与小节",
-    "03-节奏系统/六八拍伴奏",
-    "04-演奏技巧/分解和弦基础",
-    "04-演奏技巧/击弦与勾弦",
-    "07-练习与复盘/中级乐理综合测验",
-    "07-练习与复盘/练习日志模板",
-    "08-保养安全与排错/疼痛疲劳与停止练习边界",
+    "07-练习与复盘/05-错误诊断与修正",
+    "05-弹唱与伴奏/08-完整歌曲编配流程",
+    "06-基础乐理与指板/08-顺阶和弦与级数",
+    "00-从这里开始/02-学习路线总览",
+    "00-从这里开始/04-吉他调音与标准音",
+    "01-持琴与基础动作/02-坐姿与站姿",
+    "02-和弦系统/10-C-Am-F-G和弦进行",
+    "03-节奏系统/01-节拍拍号与小节",
+    "03-节奏系统/09-六八拍伴奏",
+    "04-演奏技巧/01-分解和弦基础",
+    "04-演奏技巧/06-击弦与勾弦",
+    "07-练习与复盘/07-中级乐理综合测验",
+    "07-练习与复盘/04-练习日志模板",
+    "08-保养安全与排错/01-疼痛疲劳与停止练习边界",
   ],
 ]
 const tables: string[][][] = [
@@ -285,13 +286,13 @@ const assessmentTable = [
 const logTemplate =
   "# 练习日志\n\n- 日期：\n- 材料：\n- 本次目标：\n- 起始速度（BPM / 不适用）：\n- 清晰速度（BPM / 不适用）：\n- 观察到的错误：\n- 出现位置或条件：\n- 推测原因（待验证）：\n- 采用的修正：\n- 修正后证据：\n- 下一次练习：\n- 身体或声音警讯："
 const routeHandoff =
-  "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。"
+  "8. 练习与复盘：从 [[07-练习与复盘/01-有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。"
 const theoryHandoff =
-  "用 [[07-练习与复盘/有效练习流程|有效练习流程]] 把推导与演奏组织成可观察的练习循环。"
+  "用 [[07-练习与复盘/01-有效练习流程|有效练习流程]] 把推导与演奏组织成可观察的练习循环。"
 const arrangementHandoff =
-  "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。"
+  "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/04-练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。"
 const careHandoff =
-  "下一步进入 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]，把自我复盘中的身体警讯与器材问题分流到安全处理边界。"
+  "下一步进入 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]，把自我复盘中的身体警讯与器材问题分流到安全处理边界。"
 
 function rejectsQuota(body: string): boolean {
   const number = "(?:[0-9]+|[零〇一二两三四五六七八九十百千万]+)"
@@ -313,7 +314,7 @@ function readTables(body: string): string[][][] {
   return found
 }
 function assertLesson(root: string, index: number): void {
-  const file = join(root, directory, `${titles[index]}.md`)
+  const file = join(root, curriculumFile(titles[index]))
   assert.ok(existsSync(file), `missing practice page: ${file}`)
   const page = parsePage(file)
   const body = page.body
@@ -334,7 +335,7 @@ function assertLesson(root: string, index: number): void {
   )
   const manifest = loadManifest("data/content-manifest.yml")
   const entryIndex = manifest.pages.findIndex((entry) => entry.title === titles[index])
-  assert.equal(manifest.pages[entryIndex].file, `${directory}/${titles[index]}.md`)
+  assert.equal(manifest.pages[entryIndex].file, curriculumFile(titles[index]))
   assert.equal(manifest.pages[entryIndex].permalink, page.frontmatter.permalink)
   assert.equal(manifest.pages[entryIndex].type, "lesson")
   const firstSection = body.split("## 学习目标与先修知识")[1].split("## 核心概念")[0]
@@ -351,7 +352,13 @@ function assertLesson(root: string, index: number): void {
     .map((target) => target.raw)
   assert.deepEqual(
     [...new Set(wiki)].sort(),
-    expectedLinks[index].map((path) => `${path}|${path.split("/").at(-1)}`).sort(),
+    expectedLinks[index]
+      .map((path) => {
+        const entry = manifest.pages.find((page) => page.file.slice(0, -3) === path)
+        assert.ok(entry, `missing manifest entry for ${path}`)
+        return `${path}|${entry.title}`
+      })
+      .sort(),
   )
   assert.deepEqual(page.embeds, [])
   assert.ok(body.includes(safety), "exact safety block")
@@ -433,13 +440,13 @@ function assertLesson(root: string, index: number): void {
 }
 
 test("all seven practice pages exist with exact published inventory", () => {
-  const missing = titles.filter((title) => !existsSync(join("content", directory, `${title}.md`)))
+  const missing = titles.filter((title) => !existsSync(contentFile(title)))
   assert.deepEqual(missing, [], `six missing practice pages: ${missing.join("、")}`)
   assert.deepEqual(
     readdirSync(join("content", directory))
       .filter((file) => file.endsWith(".md"))
       .sort(),
-    [...titles, "中级乐理综合测验"].map((title) => `${title}.md`).sort(),
+    [...titles, "中级乐理综合测验"].map((title) => basename(curriculumFile(title))).sort(),
   )
 })
 for (let index = 0; index < titles.length; index += 1) {
@@ -447,20 +454,22 @@ for (let index = 0; index < titles.length; index += 1) {
     assertLesson("content", index))
 }
 test("route and the two earlier lessons hand off to published practice pages", () => {
-  const route = readFileSync("content/00-从这里开始/学习路线总览.md", "utf8")
+  const route = readFileSync("content/00-从这里开始/02-学习路线总览.md", "utf8")
   assert.ok(route.includes(routeHandoff), "practice route handoff is missing")
   const items = route.match(/^\d+\. .+$/gmu) ?? []
   assert.equal(items.length, 10)
   assert.equal(
     items[8],
-    "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+    "9. 保养、安全与排错：从 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
   )
-  assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
+  assert.match(items[9], /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u)
   assert.ok(
-    readFileSync("content/06-基础乐理与指板/顺阶和弦与级数.md", "utf8").includes(theoryHandoff),
+    readFileSync("content/06-基础乐理与指板/08-顺阶和弦与级数.md", "utf8").includes(theoryHandoff),
   )
   assert.ok(
-    readFileSync("content/05-弹唱与伴奏/完整歌曲编配流程.md", "utf8").includes(arrangementHandoff),
+    readFileSync("content/05-弹唱与伴奏/08-完整歌曲编配流程.md", "utf8").includes(
+      arrangementHandoff,
+    ),
   )
 })
 test("quota detector rejects doses while allowing musical coordinates and blank fields", () => {
@@ -529,7 +538,7 @@ test("all protected diagram files remain byte-for-byte at the accepted baseline"
     assert.deepEqual(readFileSync(file), execFileSync("git", ["show", `5871bef:${file}`]), file)
 })
 test("temporary practice mutations reject every required high-risk boundary break", () => {
-  if (!titles.every((title) => existsSync(join("content", directory, `${title}.md`)))) return
+  if (!titles.every((title) => existsSync(contentFile(title)))) return
   const mutations: Array<[number, string, string]> = [
     ...logTemplate
       .split("\n")
@@ -554,8 +563,8 @@ test("temporary practice mutations reject every required high-risk boundary brea
     ...["120 BPM", "练习 10 分钟", "重复 20 次", "连续正确五次", "坚持两周"].map(
       (dose): [number, string, string] => [0, "## 核心概念", `## 核心概念\n\n${dose}`],
     ),
-    [1, "[[07-练习与复盘/有效练习流程|有效练习流程]]", "[[有效练习流程]]"],
-    [5, careHandoff, "[[09-术语与参考资料/吉他术语表|吉他术语表]]"],
+    [1, "[[07-练习与复盘/01-有效练习流程|有效练习流程]]", "[[有效练习流程]]"],
+    [5, careHandoff, "[[09-术语与参考资料/01-吉他术语表|吉他术语表]]"],
     [5, "## 核心概念", "## 核心概念\n\n总分：100，及格线：60，颁发证书。"],
     ...["当前项稳定", "带条件继续", "回到专项", "停止并求助"].map(
       (result): [number, string, string] => [5, `\u0060${result}\u0060：`, "失败："],
@@ -569,7 +578,7 @@ test("temporary practice mutations reject every required high-risk boundary brea
     const temporary = mkdtempSync(join(tmpdir(), "task8-practice-"))
     try {
       cpSync(join("content", directory), join(temporary, directory), { recursive: true })
-      const file = join(temporary, directory, `${titles[index]}.md`)
+      const file = join(temporary, curriculumFile(titles[index]))
       const original = readFileSync(file, "utf8")
       assert.ok(original.includes(from), `mutation anchor missing: ${from}`)
       writeFileSync(file, original.replace(from, to))
@@ -584,7 +593,7 @@ test("temporary practice mutations reject every required high-risk boundary brea
   }
 })
 test("author and release modes accept all 97 published pages without diagnostics", async () => {
-  if (!titles.every((title) => existsSync(join("content", directory, `${title}.md`)))) return
+  if (!titles.every((title) => existsSync(contentFile(title)))) return
   const manifest = loadManifest("data/content-manifest.yml")
   assert.equal(
     manifest.pages.filter(

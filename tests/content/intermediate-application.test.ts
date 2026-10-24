@@ -1,8 +1,9 @@
 import assert from "node:assert/strict"
 import test from "node:test"
 import { parsePage } from "../../scripts/content/parsePage"
+import { contentFile } from "./helpers/curriculumFiles"
 import { sectionText, tableRows } from "./helpers/lessonAssertions"
-const body = (name: string) => parsePage(`content/05-弹唱与伴奏/${name}.md`).body
+const body = (name: string) => parsePage(contentFile(name)).body
 function midi(pitch: string) {
   const m = /^([A-G])([♯♭]?)(\d)$/.exec(pitch)
   assert.ok(m, pitch)

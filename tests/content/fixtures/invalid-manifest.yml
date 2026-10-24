@@ -38,13 +38,13 @@ pages:
     title: 如何使用知识库
     module: start
     type: lesson
-    file: 00-从这里开始/如何使用知识库.md
+    file: 00-从这里开始/01-如何使用知识库.md
     permalink: /start/how-to-use
     required: true
   - id: how-to-use
     title: 学习路线总览
     module: start
     type: path
-    file: 00-从这里开始/学习路线总览.md
+    file: 00-从这里开始/02-学习路线总览.md
     permalink: /start/learning-roadmap
     required: true

@@ -73,7 +73,7 @@ const exactSourceDefinitions: Record<string, string> = {
 
 const expectedLessons: ExpectedLesson[] = [
   {
-    file: "content/04-演奏技巧/分解和弦基础.md",
+    file: "content/04-演奏技巧/01-分解和弦基础.md",
     frontmatter: {
       title: "分解和弦基础",
       description: "把和弦音按弦号与口数依次拨出，建立分解和弦的基础控制",
@@ -90,10 +90,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": "不适或疲劳时暂停",
     },
     links: [
-      "03-节奏系统/六八拍伴奏",
-      "04-演奏技巧/常用分解和弦型",
-      "02-和弦系统/C和弦",
-      "01-持琴与基础动作/右手位置与发力",
+      "03-节奏系统/09-六八拍伴奏",
+      "04-演奏技巧/02-常用分解和弦型",
+      "02-和弦系统/04-C和弦",
+      "01-持琴与基础动作/04-右手位置与发力",
     ],
     tables: [
       [
@@ -105,7 +105,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/04-演奏技巧/常用分解和弦型.md",
+    file: "content/04-演奏技巧/02-常用分解和弦型.md",
     frontmatter: {
       title: "常用分解和弦型",
       description: "用四四拍与六八拍原创弦序练习常用分解和弦型，并保持和弦音连续",
@@ -123,11 +123,11 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": "不适或控制下降时暂停",
     },
     links: [
-      "04-演奏技巧/分解和弦基础",
-      "04-演奏技巧/交替低音",
-      "03-节奏系统/六八拍伴奏",
-      "02-和弦系统/C和弦",
-      "02-和弦系统/G和弦",
+      "04-演奏技巧/01-分解和弦基础",
+      "04-演奏技巧/03-交替低音",
+      "03-节奏系统/09-六八拍伴奏",
+      "02-和弦系统/04-C和弦",
+      "02-和弦系统/05-G和弦",
     ],
     tables: [
       [
@@ -139,7 +139,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/04-演奏技巧/交替低音.md",
+    file: "content/04-演奏技巧/03-交替低音.md",
     frontmatter: {
       title: "交替低音",
       description: "用拇指交替弹奏和弦低音，并与高音弦保持稳定分工",
@@ -157,10 +157,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": "不适、疲劳或动作控制下降时暂停",
     },
     links: [
-      "04-演奏技巧/常用分解和弦型",
-      "04-演奏技巧/左手制音",
-      "02-和弦系统/C和弦",
-      "02-和弦系统/和弦转换方法",
+      "04-演奏技巧/02-常用分解和弦型",
+      "04-演奏技巧/04-左手制音",
+      "02-和弦系统/04-C和弦",
+      "02-和弦系统/08-和弦转换方法",
     ],
     tables: [
       [
@@ -172,7 +172,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/04-演奏技巧/左手制音.md",
+    file: "content/04-演奏技巧/04-左手制音.md",
     frontmatter: {
       title: "左手制音",
       description: "用按弦手停止延音并控制非目标弦，区分清晰停音与意外闷音",
@@ -189,10 +189,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": "不适或控制下降时暂停",
     },
     links: [
-      "02-和弦系统/和弦转换方法",
-      "03-节奏系统/重音与强弱层次",
-      "04-演奏技巧/右手制音",
-      "01-持琴与基础动作/正确按弦",
+      "02-和弦系统/08-和弦转换方法",
+      "03-节奏系统/07-重音与强弱层次",
+      "04-演奏技巧/05-右手制音",
+      "01-持琴与基础动作/05-正确按弦",
     ],
     tables: [
       [
@@ -203,7 +203,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/04-演奏技巧/右手制音.md",
+    file: "content/04-演奏技巧/05-右手制音.md",
     frontmatter: {
       title: "右手制音",
       description: "在琴桥附近用拨弦手控制延音与音色，并比较开放音和掌根制音",
@@ -220,10 +220,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": "不适或控制下降时暂停",
     },
     links: [
-      "04-演奏技巧/左手制音",
-      "03-节奏系统/放松而稳定的扫弦动作",
-      "04-演奏技巧/击弦与勾弦",
-      "03-节奏系统/四拍全下扫",
+      "04-演奏技巧/04-左手制音",
+      "03-节奏系统/04-放松而稳定的扫弦动作",
+      "04-演奏技巧/06-击弦与勾弦",
+      "03-节奏系统/05-四拍全下扫",
     ],
     tables: [
       [
@@ -234,7 +234,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/04-演奏技巧/击弦与勾弦.md",
+    file: "content/04-演奏技巧/06-击弦与勾弦.md",
     frontmatter: {
       title: "击弦与勾弦",
       description: "用一次拨弦连接击弦与勾弦音，并控制音量、节拍与多余弦声",
@@ -253,10 +253,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-nhs-rsi": "疼痛、无力、肿胀、麻木或针刺等警讯见 NHS",
     },
     links: [
-      "01-持琴与基础动作/正确按弦",
-      "04-演奏技巧/左手制音",
-      "04-演奏技巧/滑音",
-      "01-持琴与基础动作/相邻弦与跨弦",
+      "01-持琴与基础动作/05-正确按弦",
+      "04-演奏技巧/04-左手制音",
+      "04-演奏技巧/07-滑音",
+      "01-持琴与基础动作/08-相邻弦与跨弦",
     ],
     tables: [
       [
@@ -267,7 +267,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/04-演奏技巧/滑音.md",
+    file: "content/04-演奏技巧/07-滑音.md",
     frontmatter: {
       title: "滑音",
       description: "在同一根弦上保持有效接触完成指上滑音，并准确落到目标品位",
@@ -286,10 +286,10 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-nhs-rsi": "症状持续或加重时的求助边界见 NHS",
     },
     links: [
-      "04-演奏技巧/击弦与勾弦",
-      "04-演奏技巧/自然泛音与打板",
-      "01-持琴与基础动作/正确按弦",
-      "01-持琴与基础动作/左手拇指与手腕",
+      "04-演奏技巧/06-击弦与勾弦",
+      "04-演奏技巧/08-自然泛音与打板",
+      "01-持琴与基础动作/05-正确按弦",
+      "01-持琴与基础动作/03-左手拇指与手腕",
     ],
     tables: [
       [
@@ -300,7 +300,7 @@ const expectedLessons: ExpectedLesson[] = [
     ],
   },
   {
-    file: "content/04-演奏技巧/自然泛音与打板.md",
+    file: "content/04-演奏技巧/08-自然泛音与打板.md",
     frontmatter: {
       title: "自然泛音与打板",
       description: "分别体验十二品自然泛音与可选轻触打板，并守住手部和琴体安全边界",
@@ -326,12 +326,12 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-nhs-rsi": "持续或加重时求助的边界见 NHS",
     },
     links: [
-      "04-演奏技巧/滑音",
-      "03-节奏系统/重音与强弱层次",
-      "03-节奏系统/六八拍伴奏",
-      "00-从这里开始/学习路线总览",
-      "01-持琴与基础动作/认识民谣吉他",
-      "05-弹唱与伴奏/根据人声选择调",
+      "04-演奏技巧/07-滑音",
+      "03-节奏系统/07-重音与强弱层次",
+      "03-节奏系统/09-六八拍伴奏",
+      "00-从这里开始/02-学习路线总览",
+      "01-持琴与基础动作/01-认识民谣吉他",
+      "05-弹唱与伴奏/01-根据人声选择调",
     ],
     tables: [
       [
@@ -652,7 +652,7 @@ test(
       assert.deepEqual(fixedPracticeQuotaMatches(body), [], `${expected.file} fixed practice quota`)
       assert.doesNotMatch(body, /(?<!不)用于(?:诊断|治疗)|治愈|保证防伤|忍耐疼痛/u, expected.file)
     }
-    const finalBody = pageByFile.get("content/04-演奏技巧/自然泛音与打板.md")!.body
+    const finalBody = pageByFile.get("content/04-演奏技巧/08-自然泛音与打板.md")!.body
     assert.equal(finalBody.split(instrumentSafetyBlock).length - 1, 1)
     for (const expected of expectedLessons.slice(0, -1))
       assert.equal(pageByFile.get(expected.file)!.body.includes(instrumentSafetyBlock), false)
@@ -665,42 +665,45 @@ test(
     skip: missingLessonFiles.length > 0,
   },
   () => {
-    for (const file of ["content/04-演奏技巧/左手制音.md", "content/04-演奏技巧/右手制音.md"]) {
+    for (const file of [
+      "content/04-演奏技巧/04-左手制音.md",
+      "content/04-演奏技巧/05-右手制音.md",
+    ]) {
       const body = pageByFile.get(file)!.body
       assert.ok(body.includes(roleMirrorNotice), file)
       assert.match(body, /按弦手/u, file)
       assert.match(body, /拨弦手/u, file)
     }
 
-    const patterns = pageByFile.get("content/04-演奏技巧/常用分解和弦型.md")!.body
+    const patterns = pageByFile.get("content/04-演奏技巧/02-常用分解和弦型.md")!.body
     assert.match(patterns, /常用.*本站.*(?:课程|选取)|本站.*(?:课程|选取).*常用/u)
-    const alternating = pageByFile.get("content/04-演奏技巧/交替低音.md")!.body
+    const alternating = pageByFile.get("content/04-演奏技巧/03-交替低音.md")!.body
     assert.match(
       alternating,
       /交替低音.*(?:不等于|不统称).*Travis picking|不把.*交替低音.*Travis picking/iu,
     )
 
-    const frettingMute = pageByFile.get("content/04-演奏技巧/左手制音.md")!.body
+    const frettingMute = pageByFile.get("content/04-演奏技巧/04-左手制音.md")!.body
     assert.match(frettingMute, /停止有效按压.*仍.*轻触/u)
     assert.match(frettingMute, /完全离弦.*杂声/u)
     assert.match(frettingMute, /持续按压.*延音/u)
     assert.match(frettingMute, /第 3 弦第 2 品.*单音/u)
     assert.match(frettingMute, /发声的空弦.*直接轻触.*不能.*松开其他.*手指/u)
-    const palmMute = pageByFile.get("content/04-演奏技巧/右手制音.md")!.body
+    const palmMute = pageByFile.get("content/04-演奏技巧/05-右手制音.md")!.body
     assert.match(palmMute, /琴桥附近/u)
     assert.match(palmMute, /音色.*延音|延音.*音色/u)
     assert.match(palmMute, /不.*固定.*(?:位置|毫米|角度|压力)|没有.*唯一.*(?:位置|压力)/u)
 
-    const hammerPull = pageByFile.get("content/04-演奏技巧/击弦与勾弦.md")!.body
+    const hammerPull = pageByFile.get("content/04-演奏技巧/06-击弦与勾弦.md")!.body
     assert.match(hammerPull, /第二音.*(?:击弦|勾弦).*(?:产生|发声)/u)
     assert.match(hammerPull, /轻微拨过/u)
     assert.match(hammerPull, /邻弦/u)
-    const slide = pageByFile.get("content/04-演奏技巧/滑音.md")!.body
+    const slide = pageByFile.get("content/04-演奏技巧/07-滑音.md")!.body
     assert.match(slide, /指上滑音/u)
     assert.match(slide, /同一.*手指.*同一根弦/u)
     assert.match(slide, /不是.*(?:金属|瓶颈).*滑棒|不.*(?:金属|瓶颈).*滑棒/u)
 
-    const harmonics = pageByFile.get("content/04-演奏技巧/自然泛音与打板.md")!.body
+    const harmonics = pageByFile.get("content/04-演奏技巧/08-自然泛音与打板.md")!.body
     const h3 = headingsAtDepth(harmonics, 3)
     assert.ok(h3.some((heading) => heading.includes("自然泛音")))
     assert.ok(h3.some((heading) => heading.includes("打板")))
@@ -720,7 +723,7 @@ test(
   () => {
     for (const expected of expectedLessons) {
       const page = pageByFile.get(expected.file)!
-      const isPatternPage = expected.file.endsWith("/常用分解和弦型.md")
+      const isPatternPage = expected.file.endsWith("/02-常用分解和弦型.md")
       assert.deepEqual(page.embeds, isPatternPage ? [diagramPath] : [], `${expected.file} embeds`)
       if (isPatternPage) {
         assert.ok(
@@ -763,31 +766,31 @@ test(
       }
     }
 
-    const route = parsePage("content/00-从这里开始/学习路线总览.md")
+    const route = parsePage("content/00-从这里开始/02-学习路线总览.md")
     const ordered = section(route.body, "有序链接")
     const items = [...ordered.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
     assert.equal(items.length, 10)
-    assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
-    assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
-    assert.match(items[6], /\[\[06-基础乐理与指板\/音高音名与唱名\|音高音名与唱名\]\]/u)
+    assert.match(items[4], /\[\[04-演奏技巧\/01-分解和弦基础\|分解和弦基础\]\]/u)
+    assert.match(items[5], /\[\[05-弹唱与伴奏\/01-根据人声选择调\|根据人声选择调\]\]/u)
+    assert.match(items[6], /\[\[06-基础乐理与指板\/01-音高音名与唱名\|音高音名与唱名\]\]/u)
     assert.equal(
       items[7],
-      "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
+      "8. 练习与复盘：从 [[07-练习与复盘/01-有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
     assert.equal(
       items[8],
-      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     )
-    assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
+    assert.match(items[9], /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u)
 
-    const sixEight = parsePage("content/03-节奏系统/六八拍伴奏.md")
+    const sixEight = parsePage("content/03-节奏系统/09-六八拍伴奏.md")
     const nextSection = section(sixEight.body, "下一步与相关词条")
-    assert.match(nextSection, /下一步.*\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
+    assert.match(nextSection, /下一步.*\[\[04-演奏技巧\/01-分解和弦基础\|分解和弦基础\]\]/u)
 
-    const finalPage = pageByFile.get("content/04-演奏技巧/自然泛音与打板.md")!
+    const finalPage = pageByFile.get("content/04-演奏技巧/08-自然泛音与打板.md")!
     assert.match(
       section(finalPage.body, "下一步与相关词条"),
-      /下一步.*\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u,
+      /下一步.*\[\[05-弹唱与伴奏\/01-根据人声选择调\|根据人声选择调\]\]/u,
     )
   },
 )

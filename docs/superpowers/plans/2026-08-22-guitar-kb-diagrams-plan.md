@@ -290,7 +290,7 @@ git commit -m "feat: render fretboard and rhythm diagrams"
 - Create: `scripts/generate-diagrams.ts`
 - Create: `tests/diagrams/generator.test.ts`
 - Create: `content/assets/diagrams/*.svg`
-- Modify: `content/00-从这里开始/学习路线总览.md`
+- Modify: `content/00-从这里开始/02-学习路线总览.md`
 - Modify: `package.json`
 
 **Interfaces:**
@@ -387,7 +387,7 @@ Expected: both commands exit 0; status lists only intended YAML, SVG, generator,
 - [ ] **Step 8: Commit and confirm a clean phase**
 
 ```bash
-git add data/diagrams scripts/diagrams scripts/generate-diagrams.ts tests/diagrams content/assets/diagrams content/00-从这里开始/学习路线总览.md package.json
+git add data/diagrams scripts/diagrams scripts/generate-diagrams.ts tests/diagrams content/assets/diagrams content/00-从这里开始/02-学习路线总览.md package.json
 git commit -m "feat: generate guitar teaching diagrams"
 npm run verify
 git status --short --branch

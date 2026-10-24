@@ -59,7 +59,7 @@ interface ExpectedLesson {
 
 const expectedLessons: ExpectedLesson[] = [
   {
-    file: "content/02-和弦系统/和弦图读法.md",
+    file: "content/02-和弦系统/01-和弦图读法.md",
     frontmatter: {
       title: "和弦图读法",
       description: "认识和弦图中的琴弦、品位、指号与开弦制音标记，并按六弦到一弦读出指法",
@@ -73,13 +73,13 @@ const expectedLessons: ExpectedLesson[] = [
     sources: ["chart-fender", "c-fender"],
     diagrams: ["c-major"],
     links: [
-      "01-持琴与基础动作/相邻弦与跨弦",
-      "02-和弦系统/Em与E和弦",
-      "01-持琴与基础动作/正确按弦",
+      "01-持琴与基础动作/08-相邻弦与跨弦",
+      "02-和弦系统/02-Em与E和弦",
+      "01-持琴与基础动作/05-正确按弦",
     ],
   },
   {
-    file: "content/02-和弦系统/Em与E和弦.md",
+    file: "content/02-和弦系统/02-Em与E和弦.md",
     frontmatter: {
       title: "Em与E和弦",
       description: "比较开放把位 Em 与 E 的按法和音高差异，并逐弦检查发声",
@@ -92,10 +92,14 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["em-fender", "e-fender", "fretting-fender", "dynamics-fender", "safety-bapam"],
     diagrams: ["e-minor", "e-major"],
-    links: ["02-和弦系统/和弦图读法", "02-和弦系统/Am与A和弦", "01-持琴与基础动作/正确按弦"],
+    links: [
+      "02-和弦系统/01-和弦图读法",
+      "02-和弦系统/03-Am与A和弦",
+      "01-持琴与基础动作/05-正确按弦",
+    ],
   },
   {
-    file: "content/02-和弦系统/Am与A和弦.md",
+    file: "content/02-和弦系统/03-Am与A和弦.md",
     frontmatter: {
       title: "Am与A和弦",
       description: "比较开放把位 Am 与 A 的按法和音高差异，并逐弦检查发声",
@@ -108,10 +112,10 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["am-fender", "a-fender", "fretting-fender", "dynamics-fender", "safety-bapam"],
     diagrams: ["a-minor", "a-major"],
-    links: ["02-和弦系统/Em与E和弦", "02-和弦系统/C和弦", "01-持琴与基础动作/正确按弦"],
+    links: ["02-和弦系统/02-Em与E和弦", "02-和弦系统/04-C和弦", "01-持琴与基础动作/05-正确按弦"],
   },
   {
-    file: "content/02-和弦系统/C和弦.md",
+    file: "content/02-和弦系统/04-C和弦.md",
     frontmatter: {
       title: "C和弦",
       description: "学习开放把位 C 和弦的六弦到一弦指法，并排查闷音与误触弦",
@@ -124,10 +128,10 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["c-fender", "fretting-fender", "dynamics-fender", "safety-bapam"],
     diagrams: ["c-major"],
-    links: ["02-和弦系统/Am与A和弦", "02-和弦系统/G和弦", "02-和弦系统/和弦图读法"],
+    links: ["02-和弦系统/03-Am与A和弦", "02-和弦系统/05-G和弦", "02-和弦系统/01-和弦图读法"],
   },
   {
-    file: "content/02-和弦系统/G和弦.md",
+    file: "content/02-和弦系统/05-G和弦.md",
     frontmatter: {
       title: "G和弦",
       description: "学习本库采用的四指开放 G 变体，并逐弦核对清晰度",
@@ -140,10 +144,10 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["g-fender", "fretting-fender", "dynamics-fender", "safety-bapam"],
     diagrams: ["g-major"],
-    links: ["02-和弦系统/C和弦", "02-和弦系统/D与Dm和弦", "02-和弦系统/和弦转换方法"],
+    links: ["02-和弦系统/04-C和弦", "02-和弦系统/06-D与Dm和弦", "02-和弦系统/08-和弦转换方法"],
   },
   {
-    file: "content/02-和弦系统/D与Dm和弦.md",
+    file: "content/02-和弦系统/06-D与Dm和弦.md",
     frontmatter: {
       title: "D与Dm和弦",
       description: "比较开放把位 D 与 Dm 的高音弦变化，并从四弦准确起奏",
@@ -156,10 +160,10 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["d-fender", "dm-fender", "fretting-fender", "dynamics-fender", "safety-bapam"],
     diagrams: ["d-major", "d-minor"],
-    links: ["02-和弦系统/G和弦", "02-和弦系统/常用七和弦", "02-和弦系统/和弦转换方法"],
+    links: ["02-和弦系统/05-G和弦", "02-和弦系统/07-常用七和弦", "02-和弦系统/08-和弦转换方法"],
   },
   {
-    file: "content/02-和弦系统/常用七和弦.md",
+    file: "content/02-和弦系统/07-常用七和弦.md",
     frontmatter: {
       title: "常用七和弦",
       description: "认识 E7、A7 与 D7 的开放把位，并核对各自的七和弦音组成",
@@ -181,14 +185,14 @@ const expectedLessons: ExpectedLesson[] = [
     ],
     diagrams: ["e7-open", "a7-open", "d7-open"],
     links: [
-      "02-和弦系统/D与Dm和弦",
-      "02-和弦系统/和弦转换方法",
-      "02-和弦系统/Em与E和弦",
-      "02-和弦系统/Am与A和弦",
+      "02-和弦系统/06-D与Dm和弦",
+      "02-和弦系统/08-和弦转换方法",
+      "02-和弦系统/02-Em与E和弦",
+      "02-和弦系统/03-Am与A和弦",
     ],
   },
   {
-    file: "content/02-和弦系统/和弦转换方法.md",
+    file: "content/02-和弦系统/08-和弦转换方法.md",
     frontmatter: {
       title: "和弦转换方法",
       description: "用提前预想、最小移动与可用保留指提高和弦转换的可控性",
@@ -201,10 +205,14 @@ const expectedLessons: ExpectedLesson[] = [
     },
     sources: ["changes-fender", "visualization-fender", "dynamics-fender", "safety-bapam"],
     diagrams: ["c-major", "g-major"],
-    links: ["02-和弦系统/D与Dm和弦", "02-和弦系统/C-G-Am-Em和弦进行", "02-和弦系统/和弦图读法"],
+    links: [
+      "02-和弦系统/06-D与Dm和弦",
+      "02-和弦系统/09-C-G-Am-Em和弦进行",
+      "02-和弦系统/01-和弦图读法",
+    ],
   },
   {
-    file: "content/02-和弦系统/C-G-Am-Em和弦进行.md",
+    file: "content/02-和弦系统/09-C-G-Am-Em和弦进行.md",
     frontmatter: {
       title: "C-G-Am-Em和弦进行",
       description: "用原创 C-G-Am-Em 循环练习四个开放和弦的连续转换",
@@ -218,16 +226,16 @@ const expectedLessons: ExpectedLesson[] = [
     sources: ["c-fender", "g-fender", "am-fender", "em-fender", "changes-fender", "safety-bapam"],
     diagrams: ["c-major", "g-major", "a-minor", "e-minor"],
     links: [
-      "02-和弦系统/和弦转换方法",
-      "02-和弦系统/C-Am-F-G和弦进行",
-      "02-和弦系统/C和弦",
-      "02-和弦系统/G和弦",
-      "02-和弦系统/Am与A和弦",
-      "02-和弦系统/Em与E和弦",
+      "02-和弦系统/08-和弦转换方法",
+      "02-和弦系统/10-C-Am-F-G和弦进行",
+      "02-和弦系统/04-C和弦",
+      "02-和弦系统/05-G和弦",
+      "02-和弦系统/03-Am与A和弦",
+      "02-和弦系统/02-Em与E和弦",
     ],
   },
   {
-    file: "content/02-和弦系统/C-Am-F-G和弦进行.md",
+    file: "content/02-和弦系统/10-C-Am-F-G和弦进行.md",
     frontmatter: {
       title: "C-Am-F-G和弦进行",
       description: "用简化 F 形完成原创 C-Am-F-G 循环并保持逐弦清晰",
@@ -249,16 +257,16 @@ const expectedLessons: ExpectedLesson[] = [
     ],
     diagrams: ["c-major", "a-minor", "f-major-simplified", "g-major"],
     links: [
-      "02-和弦系统/C-G-Am-Em和弦进行",
-      "02-和弦系统/F简化指法与横按准备",
-      "02-和弦系统/和弦转换方法",
-      "02-和弦系统/C和弦",
-      "02-和弦系统/Am与A和弦",
-      "02-和弦系统/G和弦",
+      "02-和弦系统/09-C-G-Am-Em和弦进行",
+      "02-和弦系统/11-F简化指法与横按准备",
+      "02-和弦系统/08-和弦转换方法",
+      "02-和弦系统/04-C和弦",
+      "02-和弦系统/03-Am与A和弦",
+      "02-和弦系统/05-G和弦",
     ],
   },
   {
-    file: "content/02-和弦系统/F简化指法与横按准备.md",
+    file: "content/02-和弦系统/11-F简化指法与横按准备.md",
     frontmatter: {
       title: "F简化指法与横按准备",
       description: "用四弦简化 F 与两弦小横按建立低负担的横按准备",
@@ -279,13 +287,13 @@ const expectedLessons: ExpectedLesson[] = [
     ],
     diagrams: ["f-major-simplified"],
     links: [
-      "02-和弦系统/C-Am-F-G和弦进行",
-      "02-和弦系统/F大横按与移动和弦",
-      "01-持琴与基础动作/正确按弦",
+      "02-和弦系统/10-C-Am-F-G和弦进行",
+      "02-和弦系统/12-F大横按与移动和弦",
+      "01-持琴与基础动作/05-正确按弦",
     ],
   },
   {
-    file: "content/02-和弦系统/F大横按与移动和弦.md",
+    file: "content/02-和弦系统/12-F大横按与移动和弦.md",
     frontmatter: {
       title: "F大横按与移动和弦",
       description: "从完整 F 大横按认识六弦根音可移动和弦的基本逻辑",
@@ -307,11 +315,11 @@ const expectedLessons: ExpectedLesson[] = [
     ],
     diagrams: ["f-major-simplified", "f-major-barre"],
     links: [
-      "02-和弦系统/F简化指法与横按准备",
-      "02-和弦系统/C-Am-F-G和弦进行",
-      "01-持琴与基础动作/正确按弦",
-      "00-从这里开始/学习路线总览",
-      "03-节奏系统/节拍拍号与小节",
+      "02-和弦系统/11-F简化指法与横按准备",
+      "02-和弦系统/10-C-Am-F-G和弦进行",
+      "01-持琴与基础动作/05-正确按弦",
+      "00-从这里开始/02-学习路线总览",
+      "03-节奏系统/01-节拍拍号与小节",
     ],
   },
 ]
@@ -617,8 +625,8 @@ test(
       assert.doesNotMatch(page.body, forbiddenFixedPracticeQuotaPattern, expected.file)
     }
 
-    const gPage = pageByFile.get("content/02-和弦系统/G和弦.md")!
-    const reading = pageByFile.get("content/02-和弦系统/和弦图读法.md")!.body
+    const gPage = pageByFile.get("content/02-和弦系统/05-G和弦.md")!
+    const reading = pageByFile.get("content/02-和弦系统/01-和弦图读法.md")!.body
     assert.match(reading, /跳过开头的 `x`.*第一个.*(?:`0`|正品位)/u)
     for (const example of [
       "C `x-3-2-0-1-0` 从第 5 弦 3 品起",
@@ -628,43 +636,43 @@ test(
       assert.ok(reading.includes(example), example)
     assert.match(gPage.body, /本批采用.*四指变体|四指变体.*本批采用/u)
     assert.match(gPage.body, /其他.*G.*按法|G.*其他.*形/u)
-    const aPage = pageByFile.get("content/02-和弦系统/Am与A和弦.md")!
+    const aPage = pageByFile.get("content/02-和弦系统/03-Am与A和弦.md")!
     assert.match(aPage.body, /指号.*一种.*选项|一种.*可行.*指/u)
     for (const file of [
-      "content/02-和弦系统/C-G-Am-Em和弦进行.md",
-      "content/02-和弦系统/C-Am-F-G和弦进行.md",
+      "content/02-和弦系统/09-C-G-Am-Em和弦进行.md",
+      "content/02-和弦系统/10-C-Am-F-G和弦进行.md",
     ]) {
       const body = pageByFile.get(file)!.body
       assert.match(body, /原创/u)
       assert.match(body, /不对应歌曲|不来自歌曲|非歌曲/u)
     }
-    const laterF = pageByFile.get("content/02-和弦系统/C-Am-F-G和弦进行.md")!
+    const laterF = pageByFile.get("content/02-和弦系统/10-C-Am-F-G和弦进行.md")!
     assert.ok(laterF.body.includes("`x-x-3-2-1-1`"))
     assert.deepEqual(laterF.frontmatter.prerequisites, ["C-G-Am-Em和弦进行"])
 
-    const route = parsePage("content/00-从这里开始/学习路线总览.md")
+    const route = parsePage("content/00-从这里开始/02-学习路线总览.md")
     const ordered = route.body.split("## 有序链接\n", 2)[1]?.split("\n## ", 1)[0] ?? ""
     const items = [...ordered.matchAll(/^\d+\.\s+.*$/gmu)].map((match) => match[0])
     assert.equal(items.length, 10)
-    assert.match(items[2], /\[\[02-和弦系统\/和弦图读法\|和弦图读法\]\]/u)
-    assert.match(items[3], /\[\[03-节奏系统\/节拍拍号与小节\|节拍拍号与小节\]\]/u)
-    assert.match(items[4], /\[\[04-演奏技巧\/分解和弦基础\|分解和弦基础\]\]/u)
-    assert.match(items[5], /\[\[05-弹唱与伴奏\/根据人声选择调\|根据人声选择调\]\]/u)
-    assert.match(items[6], /\[\[06-基础乐理与指板\/音高音名与唱名\|音高音名与唱名\]\]/u)
+    assert.match(items[2], /\[\[02-和弦系统\/01-和弦图读法\|和弦图读法\]\]/u)
+    assert.match(items[3], /\[\[03-节奏系统\/01-节拍拍号与小节\|节拍拍号与小节\]\]/u)
+    assert.match(items[4], /\[\[04-演奏技巧\/01-分解和弦基础\|分解和弦基础\]\]/u)
+    assert.match(items[5], /\[\[05-弹唱与伴奏\/01-根据人声选择调\|根据人声选择调\]\]/u)
+    assert.match(items[6], /\[\[06-基础乐理与指板\/01-音高音名与唱名\|音高音名与唱名\]\]/u)
     assert.equal(
       items[7],
-      "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
+      "8. 练习与复盘：从 [[07-练习与复盘/01-有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。",
     )
     assert.equal(
       items[8],
-      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     )
-    assert.match(items[9], /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u)
+    assert.match(items[9], /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u)
 
-    const crossing = parsePage("content/01-持琴与基础动作/相邻弦与跨弦.md")
+    const crossing = parsePage("content/01-持琴与基础动作/08-相邻弦与跨弦.md")
     const section = crossing.body.split("## 下一步与相关词条\n", 2)[1]?.split("\n## ", 1)[0] ?? ""
-    assert.match(section, /下一步.*\[\[02-和弦系统\/和弦图读法\|和弦图读法\]\]/u)
-    assert.match(section, /\[\[00-从这里开始\/学习路线总览\|学习路线总览\]\]/u)
+    assert.match(section, /下一步.*\[\[02-和弦系统\/01-和弦图读法\|和弦图读法\]\]/u)
+    assert.match(section, /\[\[00-从这里开始\/02-学习路线总览\|学习路线总览\]\]/u)
   },
 )
 

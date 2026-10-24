@@ -27,7 +27,7 @@
 
 - Vendor import: `quartz/**`, `package.json`, `package-lock.json`, `tsconfig.json`, `globals.d.ts`, `.node-version`, `.npmrc`, `.prettierignore`
 - Modify: `quartz.config.ts`, `quartz.layout.ts`, `quartz/styles/custom.scss`, `.gitignore`, `package.json`
-- Create: `content/index.md`, `content/00-从这里开始/如何使用知识库.md`, `content/00-从这里开始/学习路线总览.md`
+- Create: `content/index.md`, `content/00-从这里开始/01-如何使用知识库.md`, `content/00-从这里开始/02-学习路线总览.md`
 - Create: `content/.obsidian/.gitignore`
 - Create: `data/content-manifest.yml`
 - Create: `scripts/content/types.ts`, `scripts/content/loadManifest.ts`, `scripts/content/parsePage.ts`, `scripts/content/validateMetadata.ts`, `scripts/content/validateLinks.ts`, `scripts/content/validateStructure.ts`, `scripts/content/validateContent.ts`, `scripts/check-content.ts`
@@ -136,8 +136,8 @@ git commit -m "build: import Quartz 4.5.2"
 - Modify: `.gitignore`
 - Create: `content/.obsidian/.gitignore`
 - Create: `content/index.md`
-- Create: `content/00-从这里开始/如何使用知识库.md`
-- Create: `content/00-从这里开始/学习路线总览.md`
+- Create: `content/00-从这里开始/01-如何使用知识库.md`
+- Create: `content/00-从这里开始/02-学习路线总览.md`
 
 **Interfaces:**
 - Consumes: Quartz `QuartzConfig`, `PageLayout`, and built-in Search/Explorer/Graph/Backlinks components
@@ -243,7 +243,7 @@ draft: false
 ---
 ```
 
-`content/index.md` must link to `[[00-从这里开始/如何使用知识库]]` and `[[00-从这里开始/学习路线总览]]`. The usage page explains local Obsidian and website navigation. The route page describes the ten approved modules without duplicating lesson bodies.
+`content/index.md` must link to `[[00-从这里开始/01-如何使用知识库]]` and `[[00-从这里开始/02-学习路线总览]]`. The usage page explains local Obsidian and website navigation. The route page describes the ten approved modules without duplicating lesson bodies.
 
 - [ ] **Step 7: Run focused tests and a production build**
 
@@ -295,7 +295,7 @@ pages:
     title: 如何使用知识库
     module: start
     type: lesson
-    file: 00-从这里开始/如何使用知识库.md
+    file: 00-从这里开始/01-如何使用知识库.md
     permalink: /start/how-to-use
     required: true
 ```

@@ -227,8 +227,8 @@ test("keeps normalized tags of every published seed page in the controlled vocab
   const controlledTagKeys = new Set(TAGS.map(normalizeTag))
   const seedPages = [
     "content/index.md",
-    "content/00-从这里开始/如何使用知识库.md",
-    "content/00-从这里开始/学习路线总览.md",
+    "content/00-从这里开始/01-如何使用知识库.md",
+    "content/00-从这里开始/02-学习路线总览.md",
   ]
 
   for (const pagePath of seedPages) {

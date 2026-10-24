@@ -10,7 +10,7 @@ import {
   writeFileSync,
 } from "node:fs"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { basename, join } from "node:path"
 import test from "node:test"
 import { toString } from "mdast-util-to-string"
 import remarkGfm from "remark-gfm"
@@ -19,6 +19,7 @@ import { unified } from "unified"
 import { visit } from "unist-util-visit"
 import { loadManifest } from "../../scripts/content/loadManifest"
 import { parsePage } from "../../scripts/content/parsePage"
+import { curriculumFile } from "./helpers/curriculumFiles"
 
 const directory = "08-保养安全与排错"
 const titles = [
@@ -169,11 +170,11 @@ function assertCareSnapshot(root: string): void {
     readdirSync(join(root, directory))
       .filter((file) => file.endsWith(".md"))
       .sort(),
-    titles.map((title) => `${title}.md`).sort(),
+    titles.map((title) => basename(curriculumFile(title))).sort(),
   )
   const manifest = loadManifest("data/content-manifest.yml")
   for (let index = 0; index < titles.length; index += 1) {
-    const page = parsePage(join(root, directory, `${titles[index]}.md`))
+    const page = parsePage(join(root, curriculumFile(titles[index])))
     const body = page.body
     assert.deepEqual(page.frontmatter, {
       title: titles[index],
@@ -191,7 +192,7 @@ function assertCareSnapshot(root: string): void {
       sections,
     )
     const position = manifest.pages.findIndex((entry) => entry.title === titles[index])
-    assert.equal(manifest.pages[position].file, `${directory}/${titles[index]}.md`)
+    assert.equal(manifest.pages[position].file, curriculumFile(titles[index]))
     const first = body.split("## 学习目标与先修知识")[1].split("## 核心概念")[0]
     for (const title of prerequisites[index]) {
       const previous = manifest.pages.findIndex((entry) => entry.title === title)
@@ -288,7 +289,7 @@ function assertCareSnapshot(root: string): void {
     if (index === 4)
       assert.ok(
         body.includes(
-          "下一步进入 [[09-术语与参考资料/吉他术语表|吉他术语表]]，查阅本库术语与相关课程。",
+          "下一步进入 [[09-术语与参考资料/01-吉他术语表|吉他术语表]]，查阅本库术语与相关课程。",
         ),
       )
   }
@@ -297,19 +298,19 @@ function assertCareSnapshot(root: string): void {
 test("five care lessons publish the required safety, evidence and curriculum contracts", () =>
   assertCareSnapshot("content"))
 test("care entry is linked from route item nine and stage assessment", () => {
-  const route = readFileSync("content/00-从这里开始/学习路线总览.md", "utf8")
+  const route = readFileSync("content/00-从这里开始/02-学习路线总览.md", "utf8")
   assert.ok(
     route.includes(
-      "9. 保养、安全与排错：从 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
+      "9. 保养、安全与排错：从 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]] 进入，区分停止练习、可逆排查、基础换弦与需要专业人士处理的边界。",
     ),
   )
   assert.match(
     (route.match(/^10\. .+$/mu) ?? [""])[0],
-    /\[\[09-术语与参考资料\/吉他术语表\|吉他术语表\]\]/u,
+    /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u,
   )
   assert.ok(
-    readFileSync("content/07-练习与复盘/阶段测验.md", "utf8").includes(
-      "下一步进入 [[08-保养安全与排错/疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]，把自我复盘中的身体警讯与器材问题分流到安全处理边界。",
+    readFileSync("content/07-练习与复盘/06-阶段测验.md", "utf8").includes(
+      "下一步进入 [[08-保养安全与排错/01-疼痛疲劳与停止练习边界|疼痛疲劳与停止练习边界]]，把自我复盘中的身体警讯与器材问题分流到安全处理边界。",
     ),
   )
 })
@@ -330,7 +331,7 @@ test("snapshot rejects representative missing safety, unsafe string order, wrong
     const temporary = mkdtempSync(join(tmpdir(), "task9-care-"))
     try {
       cpSync(join("content", directory), join(temporary, directory), { recursive: true })
-      const file = join(temporary, directory, `${titles[index]}.md`)
+      const file = join(temporary, curriculumFile(titles[index]))
       const original = readFileSync(file, "utf8")
       assert.ok(original.includes(from), `mutation anchor: ${from}`)
       writeFileSync(file, original.replace(from, to))
