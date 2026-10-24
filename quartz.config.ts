@@ -1,5 +1,10 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
+import { loadManifest } from "./scripts/content/loadManifest"
+
+const curriculumPageOrder = Object.fromEntries(
+  loadManifest("data/content-manifest.yml").pages.map((page, order) => [page.file, order]),
+)
 
 /**
  * Quartz 4 Configuration
@@ -81,6 +86,7 @@ const config: QuartzConfig = {
       Plugin.ContentIndex({
         enableSiteMap: false,
         enableRSS: false,
+        pageOrder: curriculumPageOrder,
       }),
       Plugin.Assets(),
       Plugin.Static(),

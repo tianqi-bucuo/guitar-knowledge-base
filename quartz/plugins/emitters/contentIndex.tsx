@@ -13,6 +13,7 @@ export type ContentDetails = {
   slug: FullSlug
   filePath: FilePath
   title: string
+  order?: number
   links: SimpleSlug[]
   tags: string[]
   content: string
@@ -28,6 +29,7 @@ interface Options {
   rssFullHtml: boolean
   rssSlug: string
   includeEmptyFiles: boolean
+  pageOrder?: Record<string, number>
 }
 
 const defaultOptions: Options = {
@@ -107,6 +109,7 @@ export const ContentIndex: QuartzEmitterPlugin<Partial<Options>> = (opts) => {
             slug,
             filePath: file.data.relativePath!,
             title: file.data.frontmatter?.title!,
+            order: opts?.pageOrder?.[file.data.relativePath!],
             links: file.data.links ?? [],
             tags: file.data.frontmatter?.tags ?? [],
             content: file.data.text ?? "",

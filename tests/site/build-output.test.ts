@@ -148,6 +148,30 @@ test("production output covers all 97 canonical aliases, real articles, and exac
   verifyPageCoverage(publicDir, required, index)
 })
 
+test("production content index carries the exact manifest order used by Explorer", () => {
+  const index = JSON.parse(read(path.join(publicDir, "static/contentIndex.json")))
+
+  for (const [order, page] of manifest.pages.entries()) {
+    const slug = slugifyFilePath(page.file as FilePath)
+    assert.equal(index[slug]?.order, order, `${page.id}: Explorer order must follow manifest`)
+  }
+
+  for (const module of manifest.modules) {
+    const expected = manifest.pages
+      .filter((page) => page.module === module.id)
+      .map((page) => page.id)
+    const sorted = manifest.pages
+      .filter((page) => page.module === module.id)
+      .sort((left, right) => {
+        const leftOrder = index[slugifyFilePath(left.file as FilePath)].order
+        const rightOrder = index[slugifyFilePath(right.file as FilePath)].order
+        return leftOrder - rightOrder
+      })
+      .map((page) => page.id)
+    assert.deepEqual(sorted, expected, `${module.id}: Explorer curriculum order drifted`)
+  }
+})
+
 test("production manifest has the eight approved search assertions", () => {
   assert.deepEqual(manifest.searchAssertions, approvedSearchAssertions)
   const index = JSON.parse(read(path.join(publicDir, "static/contentIndex.json")))
