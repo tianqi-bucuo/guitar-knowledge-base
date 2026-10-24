@@ -120,13 +120,17 @@ function bibliography(
     else before += toString(child)
   }
   surrounding(node)
-  const suffix = /^\s+—\s+(.+?)；访问日期：([^\s。]+)(。?)$/u.exec(after.trimEnd())
+  const suffix = (
+    catalog
+      ? /^\s+—\s+(.+?)；访问日期：([^\s。]+)$/u
+      : /^\s+—\s+(.+?)；访问日期：([^\s。]+)(?:。.*)?$/u
+  ).exec(after.trimEnd())
   const prefix = catalog ? null : /^(.+?)，\s*$/u.exec(before.trim())
   const historicDate = prefix && /^，\s*访问日期：([^\s。]+)(。?)$/u.exec(after.trim())
   const publisher =
     !before.trim() && suffix ? suffix[1].trim() : prefix && historicDate ? prefix[1].trim() : ""
   const accessDate = suffix?.[2] ?? historicDate?.[1] ?? ""
-  if (!title || !publisher || !accessDate || (catalog && suffix?.[3])) {
+  if (!title || !publisher || !accessDate) {
     diagnostics.push(
       error(
         malformedCode,

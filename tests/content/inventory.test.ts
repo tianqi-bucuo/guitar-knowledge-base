@@ -3,14 +3,14 @@ import test from "node:test"
 import { loadManifest } from "../../scripts/content/loadManifest"
 
 const expectedModules = [
-  { id: "start", directory: "00-从这里开始", target: 5 },
+  { id: "start", directory: "00-从这里开始", target: 6 },
   { id: "basics", directory: "01-持琴与基础动作", target: 8 },
   { id: "chords", directory: "02-和弦系统", target: 12 },
-  { id: "rhythm", directory: "03-节奏系统", target: 10 },
+  { id: "rhythm", directory: "03-节奏系统", target: 12 },
   { id: "technique", directory: "04-演奏技巧", target: 8 },
-  { id: "accompaniment", directory: "05-弹唱与伴奏", target: 8 },
-  { id: "theory", directory: "06-基础乐理与指板", target: 8 },
-  { id: "practice", directory: "07-练习与复盘", target: 6 },
+  { id: "accompaniment", directory: "05-弹唱与伴奏", target: 11 },
+  { id: "theory", directory: "06-基础乐理与指板", target: 23 },
+  { id: "practice", directory: "07-练习与复盘", target: 7 },
   { id: "care", directory: "08-保养安全与排错", target: 5 },
   { id: "reference", directory: "09-术语与参考资料", target: 5 },
 ] as const
@@ -302,15 +302,6 @@ const expectedPages = [
     type: "lesson",
     file: "03-节奏系统/重音与强弱层次.md",
     permalink: "/rhythm/accents",
-    required: true,
-  },
-  {
-    id: "syncopation",
-    title: "切分节奏入门",
-    module: "rhythm",
-    type: "lesson",
-    file: "03-节奏系统/切分节奏入门.md",
-    permalink: "/rhythm/syncopation",
     required: true,
   },
   {
@@ -691,18 +682,225 @@ const expectedPages = [
     permalink: "/reference/sources",
     required: true,
   },
+  {
+    id: "rests-dots-ties",
+    title: "休止附点与延音线",
+    module: "rhythm",
+    type: "lesson",
+    file: "03-节奏系统/休止附点与延音线.md",
+    permalink: "/rhythm/rests-dots-ties",
+    required: true,
+  },
+  {
+    id: "syncopation",
+    title: "切分节奏入门",
+    module: "rhythm",
+    type: "lesson",
+    file: "03-节奏系统/切分节奏入门.md",
+    permalink: "/rhythm/syncopation",
+    required: true,
+  },
+  {
+    id: "tuplets-grouping",
+    title: "连音与节奏分组",
+    module: "rhythm",
+    type: "lesson",
+    file: "03-节奏系统/连音与节奏分组.md",
+    permalink: "/rhythm/tuplets-grouping",
+    required: true,
+  },
+  {
+    id: "reading-notation",
+    title: "五线谱简谱与六线谱",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/五线谱简谱与六线谱.md",
+    permalink: "/theory/reading-notation",
+    required: true,
+  },
+  {
+    id: "interval-inversion",
+    title: "音程转位与复音程",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/音程转位与复音程.md",
+    permalink: "/theory/interval-inversion",
+    required: true,
+  },
+  {
+    id: "minor-scales",
+    title: "小调音阶",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/小调音阶.md",
+    permalink: "/theory/minor-scales",
+    required: true,
+  },
+  {
+    id: "key-relationships",
+    title: "关系调同主音调与五度圈",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/关系调同主音调与五度圈.md",
+    permalink: "/theory/key-relationships",
+    required: true,
+  },
+  {
+    id: "pentatonic-scales",
+    title: "五声音阶",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/五声音阶.md",
+    permalink: "/theory/pentatonic-scales",
+    required: true,
+  },
+  {
+    id: "modes",
+    title: "调式入门",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/调式入门.md",
+    permalink: "/theory/modes",
+    required: true,
+  },
+  {
+    id: "seventh-chord-theory",
+    title: "七和弦构成",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/七和弦构成.md",
+    permalink: "/theory/seventh-chord-theory",
+    required: true,
+  },
+  {
+    id: "inversions-bass",
+    title: "和弦转位与低音",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/和弦转位与低音.md",
+    permalink: "/theory/inversions-bass",
+    required: true,
+  },
+  {
+    id: "sus-add-chords",
+    title: "挂留和弦与附加音和弦",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/挂留和弦与附加音和弦.md",
+    permalink: "/theory/sus-add-chords",
+    required: true,
+  },
+  {
+    id: "harmonic-function",
+    title: "和声功能",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/和声功能.md",
+    permalink: "/theory/harmonic-function",
+    required: true,
+  },
+  {
+    id: "cadences-phrases",
+    title: "终止式与乐句",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/终止式与乐句.md",
+    permalink: "/theory/cadences-phrases",
+    required: true,
+  },
+  {
+    id: "minor-harmony",
+    title: "小调和声",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/小调和声.md",
+    permalink: "/theory/minor-harmony",
+    required: true,
+  },
+  {
+    id: "secondary-dominants",
+    title: "副属和弦",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/副属和弦.md",
+    permalink: "/theory/secondary-dominants",
+    required: true,
+  },
+  {
+    id: "modal-mixture",
+    title: "调式借用",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/调式借用.md",
+    permalink: "/theory/modal-mixture",
+    required: true,
+  },
+  {
+    id: "modulation",
+    title: "转调入门",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/转调入门.md",
+    permalink: "/theory/modulation",
+    required: true,
+  },
+  {
+    id: "voice-leading",
+    title: "声部连接与和弦配置",
+    module: "accompaniment",
+    type: "lesson",
+    file: "05-弹唱与伴奏/声部连接与和弦配置.md",
+    permalink: "/accompaniment/voice-leading",
+    required: true,
+  },
+  {
+    id: "melody-harmonization",
+    title: "旋律配和弦与非和弦音",
+    module: "accompaniment",
+    type: "lesson",
+    file: "05-弹唱与伴奏/旋律配和弦与非和弦音.md",
+    permalink: "/accompaniment/melody-harmonization",
+    required: true,
+  },
+  {
+    id: "phrase-arrangement",
+    title: "乐句分析与编配实战",
+    module: "accompaniment",
+    type: "lesson",
+    file: "05-弹唱与伴奏/乐句分析与编配实战.md",
+    permalink: "/accompaniment/phrase-arrangement",
+    required: true,
+  },
+  {
+    id: "intermediate-theory-path",
+    title: "中级乐理学习路线",
+    module: "start",
+    type: "path",
+    file: "00-从这里开始/中级乐理学习路线.md",
+    permalink: "/start/intermediate-theory",
+    required: true,
+  },
+  {
+    id: "intermediate-theory-assessment",
+    title: "中级乐理综合测验",
+    module: "practice",
+    type: "lesson",
+    file: "07-练习与复盘/中级乐理综合测验.md",
+    permalink: "/practice/intermediate-theory-assessment",
+    required: true,
+  },
 ] as const
 
-test("locks the complete ordered 75-page curriculum inventory", () => {
+test("locks the complete ordered 97-page curriculum inventory", () => {
   const manifest = loadManifest("data/content-manifest.yml")
-  const expectedModuleCounts = [5, 8, 12, 10, 8, 8, 8, 6, 5, 5]
-  const expectedDirectoryCounts = [4, 8, 12, 10, 8, 8, 8, 6, 5, 5]
+  const expectedModuleCounts = [6, 8, 12, 12, 8, 11, 23, 7, 5, 5]
+  const expectedDirectoryCounts = [5, 8, 12, 12, 8, 11, 23, 7, 5, 5]
 
-  assert.equal(manifest.pages.length, 75, "manifest must contain exactly 75 pages")
+  assert.equal(manifest.pages.length, 97, "manifest must contain exactly 97 pages")
   assert.equal(
     manifest.modules.reduce((total, module) => total + module.target, 0),
-    75,
-    "module targets must total 75",
+    97,
+    "module targets must total 97",
   )
   assert.deepEqual(
     manifest.modules.map(
@@ -716,14 +914,14 @@ test("locks the complete ordered 75-page curriculum inventory", () => {
   for (const page of manifest.pages) {
     typeCounts[page.type] += 1
   }
-  assert.deepEqual(typeCounts, { lesson: 66, index: 6, path: 2, glossary: 1 })
+  assert.deepEqual(typeCounts, { lesson: 87, index: 6, path: 3, glossary: 1 })
   assert.ok(
     manifest.pages.every((page) => page.required === true),
     "every page is required",
   )
 
   for (const field of ["id", "title", "file", "permalink"] as const) {
-    assert.equal(new Set(manifest.pages.map((page) => page[field])).size, 75, `${field} is unique`)
+    assert.equal(new Set(manifest.pages.map((page) => page[field])).size, 97, `${field} is unique`)
   }
   assert.ok(
     manifest.pages.every((page) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(page.id)),

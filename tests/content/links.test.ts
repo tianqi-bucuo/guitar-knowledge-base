@@ -11,6 +11,7 @@ import {
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
+import { loadManifest } from "../../scripts/content/loadManifest"
 import { parsePage, type PageRecord } from "../../scripts/content/parsePage"
 import {
   resolveInternalLinks,
@@ -658,8 +659,12 @@ test("stabilizes broken, cyclic, and non-file assets while accepting an in-root 
   }
 })
 
-test("all seventy-five published pages have no link diagnostics", () => {
-  const pages = [
+test("all ninety-seven published pages have no link diagnostics", () => {
+  const pages = loadManifest("data/content-manifest.yml").pages.map(({ file }) =>
+    parsePage(`content/${file}`),
+  )
+  /* The original explicit 75-page list is retained in inventory.test.ts as the identity lock. */
+  const legacyPages = [
     parsePage("content/index.md"),
     parsePage("content/00-从这里开始/如何使用知识库.md"),
     parsePage("content/00-从这里开始/学习路线总览.md"),
@@ -737,6 +742,8 @@ test("all seventy-five published pages have no link diagnostics", () => {
     parsePage("content/09-术语与参考资料/参考来源总表.md"),
   ]
 
+  assert.equal(legacyPages.length, 75)
+  assert.equal(pages.length, 97)
   assert.deepEqual(validateLinks(pages, "content"), [])
 })
 

@@ -2,12 +2,12 @@
 
 Deterministic offline structural audit. Citation/catalog integrity is not factual source verification or network availability.
 
-Published pages: 75
-Unique cited sources: 81
-Catalog sources: 81
-Footnote reference occurrences: 559
-Footnote definitions: 309
-Page-local unique definition IDs: 309
+Published pages: 97
+Unique cited sources: 121
+Catalog sources: 121
+Footnote reference occurrences: 626
+Footnote definitions: 360
+Page-local unique definition IDs: 360
 Structural errors: 0
 
 ## Sources
@@ -16,36 +16,75 @@ Structural errors: 0
 | URL | Title | Publisher / author | Access date | Cited by |
 | --- | --- | --- | --- | --- |
 | https://blog.taylorguitars.com/buyers-resources/what-does-a-guitars-truss-rod-do | What Does a Guitar’s Truss Rod Do? | Taylor Guitars，Colin Griffith | 2026-10-02 | 08-保养安全与排错/弦距琴颈与品丝基础.md; 09-术语与参考资料/吉他术语表.md |
+| https://book.fretboardfoundation.com/minor-scales.html | Minor scales | Jason Grimes，Fretboard Foundation，第17章 | 2026-10-02 | 06-基础乐理与指板/小调音阶.md |
 | https://download.yamaha.com/files/tcm%3A39-455550 | Guitar care and string replacement booklet | Yamaha | 2026-10-02 | 08-保养安全与排错/弦距琴颈与品丝基础.md; 08-保养安全与排错/更换琴弦.md; 08-保养安全与排错/清洁湿度与存放.md; 08-保养安全与排错/闷音与杂音排查.md; 09-术语与参考资料/吉他术语表.md |
 | https://hub.yamaha.com/guitars/bass/how-to-play-bass-guitar-harmonics | How to Play Bass Guitar Harmonics | E.E. Bradman，Yamaha Corporation of America / Yamaha Corporation | 2026-10-01 | 04-演奏技巧/自然泛音与打板.md; 09-术语与参考资料/吉他术语表.md |
+| https://hub.yamaha.com/guitars/g-how-to/a-guitarists-guide-to-reading-sheet-music-and-tablature | A Guitarist’s Guide to Reading Sheet Music and Tablature | Robbie Calvo，Yamaha Corporation of America | 2026-10-02 | 06-基础乐理与指板/五线谱简谱与六线谱.md |
 | https://hub.yamaha.com/guitars/g-how-to/eight-great-tips-for-learning-guitar | Eight Great Tips for Learning Guitar | Robbie Calvo，Yamaha Corporation of America | 2026-10-01 | 06-基础乐理与指板/指板上的音名.md; 06-基础乐理与指板/音高音名与唱名.md |
 | https://hub.yamaha.com/guitars/g-how-to/how-to-play-latin-percussive-guitar | How To Play Latin Percussive Guitar | Rich Tozzoli，Yamaha Corporation of America / Yamaha Corporation | 2026-10-01 | 04-演奏技巧/自然泛音与打板.md; 09-术语与参考资料/吉他术语表.md |
 | https://hub.yamaha.com/guitars/g-how-to/understanding-the-circle-of-fifths-and-circle-of-fourths | Understanding the Circle of Fifths and Circle of Fourths | Robbie Calvo，Yamaha Corporation of America | 2026-10-01 | 06-基础乐理与指板/全音与半音.md; 06-基础乐理与指板/大调音阶.md; 06-基础乐理与指板/指板上的音名.md |
 | https://hub.yamaha.com/music-educators/instruments/guitars-education/tone-and-sound-on-your-guitar-part-1 | Tone and Sound on Your Guitar, Part 1 | Bob Habersat，Yamaha Corporation of America / Yamaha Corporation | 2026-10-01 | 04-演奏技巧/左手制音.md; 09-术语与参考资料/吉他术语表.md |
 | https://human.libretexts.org/Bookshelves/Music/Music_Theory/Music_Theory_for_the_21st-Century_Classroom_%28Hutchinson%29/07%3A_Roman_Numerals_and_Cadences/7.01%3A_Roman_Numeral_Chord_Symbols | 7.1: Roman Numeral Chord Symbols | Robert Hutchinson，Humanities LibreTexts | 2026-10-01 | 05-弹唱与伴奏/和弦级数与移调.md; 05-弹唱与伴奏/完整歌曲编配流程.md; 09-术语与参考资料/吉他术语表.md |
-| https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_%28Gotham_et_al.%29/01%3A_Fundamentals/1.12%3A_Major_Scales_Scale_Degrees_and_Key_Signatures | 1.12: Major Scales, Scale Degrees, and Key Signatures | Chelsey Hamm、Bryn Hughes，Open Music Theory 2e / Humanities LibreTexts | 2026-10-01 | 06-基础乐理与指板/大调音阶.md; 06-基础乐理与指板/调与调号.md; 06-基础乐理与指板/音高音名与唱名.md; 09-术语与参考资料/吉他术语表.md |
+| https://human.libretexts.org/Bookshelves/Music/Music_Theory/Open_Music_Theory_2e_%28Gotham_et_al.%29/01%3A_Fundamentals/1.12%3A_Major_Scales_Scale_Degrees_and_Key_Signatures | 1.12: Major Scales, Scale Degrees, and Key Signatures | Chelsey Hamm、Bryn Hughes，Open Music Theory 2e / Humanities LibreTexts | 2026-10-01 | 06-基础乐理与指板/大调音阶.md; 06-基础乐理与指板/音高音名与唱名.md; 09-术语与参考资料/吉他术语表.md |
 | https://iowaprotocols.medicine.uiowa.edu/protocols/guitar-playing-part-1-health-considerations-music-and-medicine-monday | Guitar Playing — Part 1: Health Considerations | Carver College of Medicine, University of Iowa | 2026-10-01 | 01-持琴与基础动作/坐姿与站姿.md; 01-持琴与基础动作/左手拇指与手腕.md |
 | https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0193580 | Dissociable effects of practice variability on learning motor and timing skills | Baptiste Caramiaux、Frédéric Bevilacqua、Marcelo M. Wanderley、Caroline Palmer，PLOS ONE | 2026-10-01 | 07-练习与复盘/慢练与逐级提速.md |
 | https://journals.sagepub.com/doi/10.1177/03057356211073481 | Slow practice and tempo-management strategies in instrumental music learning: Investigating prevalence and cognitive functions | Emma Allingham、Clemens Wöllner，Psychology of Music | 2026-10-01 | 07-练习与复盘/慢练与逐级提速.md; 09-术语与参考资料/吉他术语表.md |
-| https://musictheory.pugetsound.edu/mt21c/Accidentals.html | Accidentals | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/全音与半音.md; 06-基础乐理与指板/调与调号.md; 09-术语与参考资料/吉他术语表.md |
+| https://lilypond.org/doc/v2.24/Documentation/notation/displaying-pitches#automatic-accidentals | Displaying pitches — Automatic accidentals | LilyPond Notation Reference，LilyPond Development Team | 2026-10-02 | 06-基础乐理与指板/五线谱简谱与六线谱.md |
+| https://musictheory.pugetsound.edu/mt21c/Accidentals.html | Accidentals | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/全音与半音.md; 06-基础乐理与指板/调与调号.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/Anticipation.html | Anticipation | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 05-弹唱与伴奏/旋律配和弦与非和弦音.md |
+| https://musictheory.pugetsound.edu/mt21c/AugmentedAndDiminishedIntervals.html | Augmented and Diminished Intervals | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/音程入门.md |
+| https://musictheory.pugetsound.edu/mt21c/CommonRhythmicNotationErrors.html | Common Rhythmic Notation Errors | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 03-节奏系统/切分节奏入门.md |
 | https://musictheory.pugetsound.edu/mt21c/DiatonicChordsInMajor.html | Diatonic Chords in Major | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/顺阶和弦与级数.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/DiatonicChordsInMinor.html | Diatonic Chords in Minor | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/小调和声.md |
+| https://musictheory.pugetsound.edu/mt21c/DotsAndTies.html | Dots and Ties | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 03-节奏系统/休止附点与延音线.md |
 | https://musictheory.pugetsound.edu/mt21c/EnharmonicNotes.html | Enharmonic Notes | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/全音与半音.md; 06-基础乐理与指板/音程入门.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/FiguredBassInversionSymbols.html | Figured Bass Inversion Symbols | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/和弦转位与低音.md |
 | https://musictheory.pugetsound.edu/mt21c/HalfStepsAndWholeSteps.html | Half Steps and Whole Steps | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/全音与半音.md; 06-基础乐理与指板/指板上的音名.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/HarmonicFunction.html | Harmonic Function | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/和声功能.md |
+| https://musictheory.pugetsound.edu/mt21c/HarmonicRhythm.html | Harmonic Rhythm | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/和声功能.md |
 | https://musictheory.pugetsound.edu/mt21c/HowToIdentifyIntervals.html | How to Identify Intervals | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/三和弦构成.md; 06-基础乐理与指板/音程入门.md; 09-术语与参考资料/吉他术语表.md |
 | https://musictheory.pugetsound.edu/mt21c/IntervalsIntroduction.html | Introduction to Intervals | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/音程入门.md |
+| https://musictheory.pugetsound.edu/mt21c/InversionOfIntervals.html | Inversion of Intervals Explained | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/音程转位与复音程.md |
+| https://musictheory.pugetsound.edu/mt21c/InvertedTriads.html | Inverted Triads | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/三和弦构成.md; 06-基础乐理与指板/和弦转位与低音.md |
+| https://musictheory.pugetsound.edu/mt21c/JazzChordBasics.html | Jazz Chord Basics | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/七和弦构成.md; 06-基础乐理与指板/挂留和弦与附加音和弦.md |
 | https://musictheory.pugetsound.edu/mt21c/MajorKeySignatures.html | Major Key Signatures | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/调与调号.md; 09-术语与参考资料/吉他术语表.md |
-| https://musictheory.pugetsound.edu/mt21c/OctaveRegisters.html | Octave Registers | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/音高音名与唱名.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/ModeMixtureSection.html | Mode Mixture | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/调式借用.md |
+| https://musictheory.pugetsound.edu/mt21c/ModulationsWithDiatonicPivotChords.html | Modulations with Diatonic Pivot Chords | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/转调入门.md |
+| https://musictheory.pugetsound.edu/mt21c/ModulationsWithoutPivotChords.html | Modulations Without Pivot Chords — Direct Modulation | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/转调入门.md |
+| https://musictheory.pugetsound.edu/mt21c/NonChordTonesIntroduction.html | Introduction to Non-Chord Tones | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 05-弹唱与伴奏/乐句分析与编配实战.md; 05-弹唱与伴奏/旋律配和弦与非和弦音.md |
+| https://musictheory.pugetsound.edu/mt21c/ObjectionableParallels.html | Objectionable Parallels | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 05-弹唱与伴奏/声部连接与和弦配置.md |
+| https://musictheory.pugetsound.edu/mt21c/OctaveRegisters.html | Octave Registers | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/音高音名与唱名.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/PassingTones.html | Passing Tones | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 05-弹唱与伴奏/旋律配和弦与非和弦音.md |
+| https://musictheory.pugetsound.edu/mt21c/PerfectAuthenticCadence.html | The Perfect Authentic Cadence | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/终止式与乐句.md |
 | https://musictheory.pugetsound.edu/mt21c/RomanNumeralChordSymbols.html | Roman Numeral Chord Symbols | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/顺阶和弦与级数.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/SeventhChordsIntroduction.html | Introduction to Seventh Chords | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 02-和弦系统/常用七和弦.md; 06-基础乐理与指板/七和弦构成.md |
+| https://musictheory.pugetsound.edu/mt21c/SimpleSusChords.html | Simple “Sus” Chords | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/挂留和弦与附加音和弦.md |
+| https://musictheory.pugetsound.edu/mt21c/Suspension.html | Suspension | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 05-弹唱与伴奏/旋律配和弦与非和弦音.md; 06-基础乐理与指板/挂留和弦与附加音和弦.md |
 | https://musictheory.pugetsound.edu/mt21c/TheMajorScale.html | The Major Scale | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/大调音阶.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/Tonicization.html | Tonicization | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/副属和弦.md |
+| https://musictheory.pugetsound.edu/mt21c/TonicizationVersusModulation.html | Tonicization versus Modulation | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/转调入门.md |
 | https://musictheory.pugetsound.edu/mt21c/TriadsIntroduction.html | Introduction to Triads | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-01 | 06-基础乐理与指板/三和弦构成.md; 09-术语与参考资料/吉他术语表.md |
+| https://musictheory.pugetsound.edu/mt21c/TypesOfMotion.html | Types of Motion | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 05-弹唱与伴奏/声部连接与和弦配置.md |
+| https://musictheory.pugetsound.edu/mt21c/VoiceLeading.html | Voice Leading | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 05-弹唱与伴奏/声部连接与和弦配置.md |
+| https://musictheory.pugetsound.edu/mt21c/cadences.html | Cadences | Robert Hutchinson，Music Theory for the 21st-Century Classroom，University of Puget Sound | 2026-10-02 | 06-基础乐理与指板/终止式与乐句.md |
 | https://online.berklee.edu/courses/time-and-rhythm-1 | Time and Rhythm 1 | Matt Sharrock，Boston Conservatory at Berklee / Berklee Online | 2026-10-01 | 07-练习与复盘/节拍器进阶用法.md; 09-术语与参考资料/吉他术语表.md |
 | https://online.berklee.edu/takenote/how-to-start-learning-your-guitar-scales | How to Start Learning Your Guitar Scales（How to Hold, Fret, and Pick the Guitar） | Berklee Online | 2026-10-01 | 01-持琴与基础动作/右手位置与发力.md; 01-持琴与基础动作/坐姿与站姿.md; 01-持琴与基础动作/左手拇指与手腕.md |
+| https://open-musictheory.github.io/docs/fundamentals/beams | Beams and borrowed divisions | Open Music Theory 编写组 | 2026-10-02 | 03-节奏系统/连音与节奏分组.md |
+| https://open-musictheory.github.io/docs/fundamentals/meter | Meter | Open Music Theory 编写组 | 2026-10-02 | 03-节奏系统/节拍拍号与小节.md |
+| https://open-musictheory.github.io/docs/fundamentals/rhythmic-values | Rhythmic values | Open Music Theory 编写组 | 2026-10-02 | 03-节奏系统/休止附点与延音线.md; 03-节奏系统/四分八分与十六分音符.md |
 | https://pmc.ncbi.nlm.nih.gov/articles/PMC11020086 | Using a music microanalysis protocol to enhance instrumental practice | Guadalupe López-Íñiguez、Gary E. McPherson，Frontiers in Psychology | 2026-10-01 | 07-练习与复盘/有效练习流程.md; 07-练习与复盘/练习日志模板.md; 07-练习与复盘/阶段测验.md; 09-术语与参考资料/吉他术语表.md |
+| https://szsx.suzhou.edu.cn/scientist-401.html | 如何认简谱 | 苏州市实验小学校教学资料 | 2026-10-02 | 06-基础乐理与指板/五线谱简谱与六线谱.md |
 | https://teacherhub.abrsm.org/mod/page/view.php?id=1397 | How to develop new approaches to music practice | Paul Harris，ABRSM Teacher Hub | 2026-10-01 | 07-练习与复盘/有效练习流程.md; 07-练习与复盘/练习日志模板.md; 07-练习与复盘/节拍器进阶用法.md |
-| https://teacherhub.abrsm.org/mod/page/view.php?id=2019 | How does the Marking Criteria work? | ABRSM Teacher Hub | 2026-10-01 | 07-练习与复盘/阶段测验.md |
+| https://teacherhub.abrsm.org/mod/page/view.php?id=2019 | How does the Marking Criteria work? | ABRSM Teacher Hub | 2026-10-01 | 07-练习与复盘/中级乐理综合测验.md; 07-练习与复盘/阶段测验.md |
 | https://usa.yamaha.com/files/download/other_assets/0/335660/AG%20General%20Owner%27s%20Manual_1407.pdf | Acoustic Guitar Owner’s Manual | Yamaha Corporation | 2026-10-02 | 08-保养安全与排错/更换琴弦.md; 08-保养安全与排错/清洁湿度与存放.md |
+| https://usermanuals.musicxml.com/MusicXML/Content/EL-MusicXML-octave-change.htm | Element: octave-change | MusicXML Reference，MakeMusic | 2026-10-02 | 06-基础乐理与指板/五线谱简谱与六线谱.md |
 | https://viva.pressbooks.pub/openmusictheory/chapter/compound-meters-and-time-signatures | Compound Meter and Time Signatures | Mark Gotham、Chelsey Hamm，Open Music Theory | 2026-10-01 | 03-节奏系统/六八拍伴奏.md; 03-节奏系统/节拍拍号与小节.md; 09-术语与参考资料/吉他术语表.md |
+| https://viva.pressbooks.pub/openmusictheory/chapter/intervals | Intervals | Chelsey Hamm、Bryn Hughes，Open Music Theory | 2026-10-02 | 06-基础乐理与指板/音程转位与复音程.md |
+| https://viva.pressbooks.pub/openmusictheory/chapter/intro-to-diatonic-modes-and-the-chromatic-scale | Introduction to Diatonic Modes and the Chromatic Scale — The Pentatonic Collection | Chelsey Hamm，Open Music Theory | 2026-10-02 | 06-基础乐理与指板/五声音阶.md; 06-基础乐理与指板/调式入门.md |
 | https://viva.pressbooks.pub/openmusictheory/chapter/intro-to-form-in-popular-music | Introduction to Form in Popular Music | Bryn Hughes、Megan Lavengood，Open Music Theory | 2026-10-01 | 05-弹唱与伴奏/主歌与副歌的伴奏对比.md; 05-弹唱与伴奏/前奏间奏与尾奏.md; 05-弹唱与伴奏/听辨歌曲结构.md; 05-弹唱与伴奏/完整歌曲编配流程.md; 09-术语与参考资料/吉他术语表.md |
+| https://viva.pressbooks.pub/openmusictheory/chapter/inversion | Inversion | Samuel Brady、Chelsey Hamm，Open Music Theory | 2026-10-02 | 06-基础乐理与指板/和弦转位与低音.md |
+| https://viva.pressbooks.pub/openmusictheory/chapter/major-scales | Major Scales, Scale Degrees, and Key Signatures | Chelsey Hamm、Bryn Hughes，Open Music Theory | 2026-10-02 | 06-基础乐理与指板/关系调同主音调与五度圈.md; 06-基础乐理与指板/大调音阶.md; 06-基础乐理与指板/调与调号.md |
+| https://viva.pressbooks.pub/openmusictheory/chapter/minor-scales | Minor Scales, Scale Degrees, and Key Signatures | Chelsey Hamm、Bryn Hughes，Open Music Theory | 2026-10-02 | 06-基础乐理与指板/关系调同主音调与五度圈.md; 06-基础乐理与指板/小调音阶.md; 06-基础乐理与指板/调与调号.md |
 | https://viva.pressbooks.pub/openmusictheory/chapter/notating-rhythm | Notating Rhythm | Mark Gotham、Chelsey Hamm、Bryn Hughes，Open Music Theory | 2026-10-01 | 03-节奏系统/四分八分与十六分音符.md; 09-术语与参考资料/吉他术语表.md |
 | https://viva.pressbooks.pub/openmusictheory/chapter/other-rhythmic-essentials | Other Rhythmic Essentials | Mark Gotham、Chelsey Hamm、Bryn Hughes，Open Music Theory | 2026-10-01 | 03-节奏系统/切分节奏入门.md; 09-术语与参考资料/吉他术语表.md |
 | https://viva.pressbooks.pub/openmusictheory/chapter/simple-meter-and-time-signatures | Simple Meter and Time Signatures | Mark Gotham、Chelsey Hamm、Kris Shaffer，Open Music Theory | 2026-10-01 | 03-节奏系统/三拍子伴奏.md; 03-节奏系统/六八拍伴奏.md; 03-节奏系统/切分节奏入门.md; 03-节奏系统/四分八分与十六分音符.md; 03-节奏系统/四拍全下扫.md; 03-节奏系统/基础八分音符扫弦.md; 03-节奏系统/节拍拍号与小节.md; 03-节奏系统/重音与强弱层次.md; 09-术语与参考资料/吉他术语表.md |
@@ -96,6 +135,7 @@ Structural errors: 0
 | https://www.yamaha.com/en/musical_instrument_guide/acoustic_guitar/maintenance/maintenance002.html | Treat your instrument with care—even when not playing it | Yamaha Corporation | 2026-10-02 | 08-保养安全与排错/弦距琴颈与品丝基础.md; 08-保养安全与排错/更换琴弦.md; 08-保养安全与排错/清洁湿度与存放.md; 08-保养安全与排错/闷音与杂音排查.md; 09-术语与参考资料/吉他术语表.md |
 | https://www.yamaha.com/en/musical_instrument_guide/acoustic_guitar/mechanism | The Structure of the Acoustic Guitar: How a guitar makes sound | Yamaha Corporation | 2026-10-01 | 01-持琴与基础动作/认识民谣吉他.md; 09-术语与参考资料/吉他术语表.md |
 | https://www.yamaha.com/en/musical_instrument_guide/acoustic_guitar/play/play002.html | How to Play the Acoustic Guitar: Time to master tuning | Yamaha Corporation | 2026-10-01 | 00-从这里开始/吉他调音与标准音.md; 09-术语与参考资料/吉他术语表.md |
+| https://www.zuoqu.com/index.php?id=1090 | 音符的长短（时值）与休止符 | 作曲大师，武汉市风雅软件有限公司 | 2026-10-02 | 06-基础乐理与指板/五线谱简谱与六线谱.md |
 
 ## Diagnostics
 

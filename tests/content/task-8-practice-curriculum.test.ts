@@ -180,6 +180,7 @@ const expectedLinks = [
     "03-节奏系统/六八拍伴奏",
     "04-演奏技巧/分解和弦基础",
     "04-演奏技巧/击弦与勾弦",
+    "07-练习与复盘/中级乐理综合测验",
     "07-练习与复盘/练习日志模板",
     "08-保养安全与排错/疼痛疲劳与停止练习边界",
   ],
@@ -286,7 +287,7 @@ const logTemplate =
 const routeHandoff =
   "8. 练习与复盘：从 [[07-练习与复盘/有效练习流程|有效练习流程]] 进入，建立节拍器、速度、日志、错误修正与阶段测验闭环。"
 const theoryHandoff =
-  "下一步进入 [[07-练习与复盘/有效练习流程|有效练习流程]]，把理论与演奏任务组织成可观察、可复盘的练习循环。"
+  "用 [[07-练习与复盘/有效练习流程|有效练习流程]] 把推导与演奏组织成可观察的练习循环。"
 const arrangementHandoff =
   "把本页的选调、和弦、段落与弹唱决定转记到 [[07-练习与复盘/练习日志模板|练习日志模板]]，保留当时条件、错误证据与下一次行动。"
 const careHandoff =
@@ -431,14 +432,14 @@ function assertLesson(root: string, index: number): void {
   }
 }
 
-test("all six practice pages exist with exact published inventory", () => {
+test("all seven practice pages exist with exact published inventory", () => {
   const missing = titles.filter((title) => !existsSync(join("content", directory, `${title}.md`)))
   assert.deepEqual(missing, [], `six missing practice pages: ${missing.join("、")}`)
   assert.deepEqual(
     readdirSync(join("content", directory))
       .filter((file) => file.endsWith(".md"))
       .sort(),
-    titles.map((title) => `${title}.md`).sort(),
+    [...titles, "中级乐理综合测验"].map((title) => `${title}.md`).sort(),
   )
 })
 for (let index = 0; index < titles.length; index += 1) {
@@ -582,7 +583,7 @@ test("temporary practice mutations reject every required high-risk boundary brea
     }
   }
 })
-test("author and release modes accept all 75 published pages without diagnostics", async () => {
+test("author and release modes accept all 97 published pages without diagnostics", async () => {
   if (!titles.every((title) => existsSync(join("content", directory, `${title}.md`)))) return
   const manifest = loadManifest("data/content-manifest.yml")
   assert.equal(
@@ -591,7 +592,7 @@ test("author and release modes accept all 75 published pages without diagnostics
         existsSync(join("content", entry.file)) &&
         parsePage(join("content", entry.file)).frontmatter.draft === false,
     ).length,
-    75,
+    97,
   )
   const author = await validateContent({
     contentRoot: "content",

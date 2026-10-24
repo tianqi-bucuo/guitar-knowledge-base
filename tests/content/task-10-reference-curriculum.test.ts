@@ -43,6 +43,14 @@ const chords = [
   "05-弹唱与伴奏/和弦级数与移调",
   "06-基础乐理与指板/三和弦构成",
   "06-基础乐理与指板/顺阶和弦与级数",
+  "06-基础乐理与指板/七和弦构成",
+  "06-基础乐理与指板/和弦转位与低音",
+  "06-基础乐理与指板/挂留和弦与附加音和弦",
+  "06-基础乐理与指板/和声功能",
+  "06-基础乐理与指板/副属和弦",
+  "06-基础乐理与指板/调式借用",
+  "05-弹唱与伴奏/声部连接与和弦配置",
+  "05-弹唱与伴奏/旋律配和弦与非和弦音",
 ]
 const rhythms = [
   "03-节奏系统/节拍拍号与小节",
@@ -52,7 +60,9 @@ const rhythms = [
   "03-节奏系统/四拍全下扫",
   "03-节奏系统/基础八分音符扫弦",
   "03-节奏系统/重音与强弱层次",
+  "03-节奏系统/休止附点与延音线",
   "03-节奏系统/切分节奏入门",
+  "03-节奏系统/连音与节奏分组",
   "03-节奏系统/三拍子伴奏",
   "03-节奏系统/六八拍伴奏",
   "04-演奏技巧/分解和弦基础",
@@ -103,6 +113,18 @@ const faq = [
   "08-保养安全与排错/更换琴弦",
   "08-保养安全与排错/弦距琴颈与品丝基础",
   "08-保养安全与排错/清洁湿度与存放",
+  "00-从这里开始/中级乐理学习路线",
+  "06-基础乐理与指板/五线谱简谱与六线谱",
+  "06-基础乐理与指板/小调音阶",
+  "06-基础乐理与指板/关系调同主音调与五度圈",
+  "06-基础乐理与指板/和弦转位与低音",
+  "06-基础乐理与指板/挂留和弦与附加音和弦",
+  "06-基础乐理与指板/和声功能",
+  "06-基础乐理与指板/副属和弦",
+  "06-基础乐理与指板/转调入门",
+  "05-弹唱与伴奏/旋律配和弦与非和弦音",
+  "05-弹唱与伴奏/声部连接与和弦配置",
+  "07-练习与复盘/中级乐理综合测验",
 ]
 const chordDiagrams = [
   "e-minor",
@@ -325,7 +347,7 @@ test("source catalog equals actual cited URLs, deduplicates identity and uses la
   const cited = all
     .filter((page) => page.contentPath !== `${referencePaths[4]}.md`)
     .flatMap((page) => citations(page.body))
-  assert.equal(new Set(cited.map((citation) => citation.url)).size, 81)
+  assert.equal(new Set(cited.map((citation) => citation.url)).size, 121)
   assertCatalog(parsePage(join("content", `${referencePaths[4]}.md`)).body, cited)
 })
 test("catalog rejects uncited and conflicting duplicate entries while accepting historical title/date variants", () => {
@@ -353,9 +375,9 @@ test("catalog rejects uncited and conflicting duplicate entries while accepting 
   assert.throws(() => citations("A[^absent]"), /SOURCE_PAIRING/u)
   assert.throws(() => assertDiagrams(chordDiagrams.slice(1), chordDiagrams), /DIAGRAM_COVERAGE/u)
 })
-test("all 75 pages are reachable and validators accept publication without errors or warnings", async () => {
+test("all 97 pages are reachable and validators accept publication without errors or warnings", async () => {
   const all = pages()
-  assert.equal(all.length, 75)
+  assert.equal(all.length, 97)
   assert.deepEqual(
     Object.fromEntries(
       ["lesson", "index", "path", "glossary"].map((type) => [
@@ -363,7 +385,7 @@ test("all 75 pages are reachable and validators accept publication without error
         all.filter((page) => page.frontmatter.type === type).length,
       ]),
     ),
-    { lesson: 66, index: 6, path: 2, glossary: 1 },
+    { lesson: 87, index: 6, path: 3, glossary: 1 },
   )
   assert.equal(
     new Set(
@@ -374,7 +396,7 @@ test("all 75 pages are reachable and validators accept publication without error
     10,
   )
   assert.deepEqual(validateLinks(all, "content"), [])
-  assert.equal(reachable(all, resolveInternalLinks(all, "content")).size, 75)
+  assert.equal(reachable(all, resolveInternalLinks(all, "content")).size, 97)
   for (const mode of ["author", "release"] as const)
     assert.deepEqual(
       await validateContent({

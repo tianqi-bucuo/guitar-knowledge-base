@@ -482,9 +482,14 @@ test(
   },
   () => {
     const manifest = loadManifest("data/content-manifest.yml")
+    const allPages = manifest.pages
+      .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
+      .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
+    const allFiles = new Set(allPages.map((page) => page.file))
+    assert.ok(task3LinkContext.every((page) => allFiles.has(page.file)))
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
-    assert.deepEqual(validateLinks([...pages, ...task3LinkContext], contentRoot), [])
+    assert.deepEqual(validateLinks(allPages, contentRoot), [])
   },
 )
 

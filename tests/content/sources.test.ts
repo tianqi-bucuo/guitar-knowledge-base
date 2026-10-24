@@ -155,6 +155,18 @@ test("accepts historical publisher-first bibliography while catalog remains stri
   )
 })
 
+test("accepts a source-use annotation after a footnote access date while catalog rows stay strict", () => {
+  const { pages, manifest } = fixture(
+    `Text[^one].\n\n[^one]: ${record()}。用于核对概念；练习为本站原创。`,
+  )
+  assert.deepEqual(auditSources(pages, manifest).diagnostics, [])
+
+  pages[1].body = `## 有序链接\n\n### Category\n\n- ${record()}。目录不允许附注。`
+  assert.ok(
+    auditSources(pages, manifest).diagnostics.some((d) => d.code === "MALFORMED_CATALOG_ENTRY"),
+  )
+})
+
 test("lessons require resolved bibliographic footnotes rather than outbound recommendations", () => {
   assert.ok(codes("[Link](https://example.com/a)").includes("LESSON_SOURCE_REQUIRED"))
   assert.ok(codes(`Missing[^absent].\n\n[^one]: ${record()}`).includes("LESSON_SOURCE_REQUIRED"))

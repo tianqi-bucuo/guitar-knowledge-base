@@ -177,6 +177,7 @@ const expectedLessons: ExpectedLesson[] = [
       "fretting-fender",
       "dynamics-fender",
       "safety-bapam",
+      "sevenths-current",
     ],
     diagrams: ["e7-open", "a7-open", "d7-open"],
     links: [
@@ -555,7 +556,7 @@ test(
       )
       assert.deepEqual(ids.references, ids.definitions, `${expected.file} source references`)
       for (const definition of page.body.match(/^\[\^[a-z0-9-]+\]:.*$/gmu) ?? []) {
-        assert.match(definition, /访问日期：2026-10-01。$/u, `${expected.file}: ${definition}`)
+        assert.match(definition, /访问日期：2026-10-0[12]。/u, `${expected.file}: ${definition}`)
       }
       if (index >= 1 && index <= 9) assert.ok(page.body.includes(shortSafetyBlock), expected.file)
       if (index >= 10) assert.ok(page.body.includes(fullSafetyBlock), expected.file)

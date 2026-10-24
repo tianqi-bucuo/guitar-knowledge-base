@@ -26,6 +26,9 @@ const approvedSearchAssertions = [
   { query: "手腕", canonicalPermalink: "/basics/fretting-hand", maxRank: 5 },
   { query: "变调夹", canonicalPermalink: "/accompaniment/capo", maxRank: 5 },
   { query: "顺阶和弦", canonicalPermalink: "/theory/diatonic-chords", maxRank: 5 },
+  { query: "副属和弦", canonicalPermalink: "/theory/secondary-dominants", maxRank: 5 },
+  { query: "小调音阶", canonicalPermalink: "/theory/minor-scales", maxRank: 5 },
+  { query: "和弦转位", canonicalPermalink: "/theory/inversions-bass", maxRank: 5 },
 ]
 
 function attributes(tag: string): Map<string, string> {
@@ -137,15 +140,15 @@ test("canonical alias coverage accepts local redirects and rejects external orig
   }
 })
 
-test("production output covers all 75 canonical aliases, real articles, and exact search index", () => {
-  assert.equal(required.length, 75)
+test("production output covers all 97 canonical aliases, real articles, and exact search index", () => {
+  assert.equal(required.length, 97)
   assert.match(read(path.join(publicDir, "index.html")), /民谣吉他知识库/u)
   const index = JSON.parse(read(path.join(publicDir, "static/contentIndex.json")))
   assert.match(read(path.join(publicDir, "static/contentIndex.json")), /开放和弦/u)
   verifyPageCoverage(publicDir, required, index)
 })
 
-test("production manifest has exactly the five approved first-five search assertions", () => {
+test("production manifest has the eight approved search assertions", () => {
   assert.deepEqual(manifest.searchAssertions, approvedSearchAssertions)
   const index = JSON.parse(read(path.join(publicDir, "static/contentIndex.json")))
   for (const assertion of approvedSearchAssertions) {
@@ -302,8 +305,8 @@ test("fresh production output stays within the approved file-byte budgets", () =
     css: 56320,
     js: 890880,
     largestSvg: 16384,
-    contentIndex: 505856,
-    total: 7668736,
+    contentIndex: 1048576,
+    total: 12582912,
   }
   for (const key of Object.keys(ceilings) as Array<keyof typeof ceilings>) {
     assert.ok(

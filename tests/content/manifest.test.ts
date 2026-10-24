@@ -66,8 +66,8 @@ test("loads the canonical curriculum manifest", () => {
   const manifest = loadManifest("data/content-manifest.yml")
 
   assert.equal(manifest.version, 1)
-  assert.equal(manifest.release.minPages, 60)
-  assert.equal(manifest.release.maxPages, 80)
+  assert.equal(manifest.release.minPages, 97)
+  assert.equal(manifest.release.maxPages, 97)
   assert.ok(manifest.modules.length > 0)
   assert.ok(manifest.pages.length > 0)
 })

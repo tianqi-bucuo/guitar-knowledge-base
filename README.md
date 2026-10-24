@@ -1,6 +1,6 @@
 # 民谣吉他知识库
 
-以简体中文编写的民谣吉他知识库，覆盖零基础到进阶核心阶段。首版清单包含 75 篇正式页面、十个模块，学习路线与百科索引共用正文。同一份 `content/` Markdown 可在 Obsidian 中离线阅读和编辑，也可由仓库固定的 Quartz 4.5.2 生成带中文搜索、导航、反向链接和关系图谱的静态网站。
+以简体中文编写的民谣吉他知识库，覆盖零基础到中级乐理与编配。当前清单包含 97 篇正式页面、十个模块，学习路线与百科索引共用正文。同一份 `content/` Markdown 可在 Obsidian 中离线阅读和编辑，也可由仓库固定的 Quartz 4.5.2 生成带中文搜索、导航、反向链接和关系图谱的静态网站。
 
 ## 环境与安装
 
@@ -17,7 +17,7 @@ npm ci
 
 ## 本地阅读与编辑
 
-在 Obsidian 中选择“打开本地仓库”，打开本仓库的 `content/` 目录作为 vault。从 `学习路线总览` 顺序学习，或通过 `吉他术语表`、和弦与节奏索引查阅。Obsidian 会显示正文 wikilink、反向链接以及 `content/assets/diagrams/` 中已提交的本地 SVG；外部视频或资料链接离线时可以不可用，核心步骤、练习与图示保存在本地。
+在 Obsidian 中选择“打开本地仓库”，打开本仓库的 `content/` 目录作为 vault。初学从 `学习路线总览` 顺序学习；已有基础则从 `中级乐理学习路线` 进入六阶段课程，完成后用 `中级乐理综合测验` 回查薄弱环节。也可通过 `吉他术语表`、和弦与节奏索引查阅。Obsidian 会显示正文 wikilink、反向链接以及 `content/assets/diagrams/` 中已提交的本地 SVG；外部视频或资料链接离线时可以不可用，核心步骤、练习、答案与图示保存在本地。
 
 `content/` 是唯一内容源；`public/` 是可重新生成的输出，不要手工编辑。Obsidian 的 workspace、cache 以及 app、appearance、core-plugins 本地偏好均被忽略，保留在本机。项目没有配置云同步、账户或本站音视频服务。
 
@@ -26,7 +26,7 @@ npm ci
 1. 从 `content/templates/教学文章模板.md`、`索引页模板.md` 或 `路线页模板.md` 复制相应模板，放入对应中文模块目录；模板目录不发布。
 2. 更新 title、description、稳定英文 permalink、type、受控 tags 与正文；教学页填写 level、真实 prerequisites。创作时保留 `draft: true`。
 3. 以自己的文字编写操作、可观察练习和自检标准，补齐真实 wikilink、适用图示和页面内来源脚注；访问日期填实际查阅日期。
-4. 按 `data/content-manifest.yml` 的页面身份、模块和顺序维护清单，保持首版 75 页范围。调整先修关系时同步学习路线；新增范围需要另行评审。
+4. 按 `data/content-manifest.yml` 的页面身份、模块和顺序维护清单，保持当前 97 页发布范围。调整先修关系时同步基础与中级学习路线；新增范围需要另行评审。
 5. 运行作者检查，在 Obsidian 与本地网站查看修改，完成审阅后设为 `draft: false`，再运行发布检查。
 
 ```bash
@@ -34,7 +34,7 @@ npm run check:content
 npm run check:release
 ```
 
-作者模式允许计划页面未完成及草稿，缺失页或篇数不足产生 warning；现有页面的元数据、结构、内部链接、附件及占位文本错误仍阻断。发布模式要求必需页面齐全、60–80 篇正式页面覆盖十个模块且没有草稿；本项目当前清单为 75 页，同时检查先修依赖、学习图连通性和搜索断言。
+作者模式允许计划页面未完成及草稿，缺失页或篇数不足产生 warning；现有页面的元数据、结构、内部链接、附件及占位文本错误仍阻断。发布模式要求 97 篇必需页面齐全、覆盖十个模块且没有草稿，同时检查先修依赖、学习图连通性和 8 条搜索断言。
 
 ### 图示更新
 
@@ -98,7 +98,7 @@ npm run check:site-output
 npm run test:site-output
 ```
 
-生产构建输出到 `public/`。真实产物检查核对离线资源、社交 URL、CJK 字体顺序与禁用的 RSS/sitemap/OG 输出；独立构建产物测试核对 75 页、搜索索引、标题/控件/图示和文件字节预算。两项产物检查必须在新构建后执行，不在通用 `npm test` 中读取旧输出。[呈现与产物 QA](reports/visual-qa.md) 记录真实浏览器检查、批准字节预算和观察限制；字节预算不是加载时间或 CPU 性能测试。
+生产构建输出到 `public/`。真实产物检查核对离线资源、社交 URL、CJK 字体顺序与禁用的 RSS/sitemap/OG 输出；独立构建产物测试核对 97 页、搜索索引、标题/控件/图示和文件字节预算。两项产物检查必须在新构建后执行，不在通用 `npm test` 中读取旧输出。[呈现与产物 QA](reports/visual-qa.md) 记录真实浏览器检查、批准字节预算和观察限制；字节预算不是加载时间或 CPU 性能测试。
 
 ## 发布交接
 
@@ -122,3 +122,5 @@ npm run verify:release
 - [SVG 图示系统计划](docs/superpowers/plans/2026-08-22-guitar-kb-diagrams-plan.md)
 - [75 篇正文建设计划](docs/superpowers/plans/2026-08-22-guitar-kb-content-plan.md)
 - [发布与质量验收计划](docs/superpowers/plans/2026-08-22-guitar-kb-release-plan.md)
+- [中级乐理扩展设计](docs/superpowers/specs/2026-10-02-guitar-intermediate-theory-design.md)
+- [中级乐理扩展计划](docs/superpowers/plans/2026-10-02-guitar-intermediate-theory-plan.md)
