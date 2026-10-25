@@ -160,7 +160,8 @@ const expectedLessons: ExpectedLesson[] = [
     prerequisiteLinks: { "06-基础乐理与指板/02-指板上的音名": "指板上的音名" },
     links: {
       "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
-      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/04-指板记忆方法与训练": "指板记忆方法与训练",
+      "06-基础乐理与指板/05-音程入门": "音程入门",
       "06-基础乐理与指板/01-音高音名与唱名": "音高音名与唱名",
     },
     table: [
@@ -173,7 +174,51 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/04-音程入门.md",
+    file: "content/06-基础乐理与指板/04-指板记忆方法与训练.md",
+    frontmatter: {
+      title: "指板记忆方法与训练",
+      description: "用六五弦锚点、八度关系和双向提取训练建立零到十二品的指板音名定位能力",
+      permalink: "/theory/fretboard-memory",
+      type: "lesson",
+      level: "基础",
+      prerequisites: ["指板上的音名", "全音与半音"],
+      tags: ["乐理", "音名", "指板", "练习"],
+      draft: false,
+    },
+    sources: [
+      "fretboard-yamaha",
+      "steps-puget",
+      "enharmonic-puget",
+      "practice-abrsm",
+      "safety-bapam",
+    ],
+    claimAnchors: {
+      "fretboard-yamaha": "标准定弦从六弦到一弦",
+      "steps-puget": "同弦向琴身移动一品升高半音",
+      "enharmonic-puget": "可按语境写G♯或A♭",
+      "practice-abrsm": "先说明目的、做法、结果与下一步",
+      "safety-bapam": safetyBlock,
+    },
+    prerequisiteLinks: {
+      "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
+      "06-基础乐理与指板/03-全音与半音": "全音与半音",
+    },
+    links: {
+      "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
+      "06-基础乐理与指板/03-全音与半音": "全音与半音",
+      "06-基础乐理与指板/05-音程入门": "音程入门",
+      "02-和弦系统/12-F大横按与移动和弦": "F大横按与移动和弦",
+      "07-练习与复盘/01-有效练习流程": "有效练习流程",
+    },
+    table: [
+      ["弦", "0–12品自然音锚点"],
+      ["6弦", "0:E、1:F、3:G、5:A、7:B、8:C、10:D、12:E"],
+      ["5弦", "0:A、2:B、3:C、5:D、7:E、8:F、10:G、12:A"],
+    ],
+    embeds: [],
+  },
+  {
+    file: "content/06-基础乐理与指板/05-音程入门.md",
     frontmatter: {
       title: "音程入门",
       description: "用字母跨度与半音数共同辨认常用旋律音程和和声音程",
@@ -194,7 +239,7 @@ const expectedLessons: ExpectedLesson[] = [
     prerequisiteLinks: { "06-基础乐理与指板/03-全音与半音": "全音与半音" },
     links: {
       "06-基础乐理与指板/03-全音与半音": "全音与半音",
-      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "06-基础乐理与指板/06-大调音阶": "大调音阶",
       "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
     },
     table: [
@@ -211,7 +256,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/05-大调音阶.md",
+    file: "content/06-基础乐理与指板/06-大调音阶.md",
     frontmatter: {
       title: "大调音阶",
       description: "用全全半全全全半构造 C 大调与 G 大调，并在指板上核对音级",
@@ -230,13 +275,13 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/05-音程入门": "音程入门",
       "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
     },
     links: {
-      "06-基础乐理与指板/04-音程入门": "音程入门",
+      "06-基础乐理与指板/05-音程入门": "音程入门",
       "06-基础乐理与指板/02-指板上的音名": "指板上的音名",
-      "06-基础乐理与指板/06-调与调号": "调与调号",
+      "06-基础乐理与指板/07-调与调号": "调与调号",
       "06-基础乐理与指板/03-全音与半音": "全音与半音",
     },
     table: [
@@ -253,7 +298,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [fretboardPath],
   },
   {
-    file: "content/06-基础乐理与指板/06-调与调号.md",
+    file: "content/06-基础乐理与指板/07-调与调号.md",
     frontmatter: {
       title: "调与调号",
       description: "区分主音中心、调内音集合与调号，并比较 C、G、D、F 大调的升降音",
@@ -272,13 +317,13 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "06-基础乐理与指板/06-大调音阶": "大调音阶",
       "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
     },
     links: {
-      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "06-基础乐理与指板/06-大调音阶": "大调音阶",
       "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
-      "06-基础乐理与指板/07-三和弦构成": "三和弦构成",
+      "06-基础乐理与指板/08-三和弦构成": "三和弦构成",
       "05-弹唱与伴奏/02-变调夹原理与用法": "变调夹原理与用法",
     },
     table: [
@@ -291,7 +336,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/07-三和弦构成.md",
+    file: "content/06-基础乐理与指板/08-三和弦构成.md",
     frontmatter: {
       title: "三和弦构成",
       description: "从根音、三音与五音的音程关系构造大、小、减、增三和弦",
@@ -309,15 +354,15 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/04-音程入门": "音程入门",
-      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "06-基础乐理与指板/05-音程入门": "音程入门",
+      "06-基础乐理与指板/06-大调音阶": "大调音阶",
       "02-和弦系统/01-和弦图读法": "和弦图读法",
     },
     links: {
-      "06-基础乐理与指板/04-音程入门": "音程入门",
-      "06-基础乐理与指板/05-大调音阶": "大调音阶",
+      "06-基础乐理与指板/05-音程入门": "音程入门",
+      "06-基础乐理与指板/06-大调音阶": "大调音阶",
       "02-和弦系统/01-和弦图读法": "和弦图读法",
-      "06-基础乐理与指板/08-顺阶和弦与级数": "顺阶和弦与级数",
+      "06-基础乐理与指板/09-顺阶和弦与级数": "顺阶和弦与级数",
       "02-和弦系统/04-C和弦": "C和弦",
       "02-和弦系统/03-Am与A和弦": "Am与A和弦",
     },
@@ -331,7 +376,7 @@ const expectedLessons: ExpectedLesson[] = [
     embeds: [],
   },
   {
-    file: "content/06-基础乐理与指板/08-顺阶和弦与级数.md",
+    file: "content/06-基础乐理与指板/09-顺阶和弦与级数.md",
     frontmatter: {
       title: "顺阶和弦与级数",
       description: "在大调各音级上叠置三和弦，并把 C 大调和弦映射为罗马数字级数",
@@ -349,13 +394,13 @@ const expectedLessons: ExpectedLesson[] = [
       "safety-bapam": safetyBlock,
     },
     prerequisiteLinks: {
-      "06-基础乐理与指板/07-三和弦构成": "三和弦构成",
-      "06-基础乐理与指板/06-调与调号": "调与调号",
+      "06-基础乐理与指板/08-三和弦构成": "三和弦构成",
+      "06-基础乐理与指板/07-调与调号": "调与调号",
       "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
     },
     links: {
-      "06-基础乐理与指板/07-三和弦构成": "三和弦构成",
-      "06-基础乐理与指板/06-调与调号": "调与调号",
+      "06-基础乐理与指板/08-三和弦构成": "三和弦构成",
+      "06-基础乐理与指板/07-调与调号": "调与调号",
       "05-弹唱与伴奏/03-和弦级数与移调": "和弦级数与移调",
       "02-和弦系统/09-C-G-Am-Em和弦进行": "C-G-Am-Em和弦进行",
       "02-和弦系统/10-C-Am-F-G和弦进行": "C-Am-F-G和弦进行",
@@ -397,21 +442,21 @@ const expectedTheoryTitles = [
 
 const expectedTheoryFiles = [
   ...expectedLessons.map(({ file }) => file.replace(/^content\//u, "")),
-  "06-基础乐理与指板/09-五线谱简谱与六线谱.md",
-  "06-基础乐理与指板/10-音程转位与复音程.md",
-  "06-基础乐理与指板/11-小调音阶.md",
-  "06-基础乐理与指板/12-关系调同主音调与五度圈.md",
-  "06-基础乐理与指板/13-五声音阶.md",
-  "06-基础乐理与指板/14-调式入门.md",
-  "06-基础乐理与指板/15-七和弦构成.md",
-  "06-基础乐理与指板/16-和弦转位与低音.md",
-  "06-基础乐理与指板/17-挂留和弦与附加音和弦.md",
-  "06-基础乐理与指板/18-和声功能.md",
-  "06-基础乐理与指板/19-终止式与乐句.md",
-  "06-基础乐理与指板/20-小调和声.md",
-  "06-基础乐理与指板/21-副属和弦.md",
-  "06-基础乐理与指板/22-调式借用.md",
-  "06-基础乐理与指板/23-转调入门.md",
+  "06-基础乐理与指板/10-五线谱简谱与六线谱.md",
+  "06-基础乐理与指板/11-音程转位与复音程.md",
+  "06-基础乐理与指板/12-小调音阶.md",
+  "06-基础乐理与指板/13-关系调同主音调与五度圈.md",
+  "06-基础乐理与指板/14-五声音阶.md",
+  "06-基础乐理与指板/15-调式入门.md",
+  "06-基础乐理与指板/16-七和弦构成.md",
+  "06-基础乐理与指板/17-和弦转位与低音.md",
+  "06-基础乐理与指板/18-挂留和弦与附加音和弦.md",
+  "06-基础乐理与指板/19-和声功能.md",
+  "06-基础乐理与指板/20-终止式与乐句.md",
+  "06-基础乐理与指板/21-小调和声.md",
+  "06-基础乐理与指板/22-副属和弦.md",
+  "06-基础乐理与指板/23-调式借用.md",
+  "06-基础乐理与指板/24-转调入门.md",
 ]
 
 const protectedFileDigests: Record<string, string> = {
@@ -572,7 +617,7 @@ function assertTheorySnapshot(root: string): void {
   assert.ok(pitch.includes("6→1弦：E2 | A2 | D3 | G3 | B3 | E4"))
   const finalPage = pages.find(({ expected }) => expected.file.endsWith("08-顺阶和弦与级数.md"))!
     .page.body
-  assert.match(finalPage, /\[\[06-基础乐理与指板\/18-和声功能\|和声功能\]\]/u)
+  assert.match(finalPage, /\[\[06-基础乐理与指板\/19-和声功能\|和声功能\]\]/u)
   assert.match(finalPage, /\[\[07-练习与复盘\/01-有效练习流程\|有效练习流程\]\]/u)
 }
 
@@ -590,11 +635,11 @@ const lessonPages =
   missingLessonFiles.length === 0 ? expectedLessons.map(({ file }) => parsePage(file)) : []
 const pageByFile = new Map(lessonPages.map((page) => [page.file, page]))
 
-test("all twenty-three theory lesson files exist with no extra formal page", () => {
+test("all twenty-four theory lesson files exist with no extra formal page", () => {
   assert.deepEqual(
     missingLessonFiles,
     [],
-    `missing Task 7 theory pages (${missingLessonFiles.length}/8):\n${missingLessonFiles.join("\n")}`,
+    `missing Task 7 theory pages (${missingLessonFiles.length}/9):\n${missingLessonFiles.join("\n")}`,
   )
   const actual = existsSync(theoryDirectory)
     ? readdirSync(theoryDirectory)
@@ -667,15 +712,15 @@ test(
     assert.match(pitch, /两根 E 弦.*相差两个八度/u)
     assert.match(pitch, /只有.*C 大调.*C=do/u)
 
-    const intervals = pageByFile.get("content/06-基础乐理与指板/04-音程入门.md")!.body
+    const intervals = pageByFile.get("content/06-基础乐理与指板/05-音程入门.md")!.body
     assert.match(intervals, /C–C.*机械计数/u)
     assert.match(intervals, /C–D♯.*不能.*小三度/u)
 
-    const triads = pageByFile.get("content/06-基础乐理与指板/07-三和弦构成.md")!.body
+    const triads = pageByFile.get("content/06-基础乐理与指板/08-三和弦构成.md")!.body
     assert.match(triads, /三个不同音高类别/u)
     assert.match(triads, /六根弦.*三和弦/u)
 
-    const diatonic = pageByFile.get("content/06-基础乐理与指板/08-顺阶和弦与级数.md")!.body
+    const diatonic = pageByFile.get("content/06-基础乐理与指板/09-顺阶和弦与级数.md")!.body
     assert.ok(diatonic.includes("C–G–Am–Em = I–V–vi–iii"))
     assert.ok(diatonic.includes("C–Am–F–G = I–vi–IV–V"))
   },
@@ -759,8 +804,8 @@ test(
       ),
     )
 
-    const finalPage = pageByFile.get("content/06-基础乐理与指板/08-顺阶和弦与级数.md")!.body
-    assert.match(finalPage, /\[\[06-基础乐理与指板\/18-和声功能\|和声功能\]\]/u)
+    const finalPage = pageByFile.get("content/06-基础乐理与指板/09-顺阶和弦与级数.md")!.body
+    assert.match(finalPage, /\[\[06-基础乐理与指板\/19-和声功能\|和声功能\]\]/u)
     assert.match(finalPage, /\[\[07-练习与复盘\/01-有效练习流程\|有效练习流程\]\]/u)
   },
 )
@@ -856,8 +901,8 @@ test("temporary mutation copies reject retained high-risk theory boundary breaks
     },
     {
       name: "full-path wikilink",
-      file: "content/06-基础乐理与指板/05-大调音阶.md",
-      from: "[[06-基础乐理与指板/04-音程入门|音程入门]]",
+      file: "content/06-基础乐理与指板/06-大调音阶.md",
+      from: "[[06-基础乐理与指板/05-音程入门|音程入门]]",
       to: "[[音程入门|音程入门]]",
     },
     {
@@ -894,14 +939,14 @@ test("temporary mutation copies reject retained high-risk theory boundary breaks
 })
 
 test(
-  "the existing validators accept all ninety-seven published pages without diagnostics",
+  "the existing validators accept all ninety-eight published pages without diagnostics",
   { skip: missingLessonFiles.length > 0 },
   async () => {
     const manifest = loadManifest("data/content-manifest.yml")
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 97)
+    assert.equal(pages.length, 98)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])

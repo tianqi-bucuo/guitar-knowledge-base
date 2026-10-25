@@ -980,14 +980,14 @@ test(
 )
 
 test(
-  "the existing validators accept all ninety-seven published pages without diagnostics",
+  "the existing validators accept all ninety-eight published pages without diagnostics",
   { skip: missingLessonFiles.length > 0 },
   async () => {
     const manifest = loadManifest("data/content-manifest.yml")
     const pages = manifest.pages
       .filter((entry) => existsSync(`${contentRoot}/${entry.file}`))
       .map((entry) => parsePage(`${contentRoot}/${entry.file}`))
-    assert.equal(pages.length, 97)
+    assert.equal(pages.length, 98)
     assert.deepEqual(validateMetadata(pages, manifest), [])
     assert.deepEqual(validateStructure(pages), [])
     assert.deepEqual(validateLinks(pages, contentRoot), [])

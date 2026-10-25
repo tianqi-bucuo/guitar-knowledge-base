@@ -41,14 +41,14 @@ const chords = [
   "04-演奏技巧/02-常用分解和弦型",
   "05-弹唱与伴奏/02-变调夹原理与用法",
   "05-弹唱与伴奏/03-和弦级数与移调",
-  "06-基础乐理与指板/07-三和弦构成",
-  "06-基础乐理与指板/08-顺阶和弦与级数",
-  "06-基础乐理与指板/15-七和弦构成",
-  "06-基础乐理与指板/16-和弦转位与低音",
-  "06-基础乐理与指板/17-挂留和弦与附加音和弦",
-  "06-基础乐理与指板/18-和声功能",
-  "06-基础乐理与指板/21-副属和弦",
-  "06-基础乐理与指板/22-调式借用",
+  "06-基础乐理与指板/08-三和弦构成",
+  "06-基础乐理与指板/09-顺阶和弦与级数",
+  "06-基础乐理与指板/16-七和弦构成",
+  "06-基础乐理与指板/17-和弦转位与低音",
+  "06-基础乐理与指板/18-挂留和弦与附加音和弦",
+  "06-基础乐理与指板/19-和声功能",
+  "06-基础乐理与指板/22-副属和弦",
+  "06-基础乐理与指板/23-调式借用",
   "05-弹唱与伴奏/09-声部连接与和弦配置",
   "05-弹唱与伴奏/10-旋律配和弦与非和弦音",
 ]
@@ -100,8 +100,9 @@ const faq = [
   "05-弹唱与伴奏/07-弹唱协调训练",
   "06-基础乐理与指板/01-音高音名与唱名",
   "06-基础乐理与指板/03-全音与半音",
-  "06-基础乐理与指板/06-调与调号",
-  "06-基础乐理与指板/08-顺阶和弦与级数",
+  "06-基础乐理与指板/04-指板记忆方法与训练",
+  "06-基础乐理与指板/07-调与调号",
+  "06-基础乐理与指板/09-顺阶和弦与级数",
   "07-练习与复盘/01-有效练习流程",
   "07-练习与复盘/02-节拍器进阶用法",
   "07-练习与复盘/03-慢练与逐级提速",
@@ -114,14 +115,14 @@ const faq = [
   "08-保养安全与排错/04-弦距琴颈与品丝基础",
   "08-保养安全与排错/05-清洁湿度与存放",
   "00-从这里开始/05-中级乐理学习路线",
-  "06-基础乐理与指板/09-五线谱简谱与六线谱",
-  "06-基础乐理与指板/11-小调音阶",
-  "06-基础乐理与指板/12-关系调同主音调与五度圈",
-  "06-基础乐理与指板/16-和弦转位与低音",
-  "06-基础乐理与指板/17-挂留和弦与附加音和弦",
-  "06-基础乐理与指板/18-和声功能",
-  "06-基础乐理与指板/21-副属和弦",
-  "06-基础乐理与指板/23-转调入门",
+  "06-基础乐理与指板/10-五线谱简谱与六线谱",
+  "06-基础乐理与指板/12-小调音阶",
+  "06-基础乐理与指板/13-关系调同主音调与五度圈",
+  "06-基础乐理与指板/17-和弦转位与低音",
+  "06-基础乐理与指板/18-挂留和弦与附加音和弦",
+  "06-基础乐理与指板/19-和声功能",
+  "06-基础乐理与指板/22-副属和弦",
+  "06-基础乐理与指板/24-转调入门",
   "05-弹唱与伴奏/10-旋律配和弦与非和弦音",
   "05-弹唱与伴奏/09-声部连接与和弦配置",
   "07-练习与复盘/07-中级乐理综合测验",
@@ -313,7 +314,7 @@ test("glossary defines representative concepts and final practice/care increment
     ["品丝", "01-持琴与基础动作/01-认识民谣吉他", "金属"],
     ["标准调弦", "00-从这里开始/04-吉他调音与标准音", "低音六弦到高音一弦"],
     ["标准定弦", "00-从这里开始/04-吉他调音与标准音", "低音六弦到高音一弦"],
-    ["小调", "06-基础乐理与指板/06-调与调号", "共享调号"],
+    ["小调", "06-基础乐理与指板/07-调与调号", "共享调号"],
     ["八度", "06-基础乐理与指板/01-音高音名与唱名", "完整音名"],
     ["清晰速度", "07-练习与复盘/03-慢练与逐级提速", "自填"],
     ["弦距", "08-保养安全与排错/04-弦距琴颈与品丝基础", "距离"],
@@ -375,9 +376,9 @@ test("catalog rejects uncited and conflicting duplicate entries while accepting 
   assert.throws(() => citations("A[^absent]"), /SOURCE_PAIRING/u)
   assert.throws(() => assertDiagrams(chordDiagrams.slice(1), chordDiagrams), /DIAGRAM_COVERAGE/u)
 })
-test("all 97 pages are reachable and validators accept publication without errors or warnings", async () => {
+test("all 98 pages are reachable and validators accept publication without errors or warnings", async () => {
   const all = pages()
-  assert.equal(all.length, 97)
+  assert.equal(all.length, 98)
   assert.deepEqual(
     Object.fromEntries(
       ["lesson", "index", "path", "glossary"].map((type) => [
@@ -385,7 +386,7 @@ test("all 97 pages are reachable and validators accept publication without error
         all.filter((page) => page.frontmatter.type === type).length,
       ]),
     ),
-    { lesson: 87, index: 6, path: 3, glossary: 1 },
+    { lesson: 88, index: 6, path: 3, glossary: 1 },
   )
   assert.equal(
     new Set(
@@ -396,7 +397,7 @@ test("all 97 pages are reachable and validators accept publication without error
     10,
   )
   assert.deepEqual(validateLinks(all, "content"), [])
-  assert.equal(reachable(all, resolveInternalLinks(all, "content")).size, 97)
+  assert.equal(reachable(all, resolveInternalLinks(all, "content")).size, 98)
   for (const mode of ["author", "release"] as const)
     assert.deepEqual(
       await validateContent({

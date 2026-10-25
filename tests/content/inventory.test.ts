@@ -9,7 +9,7 @@ const expectedModules = [
   { id: "rhythm", directory: "03-节奏系统", target: 12 },
   { id: "technique", directory: "04-演奏技巧", target: 8 },
   { id: "accompaniment", directory: "05-弹唱与伴奏", target: 11 },
-  { id: "theory", directory: "06-基础乐理与指板", target: 23 },
+  { id: "theory", directory: "06-基础乐理与指板", target: 24 },
   { id: "practice", directory: "07-练习与复盘", target: 7 },
   { id: "care", directory: "08-保养安全与排错", target: 5 },
   { id: "reference", directory: "09-术语与参考资料", target: 5 },
@@ -494,11 +494,20 @@ const expectedPages = [
     required: true,
   },
   {
+    id: "fretboard-memory",
+    title: "指板记忆方法与训练",
+    module: "theory",
+    type: "lesson",
+    file: "06-基础乐理与指板/04-指板记忆方法与训练.md",
+    permalink: "/theory/fretboard-memory",
+    required: true,
+  },
+  {
     id: "intervals",
     title: "音程入门",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/04-音程入门.md",
+    file: "06-基础乐理与指板/05-音程入门.md",
     permalink: "/theory/intervals",
     required: true,
   },
@@ -507,7 +516,7 @@ const expectedPages = [
     title: "大调音阶",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/05-大调音阶.md",
+    file: "06-基础乐理与指板/06-大调音阶.md",
     permalink: "/theory/major-scale",
     required: true,
   },
@@ -516,7 +525,7 @@ const expectedPages = [
     title: "调与调号",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/06-调与调号.md",
+    file: "06-基础乐理与指板/07-调与调号.md",
     permalink: "/theory/keys-signatures",
     required: true,
   },
@@ -525,7 +534,7 @@ const expectedPages = [
     title: "三和弦构成",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/07-三和弦构成.md",
+    file: "06-基础乐理与指板/08-三和弦构成.md",
     permalink: "/theory/triads",
     required: true,
   },
@@ -534,7 +543,7 @@ const expectedPages = [
     title: "顺阶和弦与级数",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/08-顺阶和弦与级数.md",
+    file: "06-基础乐理与指板/09-顺阶和弦与级数.md",
     permalink: "/theory/diatonic-chords",
     required: true,
   },
@@ -714,7 +723,7 @@ const expectedPages = [
     title: "五线谱简谱与六线谱",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/09-五线谱简谱与六线谱.md",
+    file: "06-基础乐理与指板/10-五线谱简谱与六线谱.md",
     permalink: "/theory/reading-notation",
     required: true,
   },
@@ -723,7 +732,7 @@ const expectedPages = [
     title: "音程转位与复音程",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/10-音程转位与复音程.md",
+    file: "06-基础乐理与指板/11-音程转位与复音程.md",
     permalink: "/theory/interval-inversion",
     required: true,
   },
@@ -732,7 +741,7 @@ const expectedPages = [
     title: "小调音阶",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/11-小调音阶.md",
+    file: "06-基础乐理与指板/12-小调音阶.md",
     permalink: "/theory/minor-scales",
     required: true,
   },
@@ -741,7 +750,7 @@ const expectedPages = [
     title: "关系调同主音调与五度圈",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/12-关系调同主音调与五度圈.md",
+    file: "06-基础乐理与指板/13-关系调同主音调与五度圈.md",
     permalink: "/theory/key-relationships",
     required: true,
   },
@@ -750,7 +759,7 @@ const expectedPages = [
     title: "五声音阶",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/13-五声音阶.md",
+    file: "06-基础乐理与指板/14-五声音阶.md",
     permalink: "/theory/pentatonic-scales",
     required: true,
   },
@@ -759,7 +768,7 @@ const expectedPages = [
     title: "调式入门",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/14-调式入门.md",
+    file: "06-基础乐理与指板/15-调式入门.md",
     permalink: "/theory/modes",
     required: true,
   },
@@ -768,7 +777,7 @@ const expectedPages = [
     title: "七和弦构成",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/15-七和弦构成.md",
+    file: "06-基础乐理与指板/16-七和弦构成.md",
     permalink: "/theory/seventh-chord-theory",
     required: true,
   },
@@ -777,7 +786,7 @@ const expectedPages = [
     title: "和弦转位与低音",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/16-和弦转位与低音.md",
+    file: "06-基础乐理与指板/17-和弦转位与低音.md",
     permalink: "/theory/inversions-bass",
     required: true,
   },
@@ -786,7 +795,7 @@ const expectedPages = [
     title: "挂留和弦与附加音和弦",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/17-挂留和弦与附加音和弦.md",
+    file: "06-基础乐理与指板/18-挂留和弦与附加音和弦.md",
     permalink: "/theory/sus-add-chords",
     required: true,
   },
@@ -795,7 +804,7 @@ const expectedPages = [
     title: "和声功能",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/18-和声功能.md",
+    file: "06-基础乐理与指板/19-和声功能.md",
     permalink: "/theory/harmonic-function",
     required: true,
   },
@@ -804,7 +813,7 @@ const expectedPages = [
     title: "终止式与乐句",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/19-终止式与乐句.md",
+    file: "06-基础乐理与指板/20-终止式与乐句.md",
     permalink: "/theory/cadences-phrases",
     required: true,
   },
@@ -813,7 +822,7 @@ const expectedPages = [
     title: "小调和声",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/20-小调和声.md",
+    file: "06-基础乐理与指板/21-小调和声.md",
     permalink: "/theory/minor-harmony",
     required: true,
   },
@@ -822,7 +831,7 @@ const expectedPages = [
     title: "副属和弦",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/21-副属和弦.md",
+    file: "06-基础乐理与指板/22-副属和弦.md",
     permalink: "/theory/secondary-dominants",
     required: true,
   },
@@ -831,7 +840,7 @@ const expectedPages = [
     title: "调式借用",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/22-调式借用.md",
+    file: "06-基础乐理与指板/23-调式借用.md",
     permalink: "/theory/modal-mixture",
     required: true,
   },
@@ -840,7 +849,7 @@ const expectedPages = [
     title: "转调入门",
     module: "theory",
     type: "lesson",
-    file: "06-基础乐理与指板/23-转调入门.md",
+    file: "06-基础乐理与指板/24-转调入门.md",
     permalink: "/theory/modulation",
     required: true,
   },
@@ -891,16 +900,16 @@ const expectedPages = [
   },
 ] as const
 
-test("locks the complete ordered 97-page curriculum inventory", () => {
+test("locks the complete ordered 98-page curriculum inventory", () => {
   const manifest = loadManifest("data/content-manifest.yml")
-  const expectedModuleCounts = [6, 8, 12, 12, 8, 11, 23, 7, 5, 5]
-  const expectedDirectoryCounts = [5, 8, 12, 12, 8, 11, 23, 7, 5, 5]
+  const expectedModuleCounts = [6, 8, 12, 12, 8, 11, 24, 7, 5, 5]
+  const expectedDirectoryCounts = [5, 8, 12, 12, 8, 11, 24, 7, 5, 5]
 
-  assert.equal(manifest.pages.length, 97, "manifest must contain exactly 97 pages")
+  assert.equal(manifest.pages.length, 98, "manifest must contain exactly 98 pages")
   assert.equal(
     manifest.modules.reduce((total, module) => total + module.target, 0),
-    97,
-    "module targets must total 97",
+    98,
+    "module targets must total 98",
   )
   assert.deepEqual(
     manifest.modules.map(
@@ -914,14 +923,14 @@ test("locks the complete ordered 97-page curriculum inventory", () => {
   for (const page of manifest.pages) {
     typeCounts[page.type] += 1
   }
-  assert.deepEqual(typeCounts, { lesson: 87, index: 6, path: 3, glossary: 1 })
+  assert.deepEqual(typeCounts, { lesson: 88, index: 6, path: 3, glossary: 1 })
   assert.ok(
     manifest.pages.every((page) => page.required === true),
     "every page is required",
   )
 
   for (const field of ["id", "title", "file", "permalink"] as const) {
-    assert.equal(new Set(manifest.pages.map((page) => page[field])).size, 97, `${field} is unique`)
+    assert.equal(new Set(manifest.pages.map((page) => page[field])).size, 98, `${field} is unique`)
   }
   assert.ok(
     manifest.pages.every((page) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(page.id)),

@@ -1,7 +1,7 @@
 version: 1
 release:
-  minPages: 97
-  maxPages: 97
+  minPages: 98
+  maxPages: 98
 searchAssertions:
   - query: 横按
     canonicalPermalink: /chords/barre-and-movable
@@ -27,6 +27,9 @@ searchAssertions:
   - query: 和弦转位
     canonicalPermalink: /theory/inversions-bass
     maxRank: 5
+  - query: 指板记忆
+    canonicalPermalink: /theory/fretboard-memory
+    maxRank: 5
 modules:
   - id: start
     directory: 00-从这里开始
@@ -48,7 +51,7 @@ modules:
     target: 11
   - id: theory
     directory: 06-基础乐理与指板
-    target: 23
+    target: 24
   - id: practice
     directory: 07-练习与复盘
     target: 7
@@ -430,39 +433,46 @@ pages:
     file: 06-基础乐理与指板/03-全音与半音.md
     permalink: /theory/whole-half-step
     required: true
+  - id: fretboard-memory
+    title: 指板记忆方法与训练
+    module: theory
+    type: lesson
+    file: 06-基础乐理与指板/04-指板记忆方法与训练.md
+    permalink: /theory/fretboard-memory
+    required: true
   - id: intervals
     title: 音程入门
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/04-音程入门.md
+    file: 06-基础乐理与指板/05-音程入门.md
     permalink: /theory/intervals
     required: true
   - id: major-scale
     title: 大调音阶
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/05-大调音阶.md
+    file: 06-基础乐理与指板/06-大调音阶.md
     permalink: /theory/major-scale
     required: true
   - id: keys-signatures
     title: 调与调号
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/06-调与调号.md
+    file: 06-基础乐理与指板/07-调与调号.md
     permalink: /theory/keys-signatures
     required: true
   - id: triads
     title: 三和弦构成
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/07-三和弦构成.md
+    file: 06-基础乐理与指板/08-三和弦构成.md
     permalink: /theory/triads
     required: true
   - id: diatonic-chords
     title: 顺阶和弦与级数
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/08-顺阶和弦与级数.md
+    file: 06-基础乐理与指板/09-顺阶和弦与级数.md
     permalink: /theory/diatonic-chords
     required: true
   - id: effective-session
@@ -602,105 +612,105 @@ pages:
     title: 五线谱简谱与六线谱
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/09-五线谱简谱与六线谱.md
+    file: 06-基础乐理与指板/10-五线谱简谱与六线谱.md
     permalink: /theory/reading-notation
     required: true
   - id: interval-inversion
     title: 音程转位与复音程
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/10-音程转位与复音程.md
+    file: 06-基础乐理与指板/11-音程转位与复音程.md
     permalink: /theory/interval-inversion
     required: true
   - id: minor-scales
     title: 小调音阶
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/11-小调音阶.md
+    file: 06-基础乐理与指板/12-小调音阶.md
     permalink: /theory/minor-scales
     required: true
   - id: key-relationships
     title: 关系调同主音调与五度圈
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/12-关系调同主音调与五度圈.md
+    file: 06-基础乐理与指板/13-关系调同主音调与五度圈.md
     permalink: /theory/key-relationships
     required: true
   - id: pentatonic-scales
     title: 五声音阶
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/13-五声音阶.md
+    file: 06-基础乐理与指板/14-五声音阶.md
     permalink: /theory/pentatonic-scales
     required: true
   - id: modes
     title: 调式入门
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/14-调式入门.md
+    file: 06-基础乐理与指板/15-调式入门.md
     permalink: /theory/modes
     required: true
   - id: seventh-chord-theory
     title: 七和弦构成
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/15-七和弦构成.md
+    file: 06-基础乐理与指板/16-七和弦构成.md
     permalink: /theory/seventh-chord-theory
     required: true
   - id: inversions-bass
     title: 和弦转位与低音
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/16-和弦转位与低音.md
+    file: 06-基础乐理与指板/17-和弦转位与低音.md
     permalink: /theory/inversions-bass
     required: true
   - id: sus-add-chords
     title: 挂留和弦与附加音和弦
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/17-挂留和弦与附加音和弦.md
+    file: 06-基础乐理与指板/18-挂留和弦与附加音和弦.md
     permalink: /theory/sus-add-chords
     required: true
   - id: harmonic-function
     title: 和声功能
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/18-和声功能.md
+    file: 06-基础乐理与指板/19-和声功能.md
     permalink: /theory/harmonic-function
     required: true
   - id: cadences-phrases
     title: 终止式与乐句
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/19-终止式与乐句.md
+    file: 06-基础乐理与指板/20-终止式与乐句.md
     permalink: /theory/cadences-phrases
     required: true
   - id: minor-harmony
     title: 小调和声
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/20-小调和声.md
+    file: 06-基础乐理与指板/21-小调和声.md
     permalink: /theory/minor-harmony
     required: true
   - id: secondary-dominants
     title: 副属和弦
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/21-副属和弦.md
+    file: 06-基础乐理与指板/22-副属和弦.md
     permalink: /theory/secondary-dominants
     required: true
   - id: modal-mixture
     title: 调式借用
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/22-调式借用.md
+    file: 06-基础乐理与指板/23-调式借用.md
     permalink: /theory/modal-mixture
     required: true
   - id: modulation
     title: 转调入门
     module: theory
     type: lesson
-    file: 06-基础乐理与指板/23-转调入门.md
+    file: 06-基础乐理与指板/24-转调入门.md
     permalink: /theory/modulation
     required: true
   - id: voice-leading

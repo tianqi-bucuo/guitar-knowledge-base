@@ -135,7 +135,7 @@ const claimAnchors: Array<Record<string, string>> = [
 ]
 const expectedLinks = [
   [
-    "06-基础乐理与指板/08-顺阶和弦与级数",
+    "06-基础乐理与指板/09-顺阶和弦与级数",
     "00-从这里开始/03-开始前自测",
     "07-练习与复盘/02-节拍器进阶用法",
     "00-从这里开始/02-学习路线总览",
@@ -172,7 +172,7 @@ const expectedLinks = [
   [
     "07-练习与复盘/05-错误诊断与修正",
     "05-弹唱与伴奏/08-完整歌曲编配流程",
-    "06-基础乐理与指板/08-顺阶和弦与级数",
+    "06-基础乐理与指板/09-顺阶和弦与级数",
     "00-从这里开始/02-学习路线总览",
     "00-从这里开始/04-吉他调音与标准音",
     "01-持琴与基础动作/02-坐姿与站姿",
@@ -464,7 +464,7 @@ test("route and the two earlier lessons hand off to published practice pages", (
   )
   assert.match(items[9], /\[\[09-术语与参考资料\/01-吉他术语表\|吉他术语表\]\]/u)
   assert.ok(
-    readFileSync("content/06-基础乐理与指板/08-顺阶和弦与级数.md", "utf8").includes(theoryHandoff),
+    readFileSync("content/06-基础乐理与指板/09-顺阶和弦与级数.md", "utf8").includes(theoryHandoff),
   )
   assert.ok(
     readFileSync("content/05-弹唱与伴奏/08-完整歌曲编配流程.md", "utf8").includes(
@@ -592,7 +592,7 @@ test("temporary practice mutations reject every required high-risk boundary brea
     }
   }
 })
-test("author and release modes accept all 97 published pages without diagnostics", async () => {
+test("author and release modes accept all 98 published pages without diagnostics", async () => {
   if (!titles.every((title) => existsSync(contentFile(title)))) return
   const manifest = loadManifest("data/content-manifest.yml")
   assert.equal(
@@ -601,7 +601,7 @@ test("author and release modes accept all 97 published pages without diagnostics
         existsSync(join("content", entry.file)) &&
         parsePage(join("content", entry.file)).frontmatter.draft === false,
     ).length,
-    97,
+    98,
   )
   const author = await validateContent({
     contentRoot: "content",

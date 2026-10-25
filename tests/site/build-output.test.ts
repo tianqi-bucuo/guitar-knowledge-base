@@ -29,6 +29,7 @@ const approvedSearchAssertions = [
   { query: "副属和弦", canonicalPermalink: "/theory/secondary-dominants", maxRank: 5 },
   { query: "小调音阶", canonicalPermalink: "/theory/minor-scales", maxRank: 5 },
   { query: "和弦转位", canonicalPermalink: "/theory/inversions-bass", maxRank: 5 },
+  { query: "指板记忆", canonicalPermalink: "/theory/fretboard-memory", maxRank: 5 },
 ]
 
 function attributes(tag: string): Map<string, string> {
@@ -140,8 +141,8 @@ test("canonical alias coverage accepts local redirects and rejects external orig
   }
 })
 
-test("production output covers all 97 canonical aliases, real articles, and exact search index", () => {
-  assert.equal(required.length, 97)
+test("production output covers all 98 canonical aliases, real articles, and exact search index", () => {
+  assert.equal(required.length, 98)
   assert.equal(
     existsSync(path.join(publicDir, ".html")),
     false,
@@ -177,7 +178,7 @@ test("production content index carries the exact manifest order used by Explorer
   }
 })
 
-test("production manifest has the eight approved search assertions", () => {
+test("production manifest has the nine approved search assertions", () => {
   assert.deepEqual(manifest.searchAssertions, approvedSearchAssertions)
   const index = JSON.parse(read(path.join(publicDir, "static/contentIndex.json")))
   for (const assertion of approvedSearchAssertions) {

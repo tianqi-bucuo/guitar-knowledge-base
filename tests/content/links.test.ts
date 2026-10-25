@@ -659,7 +659,7 @@ test("stabilizes broken, cyclic, and non-file assets while accepting an in-root 
   }
 })
 
-test("all ninety-seven published pages have no link diagnostics", () => {
+test("all ninety-eight published pages have no link diagnostics", () => {
   const pages = loadManifest("data/content-manifest.yml").pages.map(({ file }) =>
     parsePage(`content/${file}`),
   )
@@ -719,11 +719,11 @@ test("all ninety-seven published pages have no link diagnostics", () => {
     parsePage("content/06-基础乐理与指板/01-音高音名与唱名.md"),
     parsePage("content/06-基础乐理与指板/02-指板上的音名.md"),
     parsePage("content/06-基础乐理与指板/03-全音与半音.md"),
-    parsePage("content/06-基础乐理与指板/04-音程入门.md"),
-    parsePage("content/06-基础乐理与指板/05-大调音阶.md"),
-    parsePage("content/06-基础乐理与指板/06-调与调号.md"),
-    parsePage("content/06-基础乐理与指板/07-三和弦构成.md"),
-    parsePage("content/06-基础乐理与指板/08-顺阶和弦与级数.md"),
+    parsePage("content/06-基础乐理与指板/05-音程入门.md"),
+    parsePage("content/06-基础乐理与指板/06-大调音阶.md"),
+    parsePage("content/06-基础乐理与指板/07-调与调号.md"),
+    parsePage("content/06-基础乐理与指板/08-三和弦构成.md"),
+    parsePage("content/06-基础乐理与指板/09-顺阶和弦与级数.md"),
     parsePage("content/07-练习与复盘/01-有效练习流程.md"),
     parsePage("content/07-练习与复盘/02-节拍器进阶用法.md"),
     parsePage("content/07-练习与复盘/03-慢练与逐级提速.md"),
@@ -743,7 +743,7 @@ test("all ninety-seven published pages have no link diagnostics", () => {
   ]
 
   assert.equal(legacyPages.length, 75)
-  assert.equal(pages.length, 97)
+  assert.equal(pages.length, 98)
   assert.deepEqual(validateLinks(pages, "content"), [])
 })
 
