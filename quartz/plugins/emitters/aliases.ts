@@ -15,6 +15,11 @@ async function* processFile(ctx: BuildCtx, file: VFile) {
         : aliasTarget
     ) as FullSlug
 
+    // A permalink that already simplifies to the page's own URL is not an alias.
+    // In particular, emitting the homepage permalink `/` creates `public/.html`;
+    // GitHub Pages resolves that hidden file before `index.html` and loops forever.
+    if (simplifySlug(aliasTargetSlug) === ogSlug) continue
+
     const redirUrl = resolveRelative(aliasTargetSlug, ogSlug)
     yield write({
       ctx,

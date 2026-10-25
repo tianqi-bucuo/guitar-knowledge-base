@@ -142,6 +142,11 @@ test("canonical alias coverage accepts local redirects and rejects external orig
 
 test("production output covers all 97 canonical aliases, real articles, and exact search index", () => {
   assert.equal(required.length, 97)
+  assert.equal(
+    existsSync(path.join(publicDir, ".html")),
+    false,
+    "root permalink must not emit a hidden self-redirect before index.html",
+  )
   assert.match(read(path.join(publicDir, "index.html")), /民谣吉他知识库/u)
   const index = JSON.parse(read(path.join(publicDir, "static/contentIndex.json")))
   assert.match(read(path.join(publicDir, "static/contentIndex.json")), /开放和弦/u)
