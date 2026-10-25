@@ -19,7 +19,7 @@ const config: QuartzConfig = {
     enablePopovers: true,
     analytics: null,
     locale: "zh-CN",
-    baseUrl: undefined,
+    baseUrl: "tianqi-bucuo.github.io/guitar-knowledge-base",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "modified",
     theme: {

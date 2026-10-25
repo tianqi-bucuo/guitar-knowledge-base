@@ -2,6 +2,8 @@
 
 以简体中文编写的民谣吉他知识库，覆盖零基础到中级乐理与编配。当前清单包含 97 篇正式页面、十个模块，学习路线与百科索引共用正文。同一份 `content/` Markdown 可在 Obsidian 中离线阅读和编辑，也可由仓库固定的 Quartz 4.5.2 生成带中文搜索、导航、反向链接和关系图谱的静态网站。
 
+在线站点：<https://tianqi-bucuo.github.io/guitar-knowledge-base/>
+
 ## 环境与安装
 
 - Node.js >=22
@@ -112,7 +114,7 @@ npm run verify:release
 
 [发布与离线验收记录](reports/release-checklist.md) 汇总实际检查及限制。Obsidian 五页检查使用 1.13.7 的当前 renderer Offline 与禁用缓存，随后恢复；没有断开系统网络或删除依赖。运行时 QA 覆盖指定页、视口、主题和有限交互，未作完整 WCAG、屏幕阅读器或跨浏览器认证。继承的 Node `DEP0040` 警告与隔离到无 Quartz 脚本原始 SVG 的 in-app-browser console 观察均在报告中保留。
 
-首版交付本地内容与静态构建候选；线上部署、托管账号、云同步、分析、评论和后台服务不在本次范围。提交后的最终复验和预览服务器停止由交接控制器记录。
+推送到 `main` 分支后，GitHub Actions 会执行完整发布 gate，并将通过验证的 `public/` 产物部署到 GitHub Pages。云同步、分析、评论和后台服务仍不在本项目范围。
 
 ## 设计与实施依据
 
